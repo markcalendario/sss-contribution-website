@@ -1,0 +1,61 @@
+@use "../../../styles/layouts/responsive" as responsive;
+@use "../../../styles/abstracts/variables-colors" as colors;
+@use "../../../styles/abstracts/mixins-text-sizes" as textSizes;
+@use "../../../styles/abstracts/mixins-screens" as screens;
+
+#footer {
+  background-color: colors.$primary;
+  padding: 30px 0;
+
+  .container {
+    @include responsive.container;
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+
+      @include screens.tabletAndDesktop {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      p,
+      a {
+        color: colors.$slate-3;
+      }
+
+      .title {
+        @include textSizes.text-xl;
+        font-weight: 900;
+        color: colors.$slate;
+      }
+
+      .logoContainer {
+        width: 70px;
+        height: 70px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+
+      .column {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        .contentBlock {
+          .content {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 10px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+.button {
+  padding: 10px 20px;
+  border-radius: 3px;
+  border: 0;
+  display: block;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 600;
+
+  &:hover {
+    filter: brightness(85%);
+  }
+}
+
+a.button {
+  text-decoration: none;
+}

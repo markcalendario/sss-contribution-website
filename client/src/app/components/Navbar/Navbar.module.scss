@@ -1,0 +1,143 @@
+@use "../../../styles/layouts/responsive" as responsive;
+@use "../../../styles/abstracts/variables-colors" as colors;
+@use "../../../styles/abstracts/mixins-screens" as screens;
+@use "../../../styles/abstracts/mixins-text-sizes" as textSizes;
+
+.stickyNavbar {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+#navbar {
+  background-color: colors.$slate-1;
+  padding: 7px 0;
+
+  .container {
+    @include responsive.container;
+
+    .wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .logoContainer {
+          width: 55px;
+          height: 55px;
+
+          img {
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .texts {
+          color: colors.$primary;
+
+          h1 {
+            @include textSizes.text-lg;
+            font-weight: 800;
+          }
+        }
+      }
+
+      .links {
+        width: 300px;
+        display: flex;
+        justify-content: space-between;
+
+        a {
+          color: colors.$primary;
+          text-decoration: none;
+          padding: 7px;
+          transition: 0.1s ease;
+          font-weight: 600;
+
+          &:hover {
+            background-color: colors.$primary;
+            color: colors.$white;
+          }
+        }
+      }
+
+      .drawerButton {
+        cursor: pointer;
+        background-color: colors.$primary;
+        padding: 7px;
+        border: 0;
+        border-radius: 2px;
+
+        i {
+          color: colors.$white;
+        }
+      }
+    }
+  }
+}
+
+.drawer {
+  background-color: colors.$light-background;
+  position: fixed;
+  width: 75%;
+  right: 0;
+  top: 0;
+  height: 100vh;
+
+  .container {
+    @include responsive.container;
+    .wrapper {
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      .closeButtonContainer {
+        .closeButton {
+          border: 0;
+          border-radius: 1px;
+          background-color: colors.$red;
+          padding: 3px;
+          cursor: pointer;
+
+          i {
+            color: colors.$white;
+          }
+        }
+      }
+
+      .brand {
+        h1 {
+          @include textSizes.text-lg;
+          color: colors.$primary;
+        }
+      }
+
+      .links {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        a {
+          display: block;
+          text-decoration: none;
+          color: colors.$black;
+          padding: 5px 0 5px 10px;
+          transition: 0.1s ease;
+
+          &:hover {
+            background-color: colors.$primary;
+            color: colors.$white;
+            padding-left: 20px;
+          }
+        }
+      }
+    }
+  }
+}

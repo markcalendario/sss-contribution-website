@@ -1,0 +1,35 @@
+@use "../../../styles/abstracts/mixins-screens" as screens;
+@use "../../../styles/layouts/responsive" as responsive;
+@use "../../../styles/abstracts/mixins-text-sizes" as textSizes;
+
+.section {
+  padding: 75px 0;
+
+  .container {
+    @include responsive.container;
+
+    .title {
+      margin-bottom: 75px;
+
+      .titleWrapper {
+        text-align: center;
+        @include screens.desktop {
+          max-width: 650px;
+          margin: auto;
+        }
+
+        h1 {
+          font-weight: 900;
+          margin-bottom: 20px;
+
+          @include screens.desktop {
+            @include textSizes.text-4xl;
+          }
+        }
+      }
+    }
+
+    .wrapper {
+    }
+  }
+}

@@ -1,0 +1,127 @@
+@use "../styles/layouts/responsive" as responsive;
+@use "../styles/abstracts/variables-colors" as colors;
+@use "../styles/abstracts/mixins-text-sizes" as textSizes;
+@use "../styles/abstracts/mixins-screens" as screens;
+
+#hero {
+  background: colors.$slate-2;
+
+  @include screens.tabletAndDesktop {
+    background: url("/images/banners/banner.webp");
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 75vh;
+    background-position: center;
+  }
+
+  .container {
+    @include responsive.container;
+    min-height: 75vh;
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+
+    .wrapper {
+      width: 100%;
+
+      .texts {
+        text-align: center;
+
+        @include screens.tabletAndDesktop {
+          text-align: unset;
+          width: 40%;
+        }
+
+        h1 {
+          font-weight: 900;
+          margin-bottom: 15px;
+          color: colors.$primary;
+          @include textSizes.text-4xl;
+
+          @include screens.tabletAndDesktop {
+            @include textSizes.text-5xl;
+          }
+        }
+      }
+
+      .buttons {
+        margin-top: 30px;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+
+        @include screens.tabletAndDesktop {
+          justify-content: unset;
+        }
+      }
+    }
+  }
+}
+
+#statsBar {
+  background-color: colors.$primary;
+  padding: 15px 0;
+  .container {
+    @include responsive.container;
+
+    .wrapper {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+
+      .stats {
+        width: 100%;
+
+        @include screens.tabletAndDesktop {
+          width: calc((100% - (20px * 2)) / 3);
+        }
+
+        text-align: center;
+        color: colors.$white;
+
+        h1 {
+          font-weight: 900;
+        }
+      }
+    }
+  }
+}
+
+#inviteUsers {
+  background-color: colors.$light-background;
+
+  .wrapper {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+
+    .card {
+      width: 100%;
+      flex-grow: 1;
+
+      @include screens.desktop {
+        width: calc((100% - (20px * 2)) / 3);
+      }
+
+      @include screens.tablet {
+        width: calc((100% - (20px * 1)) / 2);
+      }
+    }
+  }
+}
+
+#tagline {
+  padding: 40px;
+  .container {
+    .wrapper {
+      text-align: center;
+
+      h1 {
+        font-weight: 900;
+        @include textSizes.text-4xl;
+        color: colors.$primary;
+      }
+    }
+  }
+}

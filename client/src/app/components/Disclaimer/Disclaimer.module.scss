@@ -1,0 +1,18 @@
+@use "../../../styles/abstracts/variables-colors" as colors;
+@use "../../../styles/layouts/responsive" as responsive;
+
+#disclaimer {
+  background-color: colors.$slate-9;
+  padding: 7px;
+  text-align: center;
+  .container {
+    @include responsive.container;
+
+    .wrapper {
+      p {
+        font-style: italic;
+        color: colors.$slate-3;
+      }
+    }
+  }
+}
