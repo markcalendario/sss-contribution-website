@@ -1,0 +1,49 @@
+import styles from "./FormFields.module.scss";
+
+export function Input(props) {
+  const { id, className, name, placeholder, preview, type, required, defaultValue } = props;
+
+  const unacceptedInputType = ["checkbox", "radio"];
+  if (unacceptedInputType.includes(type)) {
+    throw new Error(`Unacceptable input type. Use <Checkbox/> or <Radio/>.`);
+  }
+
+  return (
+    <div className={styles.regularFields + (className ? " " + className : "")}>
+      {placeholder ? (
+        <p className={styles.placeholder}>
+          {placeholder} {required ? <span className={styles.requiredStar}>*</span> : null}
+        </p>
+      ) : null}
+      <input id={id} placeholder={preview} defaultValue={defaultValue} name={name} type={type} />
+    </div>
+  );
+}
+
+export function Select(props) {
+  const { id, className, name, placeholder, required, children } = props;
+
+  return (
+    <div className={styles.regularFields + (className ? " " + className : "")}>
+      {placeholder ? (
+        <p className={styles.placeholder}>
+          {placeholder} {required ? <span className={styles.requiredStar}>*</span> : null}
+        </p>
+      ) : null}
+      <select id={id} name={name}>
+        {children}
+      </select>
+    </div>
+  );
+}
+
+export function Checkbox(props) {
+  const { children } = props;
+  return (
+    <label className={styles.checkbox}>
+      <input type="checkbox" />
+      <div className={styles.box}></div>
+      <p>{children}</p>
+    </label>
+  );
+}

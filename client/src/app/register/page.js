@@ -1,6 +1,5 @@
 "use client";
 
-import { Fragment } from "react";
 import styles from "./register.module.scss";
 import SectionContent, {
   SectionTitle,
@@ -9,12 +8,12 @@ import SectionContent, {
 import ImageCard from "../components/ImageCard/ImageCard";
 
 export default function ContributorTypeChooser() {
-  function redirectToMemberRegistration(params) {
+  function redirectToMemberRegistration() {
     window.location.href = "/register/member";
   }
 
-  function redirectToEmployerRegistration(params) {
-    window.location.href = "/register/individual";
+  function redirectToEmployerRegistration() {
+    window.location.href = "/register/employer";
   }
 
   return (
@@ -36,7 +35,7 @@ export default function ContributorTypeChooser() {
           imageLink="/images/contributor-types/employer.webp"
           title="I'm an employer."
           description="An employer for business or household."
-          onClick={redirectToMemberRegistration}
+          onClick={redirectToEmployerRegistration}
         />
       </SectionWrapper>
     </SectionContent>

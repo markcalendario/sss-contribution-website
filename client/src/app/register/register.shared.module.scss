@@ -1,0 +1,87 @@
+@use "../../styles/layouts/responsive" as responsive;
+@use "../../styles/abstracts/variables-colors" as colors;
+@use "../../styles/abstracts/mixins-screens" as screens;
+@use "../../styles/abstracts/mixins-text-sizes" as textSizes;
+
+#registration {
+  padding: 50px 0;
+
+  .container {
+    @include responsive.container;
+
+    .wrapper {
+      display: grid;
+      grid-template-areas:
+        "head"
+        "formNavigator"
+        "form";
+      gap: 20px;
+
+      @include screens.desktop {
+        grid-template-areas:
+          "head formNavigator"
+          "form formNavigator";
+        grid-template-columns: 1fr 300px;
+        gap: 30px;
+      }
+
+      .headers {
+        grid-area: head;
+      }
+
+      .headers,
+      .formNavigator,
+      form {
+        .title {
+          font-weight: 900;
+        }
+      }
+
+      form {
+        grid-area: form;
+        background-color: colors.$slate-1;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border-radius: 5px;
+      }
+
+      .formNavigator {
+        grid-area: formNavigator;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .step {
+          background-color: colors.$primary;
+          padding: 10px 15px;
+
+          &:hover {
+            h2 {
+              padding-left: 15px;
+            }
+
+            h2:after {
+              content: " \00BB";
+            }
+          }
+          h2 {
+            transition: 0.3s ease;
+            cursor: pointer;
+            color: colors.$slate;
+            @include textSizes.text-base;
+          }
+        }
+
+        .active {
+          background-color: colors.$slate-3;
+
+          h2 {
+            color: colors.$primary;
+          }
+        }
+      }
+    }
+  }
+}

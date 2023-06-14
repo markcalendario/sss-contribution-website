@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./page.module.scss";
 import { Fragment } from "react";
 import Navbar from "./components/Navbar/Navbar";
@@ -26,14 +28,6 @@ export default function Home() {
 }
 
 function Hero() {
-  function redirectToMemberLogin(params) {
-    window.location.href = "/login/member";
-  }
-
-  function redirectToEmployerLogin(params) {
-    window.location.href = "/login/employer";
-  }
-
   return (
     <section id={styles.hero}>
       <div className={styles.container}>
@@ -46,12 +40,12 @@ function Hero() {
             </p>
           </div>
           <div data-aos="fade" className={styles.buttons}>
-            <Button onClick={redirectToMemberLogin} className="bg-primary text-slate">
+            <LinkButton href="/login/member" className="bg-primary text-slate">
               Member
-            </Button>
-            <Button onClick={redirectToEmployerLogin} className="bg-white text-primary">
+            </LinkButton>
+            <LinkButton href="/login/employer" className="bg-white text-primary">
               Employer
-            </Button>
+            </LinkButton>
           </div>
         </div>
       </div>

@@ -6,8 +6,8 @@ import Button from "@/app/components/Buttons/Buttons";
 import { Fragment, useState } from "react";
 
 export default function MemberRegistration() {
-  const [currentStep, setCurrentStep] = useState("employer-info");
-  const steps = ["employer-info", "contact-info", "other-details", "account-details"];
+  const [currentStep, setCurrentStep] = useState("basic-info");
+  const steps = ["basic-info", "contact-info", "other-details", "account-details"];
 
   function goToNextStep() {
     setCurrentStep(steps[steps.indexOf(currentStep) + 1]);
@@ -26,12 +26,12 @@ export default function MemberRegistration() {
       <div className={styles.container}>
         <div className={styles.wrapper}>
           <div className={styles.headers}>
-            <h1 className={styles.title}>Registration Form for Employers</h1>
+            <h1 className={styles.title}>Registration Form for Individual Member</h1>
             <p>Please fill-out the form accurately. Input fields with asterisk (*) are required.</p>
           </div>
           <form>
-            {currentStep === "employer-info" ? (
-              <EmployerInformationForm goToNextStep={goToNextStep} />
+            {currentStep === "basic-info" ? (
+              <BasicInformationForm goToNextStep={goToNextStep} />
             ) : null}
             {currentStep === "contact-info" ? (
               <ContactInformationForm goToNextStep={goToNextStep} gotoPrevStep={gotoPrevStep} />
@@ -64,7 +64,7 @@ function AccountDetails(props) {
           I confirm that the information I have entered is correct and legitimate.
         </Checkbox>
       </div>
-      <Button className="bg-green text-slate">Register as Employer</Button>
+      <Button className="bg-green text-slate">Register as Individual Member</Button>
       <Button className="bg-slate-3 text-primary" onClick={gotoPrevStep}>
         Previous
       </Button>
@@ -78,10 +78,14 @@ function OtherDetailsForm(props) {
   return (
     <Fragment>
       <h1 className={styles.title}>Other Details</h1>
+      <Input placeholder="Common Reference Number (CRN)" />
       <Input placeholder="Tax Identification Number (TIN)" />
-      <Select placeholder="Select an Employer Type" required>
-        <option value="Business">Business</option>
-        <option value="Household">Household</option>
+      <Select placeholder="Select a Payor Type" required>
+        <option value="Self-Employed">Self-Employed</option>
+        <option value="Non-Working Spouse">Non-Working Spouse</option>
+        <option value="Voluntary">Voluntary</option>
+        <option value="OFW">OFW</option>
+        <option value="Farmer/Fisherman">Farmer/Fisherman</option>
       </Select>
       <Button className="bg-primary text-slate" onClick={goToNextStep}>
         Next
@@ -104,7 +108,6 @@ function ContactInformationForm(props) {
       <Input placeholder="Mobile Phone Number" required />
       <Input placeholder="Telephone Number" />
       <Input placeholder="Email Address" />
-      <Input placeholder="Website" />
       <Button className="bg-primary text-slate" onClick={goToNextStep}>
         Next
       </Button>
@@ -115,13 +118,16 @@ function ContactInformationForm(props) {
   );
 }
 
-function EmployerInformationForm(props) {
+function BasicInformationForm(props) {
   const { goToNextStep } = props;
 
   return (
     <Fragment>
-      <h1 className={styles.title}>Employer Information</h1>
-      <Input placeholder="Employer Name (Business Name / Name of Employer Household)" required />
+      <h1 className={styles.title}>Basic Information</h1>
+      <Input placeholder="First Name" required />
+      <Input placeholder="Last Name" required />
+      <Input placeholder="Middle Name" required />
+      <Input placeholder="Suffix (Jr., Sr., etc.)" />
       <Button className="bg-primary text-slate" onClick={goToNextStep}>
         Next
       </Button>
@@ -135,13 +141,13 @@ function FormNavigator(props) {
   return (
     <div className={styles.formNavigator}>
       <h1 className={styles.title}>Form Steps</h1>
-      <p>Complete these sections to create your SSS employer member account.</p>
+      <p>Complete these sections to create your SSS individual member account.</p>
       <div
-        className={styles.step + (currentStep === "employer-info" ? " " + styles.active : "")}
+        className={styles.step + (currentStep === "basic-info" ? " " + styles.active : "")}
         onClick={() => {
-          goToStep("employer-info");
+          goToStep("basic-info");
         }}>
-        <h2>Employer Information</h2>
+        <h2>Basic Information</h2>
       </div>
       <div
         className={styles.step + (currentStep === "contact-info" ? " " + styles.active : "")}

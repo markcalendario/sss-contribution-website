@@ -1,0 +1,77 @@
+@use "../../../styles/abstracts/variables-colors" as colors;
+@use "../../../styles/abstracts/mixins-border-radius" as borderRadius;
+@use "../../../styles/abstracts/mixins-text-sizes" as textSizes;
+
+.regularFields {
+  background-color: colors.$white;
+  outline: 1px colors.$slate-4 solid;
+  padding: 7px;
+  @include borderRadius.rounded-sm;
+
+  .placeholder {
+    font-weight: 700;
+    @include textSizes.text-xs;
+    color: colors.$primary;
+
+    .requiredStar {
+      color: colors.$red;
+    }
+  }
+
+  input,
+  select {
+    display: block;
+    width: 100%;
+    background-color: transparent;
+    outline: 0;
+    border: 0;
+  }
+}
+
+.checkbox {
+  display: flex;
+  outline: 1px colors.$slate-4 solid;
+  padding: 7px;
+  gap: 10px;
+  @include borderRadius.rounded-sm;
+  align-items: center;
+  cursor: pointer;
+  background-color: colors.$white;
+
+  &:hover {
+    .box {
+      background-color: colors.$slate-4;
+    }
+  }
+
+  .box {
+    background-color: colors.$slate-3;
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: colors.$white;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  input {
+    display: none;
+  }
+
+  input:checked {
+    & ~ .box::after {
+      content: "\2714";
+    }
+
+    & ~ .box {
+      background-color: colors.$primary;
+    }
+  }
+
+  p {
+    user-select: none;
+  }
+}

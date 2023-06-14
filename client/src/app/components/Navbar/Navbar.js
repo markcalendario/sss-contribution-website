@@ -32,7 +32,7 @@ function LargeScreenNavbar() {
     <nav id={styles.navbar}>
       <div className={styles.container}>
         <div className={styles.wrapper}>
-          <div className={styles.brand}>
+          <a href="/" className={styles.brand}>
             <div className={styles.logoContainer}>
               <img src="/images/logos/logo-original.webp" alt="SSS logo" />
             </div>
@@ -40,7 +40,7 @@ function LargeScreenNavbar() {
               <h1>Social Security System</h1>
               <p>Republic of the Philippines</p>
             </div>
-          </div>
+          </a>
           <div className={styles.links}>
             <a href="/individual">Member</a>
             <a href="/employer">Employer</a>
@@ -64,7 +64,7 @@ function SmallScreenNavbar() {
       <nav id={styles.navbar}>
         <div className={styles.container}>
           <div className={styles.wrapper}>
-            <div className={styles.brand}>
+            <a href="/" className={styles.brand}>
               <div className={styles.logoContainer}>
                 <img src="/images/logos/logo-original.webp" alt="SSS logo" />
               </div>
@@ -72,7 +72,7 @@ function SmallScreenNavbar() {
                 <h1>Social Security System</h1>
                 <p>Republic of the Philippines</p>
               </div>
-            </div>
+            </a>
             <Button
               onClick={handleDrawerTriggerClick}
               className={styles.drawerButton + " bg-primary text-slate"}>
