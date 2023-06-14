@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "../Buttons/Buttons";
 import styles from "./Navbar.module.scss";
 import { Fragment, useEffect, useState } from "react";
 
@@ -72,9 +73,11 @@ function SmallScreenNavbar() {
                 <p>Republic of the Philippines</p>
               </div>
             </div>
-            <button onClick={handleDrawerTriggerClick} className={styles.drawerButton}>
+            <Button
+              onClick={handleDrawerTriggerClick}
+              className={styles.drawerButton + " bg-primary text-slate"}>
               <i className="fas fa-bars fa-fw"></i>
-            </button>
+            </Button>
           </div>
         </div>
       </nav>
@@ -87,13 +90,15 @@ function Drawer(props) {
   const { handleDrawerTriggerClick } = props;
 
   return (
-    <div className={styles.drawer}>
+    <div data-aos="fade-left" className={styles.drawer}>
       <div className={styles.container}>
         <div className={styles.wrapper}>
           <div className={styles.closeButtonContainer}>
-            <button onClick={handleDrawerTriggerClick} className={styles.closeButton}>
+            <Button
+              onClick={handleDrawerTriggerClick}
+              className={styles.closeButton + " bg-red text-slate"}>
               <i className="fas fa-times fa-fw"></i>
-            </button>
+            </Button>
           </div>
           <div className={styles.brand}>
             <h1>Social Security System</h1>

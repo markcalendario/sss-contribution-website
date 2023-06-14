@@ -1,0 +1,22 @@
+@use "../../styles/layouts/responsive" as responsive;
+@use "../../styles/abstracts/variables-colors" as colors;
+@use "../../styles/abstracts/mixins-shadows" as shadows;
+@use "../../styles/abstracts/mixins-screens" as screens;
+
+#typeChooser {
+  background-color: colors.$light-background;
+  min-height: 90vh;
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    @include screens.tabletAndDesktop {
+      flex-direction: row;
+      gap: 20px;
+    }
+
+    .card {
+    }
+  }
+}

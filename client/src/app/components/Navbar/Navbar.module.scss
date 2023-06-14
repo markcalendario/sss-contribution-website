@@ -68,15 +68,7 @@
       }
 
       .drawerButton {
-        cursor: pointer;
-        background-color: colors.$primary;
         padding: 7px;
-        border: 0;
-        border-radius: 2px;
-
-        i {
-          color: colors.$white;
-        }
       }
     }
   }
@@ -89,6 +81,7 @@
   right: 0;
   top: 0;
   height: 100vh;
+  z-index: 100;
 
   .container {
     @include responsive.container;
@@ -100,15 +93,7 @@
 
       .closeButtonContainer {
         .closeButton {
-          border: 0;
-          border-radius: 1px;
-          background-color: colors.$red;
           padding: 3px;
-          cursor: pointer;
-
-          i {
-            color: colors.$white;
-          }
         }
       }
 

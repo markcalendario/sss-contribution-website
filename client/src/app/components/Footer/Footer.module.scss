@@ -31,17 +31,6 @@
         color: colors.$slate;
       }
 
-      .logoContainer {
-        width: 70px;
-        height: 70px;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
-      }
-
       .column {
         display: flex;
         flex-direction: column;
@@ -53,6 +42,17 @@
             flex-direction: column;
             gap: 5px;
             margin-top: 10px;
+          }
+
+          .logoContainer {
+            width: 70px;
+            height: 70px;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
           }
         }
       }

@@ -5,12 +5,19 @@ export default function Footer() {
     <footer id={styles.footer}>
       <div className={styles.container}>
         <div className={styles.wrapper}>
-          <div className={styles.brandColumn}>
-            <div className={styles.logoContainer}>
-              <img src="/images/logos/logo-original.webp" alt="SSS" />
+          <div className={styles.column}>
+            <div className={styles.contentBlock}>
+              <div className={styles.logoContainer}>
+                <img src="/images/logos/logo-original.webp" alt="SSS" />
+              </div>
+              <h1 className={styles.title}>Social Security System</h1>
+              <p>Republic of the Philippines</p>
             </div>
-            <h1 className={styles.title}>Social Security System</h1>
-            <p>Republic of the Philippines</p>
+            <div className={styles.contentBlock}>
+              <a href="">
+                <i className="fab fa-github"></i> Visit this project.
+              </a>
+            </div>
           </div>
 
           <div className={styles.column}>
