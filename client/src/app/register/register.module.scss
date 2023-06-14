@@ -9,11 +9,10 @@
   .wrapper {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
 
     @include screens.tabletAndDesktop {
       flex-direction: row;
-      gap: 20px;
     }
 
     .card {

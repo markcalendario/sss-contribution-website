@@ -1,7 +1,7 @@
 import styles from "./page.module.scss";
 import { Fragment } from "react";
 import Navbar from "./components/Navbar/Navbar";
-import { LinkButton } from "./components/Buttons/Buttons";
+import Button, { LinkButton } from "./components/Buttons/Buttons";
 import SectionContent, {
   SectionTitle,
   SectionWrapper
@@ -26,6 +26,14 @@ export default function Home() {
 }
 
 function Hero() {
+  function redirectToMemberLogin(params) {
+    window.location.href = "/login/member";
+  }
+
+  function redirectToEmployerLogin(params) {
+    window.location.href = "/login/employer";
+  }
+
   return (
     <section id={styles.hero}>
       <div className={styles.container}>
@@ -38,12 +46,12 @@ function Hero() {
             </p>
           </div>
           <div data-aos="fade" className={styles.buttons}>
-            <LinkButton href="/aasdas" className="bg-primary text-slate">
+            <Button onClick={redirectToMemberLogin} className="bg-primary text-slate">
               Member
-            </LinkButton>
-            <LinkButton href="/aasdas" className="bg-white text-primary">
+            </Button>
+            <Button onClick={redirectToEmployerLogin} className="bg-white text-primary">
               Employer
-            </LinkButton>
+            </Button>
           </div>
         </div>
       </div>

@@ -12,17 +12,3 @@ export default function Button(props) {
     </button>
   );
 }
-
-export function LinkButton(props) {
-  const { className, id, href, onClick, children } = props;
-
-  return (
-    <a
-      className={(className ? className + " " : "") + styles.button}
-      id={id}
-      href={href}
-      onClick={onClick}>
-      {children}
-    </a>
-  );
-}
