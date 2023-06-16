@@ -1,0 +1,41 @@
+@use "../../styles/layouts/responsive" as responsive;
+@use "../../styles/abstracts/variables-colors" as colors;
+@use "../../styles/abstracts/mixins-screens" as screens;
+
+#login {
+  background-size: cover;
+  min-height: 90vh;
+
+  .container {
+    @include responsive.container;
+    min-height: 90vh;
+
+    .wrapper {
+      display: flex;
+      align-items: center;
+      min-height: 90vh;
+      padding: 30px 0;
+
+      .loginBox {
+        background-color: colors.$slate-1;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        border-radius: 5px;
+
+        @include screens.tabletAndDesktop {
+          width: 400px;
+          padding: 35px;
+          margin: auto;
+        }
+
+        h1 {
+          font-weight: 900;
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}

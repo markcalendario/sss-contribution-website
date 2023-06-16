@@ -42,8 +42,8 @@ function LargeScreenNavbar() {
             </div>
           </a>
           <div className={styles.links}>
-            <a href="/individual">Member</a>
-            <a href="/employer">Employer</a>
+            <a href="/login/member">Member</a>
+            <a href="/login/employer">Employer</a>
             <a href="/register">Sign Up</a>
           </div>
         </div>
@@ -104,8 +104,8 @@ function Drawer(props) {
             <h1>Social Security System</h1>
           </div>
           <div className={styles.links}>
-            <a href="/individual">Member</a>
-            <a href="/employer">Employer</a>
+            <a href="/login/member">Member</a>
+            <a href="/login/employer">Employer</a>
             <a href="/register">Sign Up</a>
           </div>
         </div>

@@ -119,8 +119,12 @@
 
       h1 {
         font-weight: 900;
-        @include textSizes.text-4xl;
+        @include textSizes.text-xl;
         color: colors.$primary;
+
+        @include screens.tabletAndDesktop {
+          @include textSizes.text-3xl;
+        }
       }
     }
   }

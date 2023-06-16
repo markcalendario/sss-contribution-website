@@ -25,6 +25,10 @@
         color: colors.$slate-3;
       }
 
+      a {
+        text-decoration: none;
+      }
+
       .title {
         @include textSizes.text-xl;
         font-weight: 900;

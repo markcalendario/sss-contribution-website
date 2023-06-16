@@ -29,7 +29,7 @@
 }
 
 .checkbox {
-  display: flex;
+  display: inline-flex;
   outline: 1px colors.$slate-4 solid;
   padding: 7px;
   gap: 10px;

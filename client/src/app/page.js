@@ -9,6 +9,8 @@ import SectionContent, {
   SectionWrapper
 } from "./components/SectionContent/SectionContent";
 import ImageCard from "./components/ImageCard/ImageCard";
+import Footer from "./components/Footer/Footer";
+import Disclaimer from "./components/Disclaimer/Disclaimer";
 
 export const metadata = {
   title: "Welcome to Social Security System",
@@ -23,6 +25,8 @@ export default function Home() {
       <Stats />
       <InviteUsers />
       <Tagline />
+      <Footer />
+      <Disclaimer />
     </Fragment>
   );
 }

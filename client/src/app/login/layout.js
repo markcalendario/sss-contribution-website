@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
 import Disclaimer from "../components/Disclaimer/Disclaimer";
 
-export default function RegisterLayout({ children }) {
+export default function LoginLayout({ children }) {
   return (
     <Fragment>
       <Navbar />

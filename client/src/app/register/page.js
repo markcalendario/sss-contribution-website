@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./register.module.scss";
+import styles from "./page.module.scss";
 import SectionContent, {
   SectionTitle,
   SectionWrapper

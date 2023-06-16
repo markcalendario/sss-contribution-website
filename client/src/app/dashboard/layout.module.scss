@@ -1,0 +1,148 @@
+@use "../../styles/abstracts/mixins-screens" as screens;
+@use "../../styles/abstracts/variables-colors" as colors;
+@use "../../styles/abstracts/mixins-text-sizes" as textSizes;
+@use "../../styles/abstracts/mixins-shadows" as shadows;
+@use "../../styles/layouts/responsive" as responsive;
+
+#dashboard {
+  display: grid;
+  grid-template-areas:
+    "navbar"
+    "main";
+
+  @include screens.tabletAndDesktop {
+    grid-template-areas:
+      "navbar navbar"
+      "aside main";
+  }
+
+  @include screens.desktop {
+    grid-template-columns: 250px 1fr;
+  }
+
+  @include screens.tablet {
+    grid-template-columns: auto 1fr;
+  }
+
+  #nav {
+    grid-area: navbar;
+    background-color: colors.$white;
+    position: sticky;
+    top: 0;
+    @include shadows.shadow;
+    z-index: 1;
+    padding: 5px 0;
+
+    .wrapper {
+      width: calc(100% - 30px);
+      margin: auto;
+      display: flex;
+      align-content: center;
+      justify-content: space-between;
+
+      .left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .brandImage {
+          width: 35px;
+          height: 35px;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
+        }
+
+        .asideTogglerBtn {
+          padding: 5px;
+
+          @include screens.tabletAndDesktop {
+            display: none;
+          }
+        }
+      }
+
+      .right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .userImage {
+          width: 30px;
+          height: 30px;
+          overflow: hidden;
+          border-radius: 50px;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+
+        .userName {
+          display: none;
+
+          @include screens.tabletAndDesktop {
+            display: unset;
+          }
+        }
+      }
+    }
+  }
+
+  #main {
+    grid-area: main;
+    padding: 15px 0;
+    .container {
+      @include responsive.container;
+    }
+  }
+
+  #aside {
+    grid-area: aside;
+    background-color: colors.$white;
+    height: calc(100vh - 45px);
+    position: fixed;
+    top: 45px;
+    overflow-y: auto;
+
+    @include screens.tabletAndDesktop {
+      position: sticky;
+    }
+
+    .wrapper {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .asideLink {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        text-decoration: none;
+        color: colors.$primary;
+
+        &:hover {
+          background-color: colors.$slate-2;
+        }
+
+        span {
+          @include screens.tablet {
+            display: none;
+          }
+        }
+      }
+
+      .active {
+        background-color: colors.$slate-2;
+      }
+    }
+  }
+}

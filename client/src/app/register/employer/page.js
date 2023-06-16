@@ -1,11 +1,11 @@
 "use client";
 
 import { Checkbox, Input, Select } from "@/app/components/FormFields/FormFields";
-import styles from "../register.shared.module.scss";
+import styles from "../shared.module.scss";
 import Button from "@/app/components/Buttons/Buttons";
 import { Fragment, useState } from "react";
 
-export default function MemberRegistration() {
+export default function EmployerRegistration() {
   const [currentStep, setCurrentStep] = useState("employer-info");
   const steps = ["employer-info", "contact-info", "other-details", "account-details"];
 
@@ -59,11 +59,7 @@ function AccountDetails(props) {
       <p>Provide a strong password for your SSS account.</p>
       <Input placeholder="Password" type="password" required />
       <Input placeholder="Confirm Password" type="password" required />
-      <div>
-        <Checkbox>
-          I confirm that the information I have entered is correct and legitimate.
-        </Checkbox>
-      </div>
+      <Checkbox>I confirm that the information I have entered is correct and legitimate.</Checkbox>
       <Button className="bg-green text-slate">Register as Employer</Button>
       <Button className="bg-slate-3 text-primary" onClick={gotoPrevStep}>
         Previous
