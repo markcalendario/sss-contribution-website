@@ -1,0 +1,16 @@
+@use "../../styles/abstracts/variables-colors" as colors;
+@use "../../styles/abstracts/mixins-shadows" as shadows;
+
+.dateTimeCard {
+  padding: 20px;
+  background-color: colors.$white;
+  @include shadows.shadow;
+  border-radius: 5px;
+
+  .wrapper {
+    h1 {
+      font-weight: 900;
+      color: colors.$primary;
+    }
+  }
+}

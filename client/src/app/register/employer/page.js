@@ -1,8 +1,8 @@
 "use client";
 
-import { Checkbox, Input, Select } from "@/app/components/FormFields/FormFields";
+import { Checkbox, Input, Select } from "@/components/FormFields/FormFields";
 import styles from "../shared.module.scss";
-import Button from "@/app/components/Buttons/Buttons";
+import Button from "@/components/Buttons/Buttons";
 import { Fragment, useState } from "react";
 
 export default function EmployerRegistration() {

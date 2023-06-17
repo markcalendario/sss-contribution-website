@@ -4,8 +4,8 @@ import "../styles/main.scss";
 import "../styles/fontawesome/css/all.min.css";
 import "aos/dist/aos.css";
 import AOS from "aos";
-import Footer from "./components/Footer/Footer";
-import Disclaimer from "./components/Disclaimer/Disclaimer";
+import Footer from "../components/Footer/Footer";
+import Disclaimer from "../components/Disclaimer/Disclaimer";
 import { useEffect } from "react";
 
 export const metadata = {

@@ -1,6 +1,6 @@
-@use "../../../styles/abstracts/variables-colors" as colors;
-@use "../../../styles/abstracts/mixins-border-radius" as borderRadius;
-@use "../../../styles/abstracts/mixins-text-sizes" as textSizes;
+@use "../../styles/abstracts/variables-colors" as colors;
+@use "../../styles/abstracts/mixins-border-radius" as borderRadius;
+@use "../../styles/abstracts/mixins-text-sizes" as textSizes;
 
 .regularFields {
   background-color: colors.$white;

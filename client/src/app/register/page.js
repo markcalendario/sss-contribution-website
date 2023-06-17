@@ -4,8 +4,8 @@ import styles from "./page.module.scss";
 import SectionContent, {
   SectionTitle,
   SectionWrapper
-} from "../components/SectionContent/SectionContent";
-import ImageCard from "../components/ImageCard/ImageCard";
+} from "../../components/SectionContent/SectionContent";
+import ImageCard from "../../components/ImageCard/ImageCard";
 
 export default function ContributorTypeChooser() {
   function redirectToMemberRegistration() {

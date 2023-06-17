@@ -146,3 +146,22 @@
     }
   }
 }
+
+.dashboardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+  &:not(:first-child) {
+    margin: 50px 0;
+  }
+
+  .title {
+    h1 {
+      font-weight: 900;
+    }
+  }
+
+  .content {
+  }
+}

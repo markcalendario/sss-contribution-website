@@ -1,7 +1,7 @@
-@use "../../../styles/layouts/responsive" as responsive;
-@use "../../../styles/abstracts/variables-colors" as colors;
-@use "../../../styles/abstracts/mixins-screens" as screens;
-@use "../../../styles/abstracts/mixins-text-sizes" as textSizes;
+@use "../../styles/layouts/responsive" as responsive;
+@use "../../styles/abstracts/variables-colors" as colors;
+@use "../../styles/abstracts/mixins-screens" as screens;
+@use "../../styles/abstracts/mixins-text-sizes" as textSizes;
 
 .stickyNavbar {
   position: fixed;

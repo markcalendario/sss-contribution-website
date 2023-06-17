@@ -1,8 +1,8 @@
-@use "../../../styles/abstracts/variables-colors" as colors;
-@use "../../../styles/abstracts/mixins-border-radius" as borderRadius;
-@use "../../../styles/abstracts/mixins-shadows" as shadows;
-@use "../../../styles/abstracts/mixins-text-sizes" as textSizes;
-@use "../../../styles/abstracts/mixins-screens" as screens;
+@use "../../styles/abstracts/variables-colors" as colors;
+@use "../../styles/abstracts/mixins-border-radius" as borderRadius;
+@use "../../styles/abstracts/mixins-shadows" as shadows;
+@use "../../styles/abstracts/mixins-text-sizes" as textSizes;
+@use "../../styles/abstracts/mixins-screens" as screens;
 
 .imageCard {
   background-color: colors.$white;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Button from "../components/Buttons/Buttons";
+import Button from "../../components/Buttons/Buttons";
 import styles from "./layout.module.scss";
 import { usePathname } from "next/navigation";
 
@@ -77,7 +77,7 @@ export function Aside() {
     <aside id={styles.aside} data-aos="fade-right">
       <div className={styles.wrapper}>
         {asideLinks.map((asideLink) => (
-          <AsideLink href={asideLink.link} icon={asideLink.icon}>
+          <AsideLink key={asideLink.link} href={asideLink.link} icon={asideLink.icon}>
             {asideLink.title}
           </AsideLink>
         ))}
@@ -112,5 +112,27 @@ function Navbar({ toggleAsideState }) {
         </div>
       </div>
     </nav>
+  );
+}
+
+export function DashboardContent(props) {
+  const { children, id, className } = props;
+  return (
+    <div id={id} className={styles.dashboardContent + (className ? " " + className : "")}>
+      {children}
+    </div>
+  );
+}
+
+export function DashboardTitle({ children }) {
+  return <div className={styles.title}>{children}</div>;
+}
+
+export function Content(props) {
+  const { children, id, className } = props;
+  return (
+    <div id={id} className={styles.content + (className ? " " + className : "")}>
+      {children}
+    </div>
   );
 }

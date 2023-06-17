@@ -2,15 +2,15 @@
 
 import styles from "./page.module.scss";
 import { Fragment } from "react";
-import Navbar from "./components/Navbar/Navbar";
-import Button, { LinkButton } from "./components/Buttons/Buttons";
+import Navbar from "../components/Navbar/Navbar";
+import Button, { LinkButton } from "../components/Buttons/Buttons";
 import SectionContent, {
   SectionTitle,
   SectionWrapper
-} from "./components/SectionContent/SectionContent";
-import ImageCard from "./components/ImageCard/ImageCard";
-import Footer from "./components/Footer/Footer";
-import Disclaimer from "./components/Disclaimer/Disclaimer";
+} from "../components/SectionContent/SectionContent";
+import ImageCard from "../components/ImageCard/ImageCard";
+import Footer from "../components/Footer/Footer";
+import Disclaimer from "../components/Disclaimer/Disclaimer";
 
 export const metadata = {
   title: "Welcome to Social Security System",

@@ -1,0 +1,37 @@
+@use "../../styles/abstracts/variables-colors" as colors;
+@use "../../styles/abstracts/mixins-screens" as screens;
+
+#table {
+  border-spacing: 2px;
+  width: 100%;
+
+  tr {
+    th,
+    td {
+      padding: 10px;
+    }
+
+    th {
+      background-color: colors.$primary;
+      color: colors.$slate;
+      width: 100px;
+
+      @include screens.tabletAndDesktop {
+        width: 250px;
+      }
+    }
+
+    td {
+      background-color: colors.$slate-2;
+      word-break: break-all;
+    }
+  }
+
+  tbody {
+    tr {
+      th {
+        text-align: left;
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
-import Button, { LinkButton } from "@/app/components/Buttons/Buttons";
-import { Input } from "@/app/components/FormFields/FormFields";
+import Button, { LinkButton } from "@/components/Buttons/Buttons";
+import { Input } from "@/components/FormFields/FormFields";
 import sharedStyles from "../shared.module.scss";
 import styles from "./page.module.scss";
 
