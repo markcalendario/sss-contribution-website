@@ -1,7 +1,19 @@
 import styles from "./FormFields.module.scss";
 
 export function Input(props) {
-  const { id, className, name, placeholder, preview, type, required, defaultValue } = props;
+  const {
+    id,
+    className,
+    name,
+    placeholder,
+    preview,
+    type,
+    required,
+    defaultValue,
+    value,
+    onChange,
+    readOnly
+  } = props;
 
   const unacceptedInputType = ["checkbox", "radio"];
   if (unacceptedInputType.includes(type)) {
@@ -15,7 +27,16 @@ export function Input(props) {
           {placeholder} {required ? <span className={styles.requiredStar}>*</span> : null}
         </p>
       ) : null}
-      <input id={id} placeholder={preview} defaultValue={defaultValue} name={name} type={type} />
+      <input
+        id={id}
+        placeholder={preview}
+        defaultValue={defaultValue}
+        value={value}
+        readOnly={readOnly}
+        name={name}
+        type={type}
+        onChange={onChange}
+      />
     </div>
   );
 }

@@ -1,0 +1,24 @@
+@use "../../../../styles/abstracts/mixins-screens" as screens;
+
+#pay {
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .paymentButtons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      @include screens.desktop {
+        flex-direction: row;
+      }
+
+      button {
+        flex: 1;
+        padding: 20px;
+      }
+    }
+  }
+}

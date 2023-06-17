@@ -1,43 +1,38 @@
 @use "../../styles/abstracts/variables-colors" as colors;
 @use "../../styles/abstracts/mixins-screens" as screens;
 
-#table {
-  border-spacing: 2px;
+.tableWrapper {
   width: 100%;
+  overflow-x: auto;
+  .table {
+    border-spacing: 2px;
+    width: 100%;
 
-  tr {
-    th,
-    td {
-      padding: 8px 10px;
-    }
+    tr {
+      th,
+      td {
+        padding: 8px 10px;
+      }
 
-    th {
-      background-color: colors.$primary;
-      color: colors.$slate;
-    }
+      th {
+        background-color: colors.$primary;
+        color: colors.$slate;
+      }
 
-    td {
-      background-color: colors.$slate-2;
-      word-break: break-all;
+      td {
+        background-color: colors.$slate-2;
+        word-break: break-all;
+      }
     }
   }
 }
 
 .verticalTable {
-  tr {
-    th {
-      width: 100px;
-
-      @include screens.tabletAndDesktop {
-        width: 250px;
-      }
-    }
-  }
-
   tbody {
     tr {
       th {
         text-align: left;
+        width: 25%; /* Set initial width to 200 pixels */
       }
     }
   }
@@ -63,12 +58,16 @@
         margin: 10px 0;
         outline: 1px colors.$primary solid;
 
+        th {
+          display: block;
+        }
+
         td {
           display: block;
           text-align: left;
 
           &::before {
-            content: ":attr(data-head)"; // remove
+            content: attr(data-head); // remove
             margin-right: 15px;
             font-weight: 800;
             color: colors.$primary;

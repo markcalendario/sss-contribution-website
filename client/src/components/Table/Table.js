@@ -2,16 +2,16 @@ import styles from "./Table.module.scss";
 
 export function VerticalTable({ children }) {
   return (
-    <table id={styles.table} className={styles.verticalTable}>
-      {children}
-    </table>
+    <div className={styles.tableWrapper}>
+      <table className={styles.table + " " + styles.verticalTable}>{children}</table>
+    </div>
   );
 }
 
 export function HorizontalTable({ children }) {
   return (
-    <table id={styles.table} className={styles.horizontalTable}>
-      {children}
-    </table>
+    <div className={styles.tableWrapper}>
+      <table className={styles.table + " " + styles.horizontalTable}>{children}</table>
+    </div>
   );
 }

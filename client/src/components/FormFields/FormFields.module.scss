@@ -7,6 +7,7 @@
   outline: 1px colors.$slate-4 solid;
   padding: 7px;
   @include borderRadius.rounded-sm;
+  text-align: left;
 
   .placeholder {
     font-weight: 700;
