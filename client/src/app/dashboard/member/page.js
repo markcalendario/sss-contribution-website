@@ -4,7 +4,7 @@ import Welcomer from "@/components/Welcomer/Welcomer";
 import DateAndTimeCard from "@/components/DateAndTimeCard/DateAndTimeCard";
 import styles from "./page.module.scss";
 import Table from "@/components/Table/Table";
-import Button from "@/components/Buttons/Buttons";
+import { VerticalTable } from "@/components/Table/Table";
 
 export default function MemberDashboard() {
   return (
@@ -43,7 +43,7 @@ function MemberInformation() {
 function BasicInformation() {
   return (
     <Fragment>
-      <Table>
+      <VerticalTable>
         <thead>
           <tr>
             <th colSpan={2}>Basic Information</th>
@@ -67,7 +67,7 @@ function BasicInformation() {
             <td>Self-Employed</td>
           </tr>
         </tbody>
-      </Table>
+      </VerticalTable>
     </Fragment>
   );
 }
@@ -75,7 +75,7 @@ function BasicInformation() {
 function ContactInformation() {
   return (
     <Fragment>
-      <Table>
+      <VerticalTable>
         <thead>
           <tr>
             <th colSpan={2}>Contact Information</th>
@@ -103,7 +103,7 @@ function ContactInformation() {
             <td>markcalendario@gmail.com</td>
           </tr>
         </tbody>
-      </Table>
+      </VerticalTable>
     </Fragment>
   );
 }

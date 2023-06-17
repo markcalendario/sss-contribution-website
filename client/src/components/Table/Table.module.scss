@@ -8,17 +8,12 @@
   tr {
     th,
     td {
-      padding: 10px;
+      padding: 8px 10px;
     }
 
     th {
       background-color: colors.$primary;
       color: colors.$slate;
-      width: 100px;
-
-      @include screens.tabletAndDesktop {
-        width: 250px;
-      }
     }
 
     td {
@@ -26,11 +21,59 @@
       word-break: break-all;
     }
   }
+}
+
+.verticalTable {
+  tr {
+    th {
+      width: 100px;
+
+      @include screens.tabletAndDesktop {
+        width: 250px;
+      }
+    }
+  }
 
   tbody {
     tr {
       th {
         text-align: left;
+      }
+    }
+  }
+}
+
+.horizontalTable {
+  tbody {
+    tr {
+      td {
+        text-align: center;
+      }
+    }
+  }
+
+  @include screens.mobile {
+    thead {
+      display: none;
+    }
+
+    tbody {
+      tr {
+        display: block;
+        margin: 10px 0;
+        outline: 1px colors.$primary solid;
+
+        td {
+          display: block;
+          text-align: left;
+
+          &::before {
+            content: ":attr(data-head)"; // remove
+            margin-right: 15px;
+            font-weight: 800;
+            color: colors.$primary;
+          }
+        }
       }
     }
   }

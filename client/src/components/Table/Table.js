@@ -1,5 +1,17 @@
 import styles from "./Table.module.scss";
 
-export default function Table({ children }) {
-  return <table id={styles.table}>{children}</table>;
+export function VerticalTable({ children }) {
+  return (
+    <table id={styles.table} className={styles.verticalTable}>
+      {children}
+    </table>
+  );
+}
+
+export function HorizontalTable({ children }) {
+  return (
+    <table id={styles.table} className={styles.horizontalTable}>
+      {children}
+    </table>
+  );
 }
