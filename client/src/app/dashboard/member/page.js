@@ -83,7 +83,7 @@ function ContactInformation() {
         </thead>
         <tbody>
           <tr>
-            <th>Completer Address</th>
+            <th>Complete Address</th>
             <td>172 Julian Felipe Street, Sangandaan, Caloocan City</td>
           </tr>
           <tr>
