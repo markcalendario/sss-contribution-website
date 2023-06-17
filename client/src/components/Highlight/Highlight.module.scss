@@ -1,0 +1,42 @@
+@use "../../styles/abstracts/variables-colors" as colors;
+@use "../../styles/abstracts/mixins-text-sizes" as textSizes;
+
+.highlight {
+  padding: 10px 15px;
+  border-radius: 3px;
+
+  h1 {
+    font-weight: 900;
+    @include textSizes.text-xl;
+  }
+
+  &.primary {
+    background-color: rgba($color: colors.$primary, $alpha: 0.1);
+    border: 1px solid colors.$primary;
+
+    h1,
+    p {
+      color: colors.$primary;
+    }
+  }
+
+  &.red {
+    background-color: rgba($color: colors.$red, $alpha: 0.1);
+    border: 1px solid colors.$red;
+
+    h1,
+    p {
+      color: colors.$red;
+    }
+  }
+
+  &.orange {
+    background-color: rgba($color: colors.$orange, $alpha: 0.1);
+    border: 1px solid colors.$orange;
+
+    h1,
+    p {
+      color: colors.$orange;
+    }
+  }
+}
