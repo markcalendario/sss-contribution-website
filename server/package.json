@@ -1,0 +1,25 @@
+{
+  "name": "sss-contribution-server",
+  "version": "1.0.0",
+  "description": "Server for SSS contribution remade website",
+  "main": "index.js",
+  "scripts": {
+    "prod": "cross-env NODE_ENV=production nodemon index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "MIT"
+  ],
+  "author": "Mark Kenneth Calendario",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mysql2": "^3.3.5",
+    "nodemon": "^2.0.22",
+    "validator": "^13.9.0"
+  }
+}
