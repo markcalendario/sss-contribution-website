@@ -10,13 +10,19 @@ module.exports = {
     type: "number"
   },
   tin: {
-    length: 12
+    length: 12,
+    min: 12,
+    max: 12
   },
   mobile: {
-    length: 11
+    length: 11,
+    min: 11,
+    max: 11
   },
   telephone: {
-    length: 15
+    length: 15,
+    min: 7,
+    max: 15
   },
   payorType: {
     length: 18,
