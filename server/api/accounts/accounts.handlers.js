@@ -1,38 +1,32 @@
 const connectDB = require("../../db/connection");
-const { hashPassword } = require("./accounts.utils");
+const { saveMemberData } = require("./accounts.utils");
 
 async function handleMemberRegistration(req, res) {
   const db = await connectDB("sss_contribution");
   const payload = req.body;
-  db.query("START TRANSACTION");
-
   let lastInsertedID;
-  let sql =
-    "INSERT INTO members (address, zip, tin, mobile, telephone, email, payor_type, password) VALUES (?,?,?,?,?,?,?,?)";
-  let values = [
-    payload.address,
-    payload.zip,
-    payload.tin,
-    payload.mobile,
-    payload.telephone,
-    payload.email,
-    payload.payorType,
-    hashPassword(payload.password)
-  ];
+
+  await db.query("START TRANSACTION");
+
+  // Save membership information into members table
 
   try {
-    const [rows, fields] = await db.query(sql, values);
-    lastInsertedID = rows.insertId;
+    lastInsertedID = await saveMemberData(db, payload);
   } catch (error) {
-    db.query("ROLLBACK");
-    db.end();
-    return res.status(500).send({ success: false, message: "There was an error in the database." });
+    await db.query("ROLLBACK");
+    await db.end();
+    console.log(error);
+    return res
+      .status(500)
+      .send({ success: false, message: "There was an error initializing your account." });
   }
 
-  let sql2 =
+  // Save information as an individual member into individual table
+
+  const sql =
     "INSERT INTO individual (sss_no, crn, first_name, last_name, middle_name, suffix) VALUES (?,?,?,?,?,?)";
 
-  let values2 = [
+  const values = [
     lastInsertedID,
     payload.crn,
     payload.firstName,
@@ -43,17 +37,66 @@ async function handleMemberRegistration(req, res) {
   ];
 
   try {
-    await db.query(sql2, values2);
+    await db.query(sql, values);
   } catch (error) {
-    db.query("ROLLBACK");
-    db.end();
-    return res.status(500).send({ success: false, message: "There was an error in the database." });
+    await db.query("ROLLBACK");
+    await db.end();
+
+    console.error(error);
+
+    return res.status(500).send({
+      success: false,
+      message: "There was an error saving your information as an individual member."
+    });
   }
 
-  db.query("COMMIT");
-  db.end();
+  await db.query("COMMIT");
+  await db.end();
 
   return res.send({ success: true, message: "SSS account is successfully registered." });
 }
 
-module.exports = { handleMemberRegistration };
+async function handleEmployerRegistration(req, res) {
+  const db = await connectDB("sss_contribution");
+  const payload = req.body;
+  let lastInsertedID;
+
+  await db.query("START TRANSACTION");
+
+  // Save membership information into members table
+
+  try {
+    lastInsertedID = await saveMemberData(db, payload);
+  } catch (error) {
+    await db.query("ROLLBACK");
+    await db.end();
+    console.error(error);
+    return res.status(500).send({ success: false, message: error });
+  }
+
+  // Save membership information into members table
+
+  const sql = "INSERT INTO employers (sss_no, business_name, website) VALUES (?,?,?)";
+  const values = [lastInsertedID, payload.businessName, payload.website];
+
+  try {
+    await db.query(sql, values);
+  } catch (error) {
+    await db.query("ROLLBACK");
+    await db.end();
+
+    console.error(error);
+
+    return res.status(500).send({
+      success: false,
+      message: "There was an error saving your information as an employer."
+    });
+  }
+
+  await db.query("COMMIT");
+  await db.end();
+
+  return res.send({ success: true, message: "SSS employer account is successfully registered." });
+}
+
+module.exports = { handleMemberRegistration, handleEmployerRegistration };

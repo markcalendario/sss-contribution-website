@@ -1,7 +1,11 @@
 const router = require("express").Router();
-const { handleMemberRegistration } = require("./accounts.handlers");
-const { validateMemberRegistrationPayloads } = require("./accounts.middlewares");
+const { handleMemberRegistration, handleEmployerRegistration } = require("./accounts.handlers");
+const {
+  validateIndividualRegistrationPayloads,
+  validateEmployerRegistrationPayloads
+} = require("./accounts.middlewares");
 
-router.post("/register/member", validateMemberRegistrationPayloads, handleMemberRegistration);
+router.post("/register/member", validateIndividualRegistrationPayloads, handleMemberRegistration);
+router.post("/register/employer", validateEmployerRegistrationPayloads, handleEmployerRegistration);
 
 module.exports = router;
