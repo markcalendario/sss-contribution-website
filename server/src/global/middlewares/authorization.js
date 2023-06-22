@@ -11,7 +11,10 @@ export function validateAuthCookie(req, res, next) {
   try {
     jwt.verify(authCookie, process.env.TOKEN_SALT);
   } catch (error) {
-    return res.status(401).send({ success: false, message: "Invalid cookie, " + error.message });
+    return res
+      .clearCookie("auth_token")
+      .status(401)
+      .send({ success: false, message: "Invalid cookie, " + error.message });
   }
 
   next();
