@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   sss_no: {
     length: 10
   },
@@ -43,5 +43,8 @@ module.exports = {
     length: 72, // ignore this in input validation, it's the number of characters in a Bcypt hashing
     min: 4,
     max: 16
+  },
+  membership_type: {
+    allowedValues: ["employer", "individual"]
   }
 };

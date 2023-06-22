@@ -1,4 +1,4 @@
-function isEmpty(value) {
+export function isEmpty(value) {
   if (typeof value === "undefined" || value === null) {
     return true;
   }
@@ -17,5 +17,3 @@ function isEmpty(value) {
 
   return false;
 }
-
-module.exports = { isEmpty };

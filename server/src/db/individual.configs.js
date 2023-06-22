@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   crn: {
     length: 12,
     min: 12,

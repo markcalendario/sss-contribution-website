@@ -1,10 +1,11 @@
-const individualConfigs = require("../../db/individual.configs");
-const employersConfigs = require("../../db/employers.configs");
-const validator = require("validator");
-const { validateMemberRegistrationPayloads } = require("./accounts.utils");
-const { isEmpty } = require("../../utils/validators");
+import validator from "validator";
+import individualConfigs from "../../db/individual.configs.js";
+import employersConfigs from "../../db/employers.configs.js";
 
-async function validateIndividualRegistrationPayloads(req, res, next) {
+import { validateMemberRegistrationPayloads, isEmailRegistered } from "./authentications.utils.js";
+import { isEmpty } from "../../global/utils/validators.js";
+
+export async function validateIndividualRegistrationPayloads(req, res, next) {
   const payload = req.body;
 
   // Member payload validation
@@ -68,7 +69,7 @@ async function validateIndividualRegistrationPayloads(req, res, next) {
   next();
 }
 
-async function validateEmployerRegistrationPayloads(req, res, next) {
+export async function validateEmployerRegistrationPayloads(req, res, next) {
   const payload = req.body;
 
   // Member payload validation
@@ -99,4 +100,30 @@ async function validateEmployerRegistrationPayloads(req, res, next) {
   next();
 }
 
-module.exports = { validateIndividualRegistrationPayloads, validateEmployerRegistrationPayloads };
+export async function validateLoginPayloads(req, res, next) {
+  const payload = req.body;
+
+  if (isEmpty(payload.email)) {
+    return res.send({ success: false, message: "Email address is required." });
+  }
+
+  if (!validator.isEmail(payload.email)) {
+    return res.send({
+      success: false,
+      message: "The email address you provided is not a valid email address."
+    });
+  }
+
+  if (!(await isEmailRegistered(payload.email))) {
+    return res.send({
+      success: false,
+      message: "The email address you provided is not registered. Try signing in instead."
+    });
+  }
+
+  if (isEmpty(payload.password)) {
+    return res.send({ success: false, message: "Password is required." });
+  }
+
+  next();
+}

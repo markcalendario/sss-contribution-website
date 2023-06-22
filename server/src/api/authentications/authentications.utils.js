@@ -1,32 +1,29 @@
-const bcrypt = require("bcrypt");
-const membersConfigs = require("../../db/members.configs");
-const validator = require("validator");
-const connectDB = require("../../db/connection");
-const { isEmpty } = require("../../utils/validators");
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import membersConfigs from "../../db/members.configs.js";
+import validator from "validator";
+import { isEmpty } from "../../global/utils/validators.js";
+import connectDB from "../../db/connection.js";
 
-function hashPassword(plainPassword) {
-  return bcrypt.hashSync(plainPassword, 10);
-}
-
-/**
- * Check if email is registered.
- */
-async function isEmailRegistered(email) {
-  const connection = await connectDB("sss_contribution");
-  const sql = "SELECT COUNT(*) as isRegistered FROM members WHERE email = ?";
-  const [result, fields] = await connection.query(sql, email);
-  await connection.end();
-
-  if (result[0].isRegistered <= 0) {
-    return false;
+export async function hashPassword(plainPassword) {
+  try {
+    return await bcrypt.hash(plainPassword, 3);
+  } catch (error) {
+    console.error("[Hash Password Error]: ", error);
+    throw new Error("Error occured in hashing a password.");
   }
-
-  return true;
 }
 
-async function saveMemberData(db, validatedPayload) {
+export async function saveMemberData(db, validatedPayload) {
   const sql =
     "INSERT INTO members (address, zip, tin, mobile, telephone, email, payor_type, password) VALUES (?,?,?,?,?,?,?,?)";
+
+  let hashedPassword;
+  try {
+    hashedPassword = await hashPassword(validatedPayload.password);
+  } catch (error) {
+    throw new Error("There was an error saving your membership information.");
+  }
 
   const values = [
     validatedPayload.address,
@@ -36,7 +33,7 @@ async function saveMemberData(db, validatedPayload) {
     validatedPayload.telephone,
     validatedPayload.email,
     validatedPayload.payorType,
-    hashPassword(validatedPayload.password)
+    hashedPassword
   ];
 
   try {
@@ -47,7 +44,7 @@ async function saveMemberData(db, validatedPayload) {
   }
 }
 
-async function validateMemberRegistrationPayloads(payload) {
+export async function validateMemberRegistrationPayloads(payload) {
   // Address
 
   if (isEmpty(payload.address)) {
@@ -151,9 +148,33 @@ async function validateMemberRegistrationPayloads(payload) {
   }
 }
 
-module.exports = {
-  hashPassword,
-  isEmailRegistered,
-  saveMemberData,
-  validateMemberRegistrationPayloads
-};
+export async function isEmailRegistered(email) {
+  const connection = await connectDB("sss_contribution");
+  const sql = "SELECT COUNT(*) as isRegistered FROM members WHERE email = ?";
+  const [result, fields] = await connection.query(sql, email);
+  await connection.end();
+
+  if (result[0].isRegistered <= 0) {
+    return false;
+  }
+
+  return true;
+}
+
+export async function comparePasswords(hashed, plain) {
+  try {
+    return await bcrypt.compare(plain, hashed);
+  } catch (error) {
+    console.error("[Compare Password Error]: ", error);
+    throw new Error("Error occured in comparing a password.");
+  }
+}
+
+export async function signToken(sss_no) {
+  try {
+    return jwt.sign({ sss_no: sss_no }, process.env.TOKEN_SALT, { expiresIn: "24h" });
+  } catch (error) {
+    console.error("[Jwt Signing Error]", error);
+    throw new Error("An error occured while signing a token.");
+  }
+}

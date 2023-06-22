@@ -1,13 +1,15 @@
-const express = require("express");
+import express from "express";
 const app = express();
-const dotenv = require("dotenv");
-const auth = require("./api/auth/auth");
-const accounts = require("./api/accounts/accounts");
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import auth from "./src/api/authentications/authentications.js";
+import accounts from "./src/api/accounts/accounts.js";
 
 // Configurations
 const dotenvPath = `./.env.${process.env.NODE_ENV}`;
 dotenv.config({ path: dotenvPath });
 app.use(express.json());
+app.use(cookieParser());
 
 // APIs
 app.use("/auth", auth);

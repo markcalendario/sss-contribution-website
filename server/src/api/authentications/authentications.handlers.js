@@ -1,7 +1,7 @@
-const connectDB = require("../../db/connection");
-const { saveMemberData } = require("./accounts.utils");
+import connectDB from "../../db/connection.js";
+import { saveMemberData, comparePasswords, signToken } from "./authentications.utils.js";
 
-async function handleMemberRegistration(req, res) {
+export async function handleIndividualMemberRegistration(req, res) {
   const db = await connectDB("sss_contribution");
   const payload = req.body;
   let lastInsertedID;
@@ -31,7 +31,6 @@ async function handleMemberRegistration(req, res) {
     payload.crn,
     payload.firstName,
     payload.lastName,
-    payload.telephone,
     payload.middleName,
     payload.suffix
   ];
@@ -56,7 +55,7 @@ async function handleMemberRegistration(req, res) {
   return res.send({ success: true, message: "SSS account is successfully registered." });
 }
 
-async function handleEmployerRegistration(req, res) {
+export async function handleEmployerRegistration(req, res) {
   const db = await connectDB("sss_contribution");
   const payload = req.body;
   let lastInsertedID;
@@ -99,4 +98,30 @@ async function handleEmployerRegistration(req, res) {
   return res.send({ success: true, message: "SSS employer account is successfully registered." });
 }
 
-module.exports = { handleMemberRegistration, handleEmployerRegistration };
+export async function handleLogin(req, res) {
+  const connection = await connectDB("sss_contribution");
+
+  const sql = "SELECT sss_no, password FROM members WHERE email = ? LIMIT 1";
+  const values = [req.body.email];
+  const [row, field] = await connection.query(sql, values);
+  const fetchedData = row[0];
+  // skip checking if there's a row (or email is present)
+  // because it is already handled by the middleware
+
+  const hashedPassword = fetchedData.password;
+  let isPasswordCorrect;
+  try {
+    isPasswordCorrect = await comparePasswords(hashedPassword, req.body.password);
+  } catch (error) {
+    throw new Error("An error occured while logging in.", error);
+  }
+
+  if (!isPasswordCorrect) {
+    return res.send({ success: false, message: "Incorrect credentials. Please try again." });
+  }
+
+  const token = await signToken(fetchedData.sss_no);
+  res
+    .cookie("auth_token", token, { maxAge: 86400000, httpOnly: true, secure: true })
+    .send({ success: true, message: "You are now logged in." });
+}
