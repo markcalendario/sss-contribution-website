@@ -9,17 +9,24 @@ import {
 import {
   validateIndividualRegistrationPayloads,
   validateEmployerRegistrationPayloads,
-  validateLoginPayloads
+  validateLoginPayloads,
+  validateMemberRegistrationPayloads
 } from "./authentications.middlewares.js";
 
 const router = express.Router();
 
 router.post(
   "/register/individual",
+  validateMemberRegistrationPayloads,
   validateIndividualRegistrationPayloads,
   handleIndividualMemberRegistration
 );
-router.post("/register/employer", validateEmployerRegistrationPayloads, handleEmployerRegistration);
+router.post(
+  "/register/employer",
+  validateMemberRegistrationPayloads,
+  validateEmployerRegistrationPayloads,
+  handleEmployerRegistration
+);
 router.get("/login", validateLoginPayloads, handleLogin);
 
 export default router;
