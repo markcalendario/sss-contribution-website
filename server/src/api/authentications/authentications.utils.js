@@ -130,8 +130,13 @@ export async function validateMemberRegistrationPayloads(payload) {
     throw new Error("Please provide a valid email.");
   }
 
-  if (await isEmailRegistered(payload.email)) {
-    throw new Error("Email is already registered. Try signing in.");
+  try {
+    if (await isEmailRegistered(payload.email)) {
+      throw new Error("Email is already registered. Try signing in.");
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
   }
 
   if (payload.email.length > membersConfigs.email.length) {
@@ -156,20 +161,20 @@ export async function validateMemberRegistrationPayloads(payload) {
 export async function isEmailRegistered(email) {
   const sql = "SELECT COUNT(*) as isRegistered FROM members WHERE email = ?";
 
-  const connection = await connectDB("sss_contribution");
-  if (!connection) {
+  const db = await connectDB("sss_contribution");
+  if (!db) {
     throw new Error("Cannot connect to the database.");
   }
 
   let rows;
 
   try {
-    [rows] = await connection.query(sql, email);
+    [rows] = await db.query(sql, email);
   } catch (error) {
     console.error(error);
     throw new Error("[Query Error]", error);
   } finally {
-    connection.end();
+    db.end();
   }
 
   if (rows[0].isRegistered <= 0) {

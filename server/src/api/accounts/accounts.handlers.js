@@ -5,9 +5,9 @@ import { isEmpty } from "../../global/utils/validators.js";
 export async function handleGetRole(req, res) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
 
-  const connection = await connectDB("sss_contribution");
-  if (!connection) {
-    return res.send({ message: "Cannot connect to the database." });
+  const db = await connectDB("sss_contribution");
+  if (!db) {
+    return res.status(500).send({ message: "Cannot connect to the database." });
   }
 
   const sql =
@@ -17,14 +17,14 @@ export async function handleGetRole(req, res) {
   let rows;
 
   try {
-    [rows] = await connection.query(sql, value);
+    [rows] = await db.query(sql, value);
   } catch (error) {
     console.error("[DB Error]", error);
     return res
       .status(500)
       .send({ success: false, message: "An error occured while getting role." });
   } finally {
-    connection.end();
+    db.end();
   }
 
   const fetchedData = rows[0];
@@ -39,9 +39,9 @@ export async function handleGetRole(req, res) {
 export async function handleGetIndividualMemberInfo(req, res) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
 
-  const connection = await connectDB("sss_contribution");
-  if (!connection) {
-    return res.send({ message: "Cannot connect to the database." });
+  const db = await connectDB("sss_contribution");
+  if (!db) {
+    return res.status(500).send({ message: "Cannot connect to the database." });
   }
 
   const sql =
@@ -51,7 +51,7 @@ export async function handleGetIndividualMemberInfo(req, res) {
   let rows;
 
   try {
-    [rows] = await connection.query(sql, values);
+    [rows] = await db.query(sql, values);
   } catch (error) {
     console.error("[DB Error]", error);
     return res.status(500).send({
@@ -59,7 +59,7 @@ export async function handleGetIndividualMemberInfo(req, res) {
       message: "Error fetching individual member information."
     });
   } finally {
-    connection.end();
+    db.end();
   }
 
   // Do not validate if the rows will return any value from the individual table because IT WILL.
@@ -75,9 +75,9 @@ export async function handleGetIndividualMemberInfo(req, res) {
 export async function handleGetEmployerMemberInfo(req, res) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
 
-  const connection = await connectDB("sss_contribution");
-  if (!connection) {
-    return res.send({ message: "Cannot connect to the database." });
+  const db = await connectDB("sss_contribution");
+  if (!db) {
+    return res.status(500).send({ message: "Cannot connect to the database." });
   }
 
   const sql =
@@ -87,7 +87,7 @@ export async function handleGetEmployerMemberInfo(req, res) {
   let rows;
 
   try {
-    [rows] = await connection.query(sql, values);
+    [rows] = await db.query(sql, values);
   } catch (error) {
     console.error("[Query Error]", error);
     return res.status(500).send({
@@ -95,7 +95,7 @@ export async function handleGetEmployerMemberInfo(req, res) {
       message: "An error occured while getting information as an employer."
     });
   } finally {
-    connection.end();
+    db.end();
   }
 
   // Do not validate if the rows will return any value from the employer table because IT WILL.

@@ -6,7 +6,7 @@ export async function handleIndividualMemberRegistration(req, res) {
 
   const db = await connectDB("sss_contribution");
   if (!db) {
-    return res.send({ message: "Cannot connect to the database." });
+    return res.status(500).send({ message: "Cannot connect to the database." });
   }
 
   try {
@@ -70,7 +70,7 @@ export async function handleEmployerRegistration(req, res) {
 
   const db = await connectDB("sss_contribution");
   if (!db) {
-    return res.send({ message: "Cannot connect to the database." });
+    return res.status(500).send({ message: "Cannot connect to the database." });
   }
 
   try {
@@ -122,9 +122,9 @@ export async function handleEmployerRegistration(req, res) {
 }
 
 export async function handleLogin(req, res) {
-  const connection = await connectDB("sss_contribution");
-  if (!connection) {
-    return res.send({ message: "Cannot connect to the database." });
+  const db = await connectDB("sss_contribution");
+  if (!db) {
+    return res.status(500).send({ message: "Cannot connect to the database." });
   }
 
   const sql = "SELECT sss_no, password FROM members WHERE email = ? LIMIT 1";
@@ -133,11 +133,11 @@ export async function handleLogin(req, res) {
   let rows;
 
   try {
-    [rows] = await connection.query(sql, values);
+    [rows] = await db.query(sql, values);
   } catch (error) {
     return res.send({ success: false, message: "An error occured while logging in." });
   } finally {
-    connection.end();
+    db.end();
   }
 
   const fetchedData = rows[0];

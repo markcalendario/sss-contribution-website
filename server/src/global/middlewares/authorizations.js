@@ -39,22 +39,22 @@ export async function isIndividualMember(req, res, next) {
   const sql = "SELECT 1 FROM individual WHERE sss_no = ?";
   const values = [sss_no];
 
-  const connection = await connectDB("sss_contribution");
-  if (!connection) {
-    return res.send({ message: "Cannot connect to the database." });
+  const db = await connectDB("sss_contribution");
+  if (!db) {
+    return res.status(500).send({ message: "Cannot connect to the database." });
   }
 
   let rows;
 
   try {
-    [rows] = await connection.query(sql, values);
+    [rows] = await db.query(sql, values);
   } catch (error) {
     console.error("[DB Error]", error);
     return res
       .status(500)
       .send({ success: false, message: "An error occured while fetching your information" });
   } finally {
-    connection.end();
+    db.end();
   }
 
   if (isEmpty(rows)) {
@@ -70,22 +70,22 @@ export async function isEmployerMember(req, res, next) {
   const sql = "SELECT 1 FROM employers WHERE sss_no = ?";
   const values = [sss_no];
 
-  const connection = await connectDB("sss_contribution");
-  if (!connection) {
-    return res.send({ message: "Cannot connect to the database." });
+  const db = await connectDB("sss_contribution");
+  if (!db) {
+    return res.status(500).send({ message: "Cannot connect to the database." });
   }
 
   let rows;
 
   try {
-    [rows] = await connection.query(sql, values);
+    [rows] = await db.query(sql, values);
   } catch (error) {
     console.error("[DB Error]", error);
     return res
       .status(500)
       .send({ success: false, message: "An error occured while fetching your information" });
   } finally {
-    connection.end();
+    db.end();
   }
 
   if (isEmpty(rows)) {

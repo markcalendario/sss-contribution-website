@@ -114,10 +114,17 @@ export async function validateLoginPayloads(req, res, next) {
     });
   }
 
-  if (!(await isEmailRegistered(payload.email))) {
+  try {
+    if (!(await isEmailRegistered(payload.email))) {
+      return res.send({
+        success: false,
+        message: "The email address you provided is not registered. Try signing up instead."
+      });
+    }
+  } catch (error) {
     return res.send({
       success: false,
-      message: "The email address you provided is not registered. Try signing up instead."
+      message: "Error occured while checking your email address."
     });
   }
 
