@@ -9,7 +9,7 @@ export async function hashPassword(plainPassword) {
   try {
     return await bcrypt.hash(plainPassword, 3);
   } catch (error) {
-    console.error("[Hash Password Error]: ", error);
+    console.error("[Password Hashing Error]: ", error);
     throw new Error("Error occured in hashing a password.");
   }
 }
@@ -19,6 +19,7 @@ export async function saveMemberData(db, validatedPayload) {
     "INSERT INTO members (address, zip, tin, mobile, telephone, email, payor_type, password) VALUES (?,?,?,?,?,?,?,?)";
 
   let hashedPassword;
+
   try {
     hashedPassword = await hashPassword(validatedPayload.password);
   } catch (error) {
@@ -36,8 +37,12 @@ export async function saveMemberData(db, validatedPayload) {
     hashedPassword
   ];
 
+  // Do not end connections
+  // This is part of a TRANSACTION
+  // Closing a connections must be handled after COMMIT or ROLLBACK outside of this function
+
   try {
-    const [rows, fields] = await db.query(sql, values);
+    const [rows] = await db.query(sql, values);
     return rows.insertId;
   } catch {
     throw new Error("There was an error saving your membership information.");
@@ -149,12 +154,21 @@ export async function validateMemberRegistrationPayloads(payload) {
 }
 
 export async function isEmailRegistered(email) {
-  const connection = await connectDB("sss_contribution");
   const sql = "SELECT COUNT(*) as isRegistered FROM members WHERE email = ?";
-  const [result, fields] = await connection.query(sql, email);
-  await connection.end();
 
-  if (result[0].isRegistered <= 0) {
+  let connection, rows;
+
+  try {
+    connection = await connectDB("sss_contribution");
+    [rows] = await connection.query(sql, email);
+  } catch (error) {
+    console.error(error);
+    throw new Error("[Query Error]", error);
+  } finally {
+    connection.end();
+  }
+
+  if (rows[0].isRegistered <= 0) {
     return false;
   }
 

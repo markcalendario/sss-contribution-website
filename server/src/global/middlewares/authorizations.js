@@ -10,8 +10,10 @@ export function validateAuthCookie(req, res, next) {
     return res.status(401).send({ success: false, message: "Cookie is absent." });
   }
 
+  let payload;
+
   try {
-    jwt.verify(authCookie, process.env.TOKEN_SALT);
+    payload = jwt.verify(authCookie, process.env.TOKEN_SALT);
   } catch (error) {
     return res
       .clearCookie("auth_token")
@@ -19,18 +21,37 @@ export function validateAuthCookie(req, res, next) {
       .send({ success: false, message: "Invalid cookie, " + error.message });
   }
 
+  // Check if sss_no is present
+
+  if (isEmpty(payload.sss_no)) {
+    return res
+      .clearCookie("auth_token")
+      .status(401)
+      .send({ success: false, message: "Invalid cookie, no identity." });
+  }
+
   next();
 }
 
 export async function isIndividualMember(req, res, next) {
   const sss_no = decodeAuthToken(req.cookies.auth_token).sss_no;
-  const connection = await connectDB("sss_contribution");
 
   const sql = "SELECT 1 FROM individual WHERE sss_no = ?";
   const values = [sss_no];
 
-  const [rows, field] = await connection.query(sql, values);
-  await connection.end();
+  let connection, rows;
+
+  try {
+    connection = await connectDB("sss_contribution");
+    [rows] = await connection.query(sql, values);
+  } catch (error) {
+    console.error("[DB Error]", error);
+    return res
+      .status(500)
+      .send({ success: false, message: "An error occured while fetching your information" });
+  } finally {
+    connection.end();
+  }
 
   if (isEmpty(rows)) {
     return res.status(401).send({ success: false, message: "You are not an individual member." });
@@ -41,13 +62,23 @@ export async function isIndividualMember(req, res, next) {
 
 export async function isEmployerMember(req, res, next) {
   const sss_no = decodeAuthToken(req.cookies.auth_token).sss_no;
-  const connection = await connectDB("sss_contribution");
 
   const sql = "SELECT 1 FROM employers WHERE sss_no = ?";
   const values = [sss_no];
 
-  const [rows, field] = await connection.query(sql, values);
-  await connection.end();
+  let connection, rows;
+
+  try {
+    connection = await connectDB("sss_contribution");
+    [rows] = await connection.query(sql, values);
+  } catch (error) {
+    console.error("[DB Error]", error);
+    return res
+      .status(500)
+      .send({ success: false, message: "An error occured while fetching your information" });
+  } finally {
+    connection.end();
+  }
 
   if (isEmpty(rows)) {
     return res.status(401).send({ success: false, message: "You are not an employer member." });

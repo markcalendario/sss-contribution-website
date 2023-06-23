@@ -17,13 +17,13 @@ export function isPeriodRetroactive(month, year) {
   ];
 
   const currentDate = new Date();
-  const currentMonth = currentDate.toLocaleString("default", { month: "long" });
+  const currentMonth = currentDate.toLocaleString("default", { month: "long" }).toLowerCase();
 
   const isYearRetroactive = parseInt(year) < currentDate.getFullYear();
-  const isMonthRetroactive =
-    months.indexOf(month.toLowerCase()) < months.indexOf(currentMonth.toLowerCase());
+  const isMonthRetroactive = months.indexOf(month) < months.indexOf(currentMonth);
+  const isYearCurrent = parseInt(year) === currentDate.getFullYear();
 
-  if (isYearRetroactive || (parseInt(year) === currentDate.getFullYear() && isMonthRetroactive)) {
+  if (isYearRetroactive || (isYearCurrent && isMonthRetroactive)) {
     return true;
   }
 
@@ -31,13 +31,22 @@ export function isPeriodRetroactive(month, year) {
 }
 
 export async function isPeriodAlreadyPaid(month, year, sssNo) {
-  const connection = await connectDB("sss_contribution");
   const sql = "SELECT * FROM contributions WHERE month = ? AND year = ? AND sss_no = ?";
   const values = [month, year, sssNo];
-  const [row, fields] = await connection.query(sql, values);
-  await connection.end();
 
-  if (row.length > 0) {
+  let connection, rows;
+
+  try {
+    connection = await connectDB("sss_contribution");
+    [rows] = await connection.query(sql, values);
+  } catch (error) {
+    console.error("[DB Error]", error);
+    throw Error("Error occured while checking data of a period.");
+  } finally {
+    await connection.end();
+  }
+
+  if (rows.length > 0) {
     return true;
   }
 
