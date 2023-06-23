@@ -3,12 +3,12 @@ import {
   isEmployerMember,
   isIndividualMember,
   validateAuthCookie
-} from "../../global/middlewares/authorization.js";
+} from "../../global/middlewares/authorizations.js";
 import {
   handleGetEmployerMemberInfo,
   handleGetIndividualMemberInfo,
   handleGetRole
-} from "./accounts.handler.js";
+} from "./accounts.handlers.js";
 const router = express.Router();
 
 router.get("/role", validateAuthCookie, handleGetRole);

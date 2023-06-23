@@ -1,6 +1,8 @@
+import configs from "./global.configs.js";
+
 export default {
   sss_no: {
-    length: 10
+    ...configs.sss_no
   },
   address: {
     length: 100
