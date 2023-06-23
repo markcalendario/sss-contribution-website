@@ -39,10 +39,14 @@ export async function isIndividualMember(req, res, next) {
   const sql = "SELECT 1 FROM individual WHERE sss_no = ?";
   const values = [sss_no];
 
-  let connection, rows;
+  const connection = await connectDB("sss_contribution");
+  if (!connection) {
+    return res.send({ message: "Cannot connect to the database." });
+  }
+
+  let rows;
 
   try {
-    connection = await connectDB("sss_contribution");
     [rows] = await connection.query(sql, values);
   } catch (error) {
     console.error("[DB Error]", error);
@@ -66,10 +70,14 @@ export async function isEmployerMember(req, res, next) {
   const sql = "SELECT 1 FROM employers WHERE sss_no = ?";
   const values = [sss_no];
 
-  let connection, rows;
+  const connection = await connectDB("sss_contribution");
+  if (!connection) {
+    return res.send({ message: "Cannot connect to the database." });
+  }
+
+  let rows;
 
   try {
-    connection = await connectDB("sss_contribution");
     [rows] = await connection.query(sql, values);
   } catch (error) {
     console.error("[DB Error]", error);

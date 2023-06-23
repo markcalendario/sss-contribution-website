@@ -34,10 +34,14 @@ export async function isPeriodAlreadyPaid(month, year, sssNo) {
   const sql = "SELECT * FROM contributions WHERE month = ? AND year = ? AND sss_no = ?";
   const values = [month, year, sssNo];
 
-  let connection, rows;
+  const connection = await connectDB("sss_contribution");
+  if (!connection) {
+    return res.send({ message: "Cannot connect to the database." });
+  }
+
+  let rows;
 
   try {
-    connection = await connectDB("sss_contribution");
     [rows] = await connection.query(sql, values);
   } catch (error) {
     console.error("[DB Error]", error);

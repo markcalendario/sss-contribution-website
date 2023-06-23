@@ -5,8 +5,7 @@ export async function handleIndividualContributionFiling(req, res) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
   const contributions = req.body.contributions;
 
-  let connection = await connectDB("sss_contribution");
-
+  const connection = await connectDB("sss_contribution");
   if (!connection) {
     return res.status(500).send({ message: "Can't connect to database" });
   }

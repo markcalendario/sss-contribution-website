@@ -1,6 +1,6 @@
 import validator from "validator";
-import individualConfigs from "../../db/individual.configs.js";
-import employersConfigs from "../../db/employers.configs.js";
+import individualConfigs from "../../db/configs/individual.configs.js";
+import employersConfigs from "../../db/configs/employers.configs.js";
 
 import { validateMemberRegistrationPayloads, isEmailRegistered } from "./authentications.utils.js";
 import { isEmpty } from "../../global/utils/validators.js";
@@ -117,7 +117,7 @@ export async function validateLoginPayloads(req, res, next) {
   if (!(await isEmailRegistered(payload.email))) {
     return res.send({
       success: false,
-      message: "The email address you provided is not registered. Try signing in instead."
+      message: "The email address you provided is not registered. Try signing up instead."
     });
   }
 

@@ -5,14 +5,18 @@ import { isEmpty } from "../../global/utils/validators.js";
 export async function handleGetRole(req, res) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
 
+  const connection = await connectDB("sss_contribution");
+  if (!connection) {
+    return res.send({ message: "Cannot connect to the database." });
+  }
+
   const sql =
     "SELECT IF (EXISTS (SELECT 1 FROM individual WHERE sss_no = ?), 'Individual', 'Employer') AS role FROM members;";
   const value = [sssNo];
 
-  let connection, rows;
+  let rows;
 
   try {
-    connection = await connectDB("sss_contribution");
     [rows] = await connection.query(sql, value);
   } catch (error) {
     console.error("[DB Error]", error);
@@ -35,14 +39,18 @@ export async function handleGetRole(req, res) {
 export async function handleGetIndividualMemberInfo(req, res) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
 
+  const connection = await connectDB("sss_contribution");
+  if (!connection) {
+    return res.send({ message: "Cannot connect to the database." });
+  }
+
   const sql =
     "SELECT members.sss_no, crn, first_name, last_name, middle_name, suffix, address, zip, tin, mobile, telephone, payor_type, email FROM members INNER JOIN individual ON individual.sss_no = members.sss_no WHERE members.sss_no = ?;";
   const values = [sssNo];
 
-  let connection, rows;
+  let rows;
 
   try {
-    connection = await connectDB("sss_contribution");
     [rows] = await connection.query(sql, values);
   } catch (error) {
     console.error("[DB Error]", error);
@@ -67,14 +75,18 @@ export async function handleGetIndividualMemberInfo(req, res) {
 export async function handleGetEmployerMemberInfo(req, res) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
 
+  const connection = await connectDB("sss_contribution");
+  if (!connection) {
+    return res.send({ message: "Cannot connect to the database." });
+  }
+
   const sql =
     "SELECT members.sss_no, business_name, website, address, zip, tin, mobile, telephone, payor_type, email FROM members INNER JOIN employers ON employers.sss_no = members.sss_no WHERE members.sss_no = ?;";
   const values = [sssNo];
 
-  let connection, rows;
+  let rows;
 
   try {
-    connection = await connectDB("sss_contribution");
     [rows] = await connection.query(sql, values);
   } catch (error) {
     console.error("[Query Error]", error);

@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import membersConfigs from "../../db/members.configs.js";
+import membersConfigs from "../../db/configs/members.configs.js";
 import validator from "validator";
 import { isEmpty } from "../../global/utils/validators.js";
 import connectDB from "../../db/connection.js";
@@ -156,10 +156,14 @@ export async function validateMemberRegistrationPayloads(payload) {
 export async function isEmailRegistered(email) {
   const sql = "SELECT COUNT(*) as isRegistered FROM members WHERE email = ?";
 
-  let connection, rows;
+  const connection = await connectDB("sss_contribution");
+  if (!connection) {
+    throw new Error("Cannot connect to the database.");
+  }
+
+  let rows;
 
   try {
-    connection = await connectDB("sss_contribution");
     [rows] = await connection.query(sql, email);
   } catch (error) {
     console.error(error);

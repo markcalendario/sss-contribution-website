@@ -1,5 +1,5 @@
 import { isEmpty } from "../../global/utils/validators.js";
-import contributionsConfigs from "../../db/contributions.configs.js";
+import contributionsConfigs from "../../db/configs/contributions.configs.js";
 import { isPeriodAlreadyPaid, isPeriodRetroactive } from "./contributions.utils.js";
 import { decodeAuthToken } from "../../global/utils/jwt.js";
 

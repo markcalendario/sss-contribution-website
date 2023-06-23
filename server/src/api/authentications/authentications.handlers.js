@@ -4,11 +4,12 @@ import { saveMemberData, comparePasswords, signToken } from "./authentications.u
 export async function handleIndividualMemberRegistration(req, res) {
   const payload = req.body;
 
-  let db;
+  const db = await connectDB("sss_contribution");
+  if (!db) {
+    return res.send({ message: "Cannot connect to the database." });
+  }
 
   try {
-    // Establish a connection
-    db = await connectDB("sss_contribution");
     // Start a transaction
     await db.query("START TRANSACTION");
   } catch (error) {
@@ -67,11 +68,12 @@ export async function handleIndividualMemberRegistration(req, res) {
 export async function handleEmployerRegistration(req, res) {
   const payload = req.body;
 
-  let db;
+  const db = await connectDB("sss_contribution");
+  if (!db) {
+    return res.send({ message: "Cannot connect to the database." });
+  }
 
   try {
-    // Establish a connection
-    db = await connectDB("sss_contribution");
     // Start a transaction
     await db.query("START TRANSACTION");
   } catch (error) {
@@ -121,12 +123,24 @@ export async function handleEmployerRegistration(req, res) {
 
 export async function handleLogin(req, res) {
   const connection = await connectDB("sss_contribution");
+  if (!connection) {
+    return res.send({ message: "Cannot connect to the database." });
+  }
 
   const sql = "SELECT sss_no, password FROM members WHERE email = ? LIMIT 1";
   const values = [req.body.email];
 
-  const [row, field] = await connection.query(sql, values);
-  const fetchedData = row[0];
+  let rows;
+
+  try {
+    [rows] = await connection.query(sql, values);
+  } catch (error) {
+    return res.send({ success: false, message: "An error occured while logging in." });
+  } finally {
+    connection.end();
+  }
+
+  const fetchedData = rows[0];
 
   // Skip checking if there's a row (or email is present)
   // Because it was already handled by the middleware
@@ -138,7 +152,8 @@ export async function handleLogin(req, res) {
   try {
     isPasswordCorrect = await comparePasswords(hashedPassword, req.body.password);
   } catch (error) {
-    throw new Error("An error occured while logging in.", error);
+    console.error("[DB Error]", error);
+    return res.send({ success: false, message: "An error occured while logging in." });
   }
 
   if (!isPasswordCorrect) {
@@ -146,7 +161,7 @@ export async function handleLogin(req, res) {
   }
 
   const token = await signToken(fetchedData.sss_no);
-  connection.end();
+
   res
     .cookie("auth_token", token, { maxAge: 86400000, httpOnly: true, secure: true })
     .send({ success: true, message: "You are now logged in." });
