@@ -6,7 +6,7 @@ import membersConfigs from "../../db/configs/members.configs.js";
 import { isEmailRegistered } from "./authentications.utils.js";
 import { isEmpty } from "../../global/utils/validators.js";
 
-export async function validateMemberRegistrationPayloads(req, res, next) {
+export async function validateMemberRegistrationPayload(req, res, next) {
   const payload = req.body;
 
   // Address
@@ -132,7 +132,7 @@ export async function validateMemberRegistrationPayloads(req, res, next) {
   next();
 }
 
-export async function validateIndividualRegistrationPayloads(req, res, next) {
+export async function validateIndividualRegistrationPayload(req, res, next) {
   const payload = req.body;
 
   // Individual payload validation
@@ -188,7 +188,7 @@ export async function validateIndividualRegistrationPayloads(req, res, next) {
   next();
 }
 
-export async function validateEmployerRegistrationPayloads(req, res, next) {
+export async function validateEmployerRegistrationPayload(req, res, next) {
   const payload = req.body;
 
   // Employer member data payload validation
@@ -211,7 +211,7 @@ export async function validateEmployerRegistrationPayloads(req, res, next) {
   next();
 }
 
-export async function validateLoginPayloads(req, res, next) {
+export async function validateLoginPayload(req, res, next) {
   const payload = req.body;
 
   if (isEmpty(payload.email)) {

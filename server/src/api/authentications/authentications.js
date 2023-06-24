@@ -7,26 +7,26 @@ import {
 } from "./authentications.handlers.js";
 
 import {
-  validateIndividualRegistrationPayloads,
-  validateEmployerRegistrationPayloads,
-  validateLoginPayloads,
-  validateMemberRegistrationPayloads
+  validateIndividualRegistrationPayload,
+  validateEmployerRegistrationPayload,
+  validateLoginPayload,
+  validateMemberRegistrationPayload
 } from "./authentications.middlewares.js";
 
 const router = express.Router();
 
 router.post(
   "/register/individual",
-  validateMemberRegistrationPayloads,
-  validateIndividualRegistrationPayloads,
+  validateMemberRegistrationPayload,
+  validateIndividualRegistrationPayload,
   handleIndividualMemberRegistration
 );
 router.post(
   "/register/employer",
-  validateMemberRegistrationPayloads,
-  validateEmployerRegistrationPayloads,
+  validateMemberRegistrationPayload,
+  validateEmployerRegistrationPayload,
   handleEmployerRegistration
 );
-router.get("/login", validateLoginPayloads, handleLogin);
+router.get("/login", validateLoginPayload, handleLogin);
 
 export default router;
