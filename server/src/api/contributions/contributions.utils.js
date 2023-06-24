@@ -56,3 +56,27 @@ export async function isPeriodAlreadyPaid(month, year, sssNo) {
 
   return false;
 }
+
+export async function hasUnpaidContributions(sssNo) {
+  const db = await connectDB("sss_contribution");
+  if (!db) {
+    throw new Error("Error occured while connecting with database.");
+  }
+
+  const sql =
+    "SELECT COUNT(*) AS unpaidContributions FROM contributions LEFT JOIN payments ON contributions.sss_no = payments.sss_no AND contributions.month = payments.month AND contributions.year = payments.year WHERE contributions.sss_no = ? AND payments.sss_no IS NULL;";
+  const values = [sssNo];
+
+  let rows;
+
+  try {
+    [rows] = await db.query(sql, values);
+  } catch (error) {
+    console.log("[DB Error]", error);
+    throw new Error("An error occured while checking for unpaid contributions.");
+  } finally {
+    db.end();
+  }
+
+  return rows[0].unpaidContributions;
+}

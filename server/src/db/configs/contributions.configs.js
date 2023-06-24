@@ -1,8 +1,11 @@
 import configs from "./global.configs.js";
 
 export default {
-  amount: {
-    ...configs.contribution_amount
+  sss: {
+    ...configs.sss
+  },
+  ec: {
+    ...configs.ec
   },
   month: {
     ...configs.month

@@ -18,7 +18,12 @@ export default {
       "december"
     ]
   },
-  contribution_amount: {
+  sss: {
+    length: 11,
+    min: 200, // custom, not a database metadata
+    max: 999999999.99 // custom, not a database metadata
+  },
+  ec: {
     length: 11,
     min: 200, // custom, not a database metadata
     max: 999999999.99 // custom, not a database metadata

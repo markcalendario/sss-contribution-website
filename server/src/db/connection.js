@@ -1,6 +1,6 @@
 import mysql from "mysql2/promise";
 
-export default async function connectDB(database, res) {
+export default async function connectDB(database) {
   let connection = null;
 
   try {
