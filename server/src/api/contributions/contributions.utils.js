@@ -1,4 +1,7 @@
 import connectDB from "../../db/connection.js";
+import validator from "validator";
+import { isString, isStringEmpty } from "../../global/utils/validators.js";
+import contributionsConfigs from "../../db/configs/contributions.configs.js";
 
 export function isPeriodRetroactive(month, year) {
   const months = [
@@ -79,4 +82,40 @@ export async function hasUnpaidContributions(sssNo) {
   }
 
   return rows[0].unpaidContributions;
+}
+
+export function isContributionAmountValid(amount, contributionType) {
+  if (contributionType !== "sss" && contributionType !== "ec") {
+    return [false, "Unknown contribution type."];
+  }
+
+  if (!isString(amount)) {
+    return [false, `${contributionType} amount must be string.`];
+  }
+
+  if (isStringEmpty(amount)) {
+    return [false, `${contributionType} amount is required.`];
+  }
+
+  const isValidCurrency = validator.isNumeric(amount);
+  if (!isValidCurrency) {
+    return [false, `${contributionType} amount is not a number.`];
+  }
+
+  if (parseFloat(amount) > contributionsConfigs.sss.max) {
+    return [
+      false,
+      `The maximum acceptable ${contributionType} contribution amount is ${contributionsConfigs[contributionType].max}`
+    ];
+  }
+
+  const isAmountUnderMinRange = parseFloat(amount) < contributionsConfigs[contributionType].min;
+  if (isAmountUnderMinRange) {
+    return [
+      false,
+      `The minimum acceptable ${contributionType} contribution amount is ${contributionsConfigs[contributionType].min}`
+    ];
+  }
+
+  return [true, "Contribution amount is valid."];
 }

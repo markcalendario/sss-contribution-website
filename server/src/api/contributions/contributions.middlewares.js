@@ -1,7 +1,8 @@
-import { isEmpty } from "../../global/utils/validators.js";
+import { isStringEmpty, isString, isArray } from "../../global/utils/validators.js";
 import contributionsConfigs from "../../db/configs/contributions.configs.js";
 import {
   hasUnpaidContributions,
+  isContributionAmountValid,
   isPeriodAlreadyPaid,
   isPeriodRetroactive
 } from "./contributions.utils.js";
@@ -9,16 +10,16 @@ import { decodeAuthToken } from "../../global/utils/jwt.js";
 import validator from "validator";
 
 export async function validateCommonContributionPayload(req, res, next) {
-  const contributions = req.body.contributions;
-  if (isEmpty(contributions)) {
-    return res.send({ success: false, message: "We cannot find contribution request data." });
-  }
-
-  let unpaidContributionsCount;
+  const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
 
   try {
-    const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
-    unpaidContributionsCount = await hasUnpaidContributions(sssNo);
+    const unpaidContributionsCount = await hasUnpaidContributions(sssNo);
+    if (unpaidContributionsCount > 0) {
+      return res.send({
+        success: false,
+        message: `You still have unpaid contributions for ${unpaidContributionsCount} period(s).`
+      });
+    }
   } catch (error) {
     console.error(error);
     return res.send({
@@ -27,35 +28,88 @@ export async function validateCommonContributionPayload(req, res, next) {
     });
   }
 
-  if (unpaidContributionsCount > 0) {
-    return res.send({
-      success: false,
-      message: `You still have unpaid contributions for ${unpaidContributionsCount} periods.`
-    });
+  const contributions = req.body.contributions;
+
+  if (!isArray(contributions)) {
+    return res.send({ success: false, message: "Contributions must be a type of list." });
   }
 
   for (const contribution of contributions) {
-    if (isEmpty(contribution.month) || isEmpty(contribution.year)) {
+    const { month, year } = contribution;
+
+    // Year
+
+    if (!isString(year)) {
       return res.send({
         success: false,
-        message: "Some of the contributions payload are invalid."
+        message: "Year must be a string."
       });
     }
 
-    const isMonthValid = contributionsConfigs.month.allowedValues.includes(contribution.month);
-    if (!isMonthValid) {
-      return res.send({ success: false, message: "Invalid month: " + contribution.month });
+    if (isStringEmpty(year)) {
+      return res.send({
+        success: false,
+        message: "Year is required."
+      });
     }
 
-    const isYearValid = contribution.year.toString().length > contributionsConfigs.year.length;
+    const isYearValid =
+      year.length > contributionsConfigs.year.maxLength ||
+      year.length < contributionsConfigs.year.minLength;
+
     if (isYearValid) {
-      return res.send({ success: false, message: "Invalid year: " + contribution.year });
+      return res.send({ success: false, message: "Invalid year: " + year });
     }
 
-    if (isPeriodRetroactive(contribution.month, contribution.year)) {
+    if (!validator.isInt(year)) {
+      return res.send({ success: false, message: "Year must be a number." });
+    }
+
+    // Month
+
+    if (!isString(month)) {
+      return res.send({
+        success: false,
+        message: "Month must be a string."
+      });
+    }
+
+    if (isStringEmpty(month)) {
+      return res.send({
+        success: false,
+        message: "Month is required."
+      });
+    }
+
+    const isMonthValid = contributionsConfigs.month.allowedValues.includes(month);
+
+    if (!isMonthValid) {
+      return res.send({ success: false, message: "Invalid month: " + month });
+    }
+
+    if (isPeriodRetroactive(month, year)) {
       return res.send({
         success: false,
         message: "You cannot pay retroactively."
+      });
+    }
+
+    let isPeriodPaid;
+
+    try {
+      isPeriodPaid = await isPeriodAlreadyPaid(month, year, sssNo);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send({
+        success: false,
+        message: "An error occured while checking period state."
+      });
+    }
+
+    if (isPeriodPaid) {
+      return res.send({
+        success: false,
+        message: "You already paid this period."
       });
     }
   }
@@ -67,54 +121,10 @@ export async function validateSSSContributionAmountPayload(req, res, next) {
   const contributions = req.body.contributions;
 
   for (const contribution of contributions) {
-    const sssAmount = contribution.sss;
+    let [isAmountValid, text] = isContributionAmountValid(contribution.sss, "sss");
 
-    if (isEmpty(sssAmount)) {
-      return res.send({
-        success: false,
-        message: "SSS contribution amount is required."
-      });
-    }
-
-    const isValidCurrency = validator.isNumeric(sssAmount.toString());
-    if (!isValidCurrency) {
-      return res.send({ success: false, message: "SSS contribution amount is not a number." });
-    }
-
-    const isAmountOverMaxRange = parseFloat(sssAmount) > contributionsConfigs.sss.max;
-    if (isAmountOverMaxRange) {
-      return res.send({
-        success: false,
-        message: "The maximum acceptable SSS contribution amount is " + contributionsConfigs.sss.max
-      });
-    }
-
-    const isAmountUnderMinRange = parseFloat(sssAmount) < contributionsConfigs.sss.min;
-    if (isAmountUnderMinRange) {
-      return res.send({
-        success: false,
-        message: "The minimum acceptable SSS contribution amount is " + contributionsConfigs.sss.min
-      });
-    }
-
-    let isPeriodPaid;
-
-    try {
-      const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
-      isPeriodPaid = await isPeriodAlreadyPaid(contribution.month, contribution.year, sssNo);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).send({
-        success: false,
-        message: "An error occured while checking period state."
-      });
-    }
-
-    if (isPeriodPaid) {
-      return res.send({
-        success: false,
-        message: "You already paid this period."
-      });
+    if (!isAmountValid) {
+      return res.send({ success: false, message: text });
     }
   }
 
@@ -125,54 +135,10 @@ export async function validateECContributionAmountPayload(req, res, next) {
   const contributions = req.body.contributions;
 
   for (const contribution of contributions) {
-    const ecAmount = contribution.ec;
+    let [isAmountValid, text] = isContributionAmountValid(contribution.ec, "ec");
 
-    if (isEmpty(ecAmount)) {
-      return res.send({
-        success: false,
-        message: "EC contribution amount is required."
-      });
-    }
-
-    const isValidCurrency = validator.isNumeric(ecAmount.toString());
-    if (!isValidCurrency) {
-      return res.send({ success: false, message: "EC contribution amount is not a number." });
-    }
-
-    const isAmountOverMaxRange = parseFloat(ecAmount) > contributionsConfigs.ec.max;
-    if (isAmountOverMaxRange) {
-      return res.send({
-        success: false,
-        message: "The maximum acceptable EC contribution amount is " + contributionsConfigs.ec.max
-      });
-    }
-
-    const isAmountUnderMinRange = parseFloat(ecAmount) < contributionsConfigs.ec.min;
-    if (isAmountUnderMinRange) {
-      return res.send({
-        success: false,
-        message: "The minimum acceptable EC contribution amount is " + contributionsConfigs.ec.min
-      });
-    }
-
-    let isPeriodPaid;
-
-    try {
-      const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
-      isPeriodPaid = await isPeriodAlreadyPaid(contribution.month, contribution.year, sssNo);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).send({
-        success: false,
-        message: "An error occured while checking period state."
-      });
-    }
-
-    if (isPeriodPaid) {
-      return res.send({
-        success: false,
-        message: "You already paid this period."
-      });
+    if (!isAmountValid) {
+      return res.send({ success: false, message: text });
     }
   }
 

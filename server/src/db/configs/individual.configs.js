@@ -1,19 +1,23 @@
+import configs from "./global.configs.js";
+
 export default {
+  sss_no: {
+    ...configs.sss_no
+  },
   crn: {
-    length: 12,
-    min: 12,
-    max: 12
+    minLength: 12,
+    maxLength: 12
   },
   first_name: {
-    length: 30
+    maxLength: 30
   },
   middle_name: {
-    length: 30
+    maxLength: 30
   },
   last_name: {
-    length: 30
+    maxLength: 30
   },
   suffix: {
-    length: 10
+    maxLength: 10
   }
 };

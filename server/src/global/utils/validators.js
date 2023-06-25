@@ -1,17 +1,41 @@
-export function isEmpty(value) {
-  if (typeof value === "undefined" || value === null) {
+export function isStringEmpty(value) {
+  if (value.trim() === "") {
     return true;
   }
 
-  if (typeof value === "string" && value.trim() === "") {
+  return false;
+}
+
+export function isString(value) {
+  if (typeof value !== "string") {
+    return false;
+  }
+
+  return true;
+}
+
+export function isObjectEmpty(obj) {
+  if (Object.keys(obj).length === 0) {
     return true;
   }
 
-  if (Array.isArray(value) && value.length === 0) {
+  return false;
+}
+
+export function isObject(obj) {
+  return typeof obj === "object" && obj !== null && !Array.isArray(obj);
+}
+
+export function isArray(array) {
+  if (Array.isArray(array)) {
     return true;
   }
 
-  if (typeof value === "object" && Object.keys(value).length === 0) {
+  return false;
+}
+
+export function isArrayEmpty(array) {
+  if (array.length === 0) {
     return true;
   }
 

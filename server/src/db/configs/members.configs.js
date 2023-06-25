@@ -5,29 +5,26 @@ export default {
     ...configs.sss_no
   },
   address: {
-    length: 100
+    maxLength: 100,
+    minLength: 5
   },
   zip: {
-    length: 9,
-    type: "number"
+    maxLength: 4,
+    minLength: 4
   },
   tin: {
-    length: 12,
-    min: 12,
-    max: 12
+    maxLength: 12,
+    minLength: 12
   },
   mobile: {
-    length: 11,
-    min: 11,
-    max: 11
+    minLength: 11,
+    maxLength: 11
   },
   telephone: {
-    length: 15,
-    min: 7,
-    max: 15
+    minLength: 7,
+    maxLength: 15
   },
   payorType: {
-    length: 18,
     allowedValues: [
       "business",
       "household",
@@ -39,14 +36,11 @@ export default {
     ]
   },
   email: {
-    length: 100
+    maxLength: 100,
+    minLength: 6 // worse case: a@a.a
   },
   password: {
-    length: 72, // ignore this in input validation, it's the number of characters in a Bcypt hashing
-    min: 4,
-    max: 16
-  },
-  membership_type: {
-    allowedValues: ["employer", "individual"]
+    minLength: 6,
+    maxLength: 16
   }
 };

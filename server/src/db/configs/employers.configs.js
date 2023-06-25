@@ -1,8 +1,13 @@
+import configs from "./global.configs.js";
+
 export default {
+  sss_no: {
+    ...configs.sss_no
+  },
   website: {
-    length: 255
+    maxLength: 255
   },
   business_name: {
-    length: 75
+    maxLength: 75
   }
 };

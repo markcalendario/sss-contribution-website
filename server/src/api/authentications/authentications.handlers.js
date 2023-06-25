@@ -3,6 +3,7 @@ import { saveMemberData, comparePasswords, signToken } from "./authentications.u
 
 export async function handleIndividualMemberRegistration(req, res) {
   const payload = req.body;
+  const { crn, firstName, lastName, middleName, suffix } = payload;
 
   const db = await connectDB("sss_contribution");
   if (!db) {
@@ -38,15 +39,7 @@ export async function handleIndividualMemberRegistration(req, res) {
 
   const sql =
     "INSERT INTO individual (sss_no, crn, first_name, last_name, middle_name, suffix) VALUES (?,?,?,?,?,?)";
-
-  const values = [
-    lastInsertedID,
-    payload.crn,
-    payload.firstName,
-    payload.lastName,
-    payload.middleName,
-    payload.suffix
-  ];
+  const values = [lastInsertedID, crn, firstName, lastName, middleName, suffix];
 
   try {
     await db.query(sql, values);
@@ -67,6 +60,7 @@ export async function handleIndividualMemberRegistration(req, res) {
 
 export async function handleEmployerRegistration(req, res) {
   const payload = req.body;
+  const { website, businessName } = payload;
 
   const db = await connectDB("sss_contribution");
   if (!db) {
@@ -102,7 +96,7 @@ export async function handleEmployerRegistration(req, res) {
   // Save membership information into members table
 
   const sql = "INSERT INTO employers (sss_no, business_name, website) VALUES (?,?,?)";
-  const values = [lastInsertedID, payload.businessName, payload.website];
+  const values = [lastInsertedID, businessName, website];
 
   try {
     await db.query(sql, values);
@@ -143,7 +137,7 @@ export async function handleLogin(req, res) {
   const fetchedData = rows[0];
 
   // Skip checking if there's a row (or email is present)
-  // Because it was already handled by the middleware
+  // Because it was already handled by the middleware, so it will return a row
 
   const hashedPassword = fetchedData.password;
 

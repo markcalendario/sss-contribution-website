@@ -1,8 +1,5 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import membersConfigs from "../../db/configs/members.configs.js";
-import validator from "validator";
-import { isEmpty } from "../../global/utils/validators.js";
 import connectDB from "../../db/connection.js";
 
 export async function hashPassword(plainPassword) {
@@ -44,7 +41,8 @@ export async function saveMemberData(db, validatedPayload) {
   try {
     const [rows] = await db.query(sql, values);
     return rows.insertId;
-  } catch {
+  } catch (error) {
+    // console.error(error);
     throw new Error("There was an error saving your membership information.");
   }
 }

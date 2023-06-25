@@ -4,104 +4,170 @@ import employersConfigs from "../../db/configs/employers.configs.js";
 import membersConfigs from "../../db/configs/members.configs.js";
 
 import { isEmailRegistered } from "./authentications.utils.js";
-import { isEmpty } from "../../global/utils/validators.js";
+import { isStringEmpty, isString } from "../../global/utils/validators.js";
 
 export async function validateMemberRegistrationPayload(req, res, next) {
-  const payload = req.body;
+  const { address, zip, tin, mobile, telephone, payorType, email, password } = req.body;
 
   // Address
 
-  if (isEmpty(payload.address)) {
+  if (!isString(address)) {
+    return res.send({ success: false, message: "Address must be string." });
+  }
+
+  if (isStringEmpty(address)) {
     return res.send({ success: false, message: "Complete address is required." });
   }
 
-  if (payload.address.length > membersConfigs.address.length) {
+  if (address.length > membersConfigs.address.maxLength) {
     return res.send({ success: false, message: "Too many characters for an address." });
+  }
+
+  if (address.length < membersConfigs.address.minLength) {
+    return res.send({ success: false, message: "Too few characters for an address." });
   }
 
   // Zip
 
-  if (isEmpty(payload.zip)) {
+  if (!isString(zip)) {
+    return res.send({ success: false, message: "Zip code must be string." });
+  }
+
+  if (isStringEmpty(zip)) {
     return res.send({ success: false, message: "Zip code is required." });
   }
 
-  if (payload.zip.length > membersConfigs.zip.length) {
-    return res.send({ success: false, message: "Too many characters for ZIP Code." });
+  if (zip.length > membersConfigs.zip.maxLength || zip.length < membersConfigs.zip.minLength) {
+    return res.send({
+      success: false,
+      message: `ZIP Code must contain ${membersConfigs.zip.maxLength} digits.`
+    });
   }
 
-  // TIN
-
-  if (isEmpty(payload.tin)) {
-    return res.send({ success: false, message: "TIN is required." });
+  if (!validator.isInt(zip)) {
+    return res.send({
+      success: false,
+      message: "ZIP code is invalid. It must contain numbers only."
+    });
   }
 
-  if (payload.tin.length < membersConfigs.tin.min || payload.tin.length > membersConfigs.tin.max) {
-    return res.send({ success: false, message: "TIN number must consists 12 digits." });
+  // TIN: optional
+
+  if (!isString(tin)) {
+    return res.send({ success: false, message: "TIN must be string." });
+  }
+
+  if (
+    !isStringEmpty(tin) &&
+    (tin.length < membersConfigs.tin.minLength || tin.length > membersConfigs.tin.maxLength)
+  ) {
+    return res.send({ success: false, message: "TIN must consist 12 digits." });
+  }
+
+  if (!isStringEmpty(tin) && !validator.isInt(tin)) {
+    return res.send({
+      success: false,
+      message: "TIN must contain numbers only."
+    });
   }
 
   // Mobile
 
-  if (isEmpty(payload.mobile)) {
+  if (!isString(mobile)) {
+    return res.send({ success: false, message: "Mobile number must be string." });
+  }
+
+  if (isStringEmpty(mobile)) {
     return res.send({
       success: false,
-      message: "11-digit (PH standard format, ex. 09xxxxxxxxx) mobile number is required."
+      message: "11-digit mobile number is required."
     });
   }
 
   if (
-    payload.mobile.length < membersConfigs.mobile.min ||
-    payload.mobile.length > membersConfigs.mobile.max
+    mobile.length < membersConfigs.mobile.minLength ||
+    mobile.length > membersConfigs.mobile.maxLength
   ) {
     return res.send({
       success: false,
-      message: "Mobile number must consists 11-digit (PH standard format, ex. 09xxxxxxxxx)."
+      message: "Mobile number must consists 11-digit."
+    });
+  }
+
+  if (!validator.isInt(mobile)) {
+    return res.send({
+      success: false,
+      message: "Invalid mobile number. Use the Philippine standard format, ex. 09xxxxxxxxx."
     });
   }
 
   // Telephone
 
-  if (isEmpty(payload.telephone)) {
+  if (!isString(telephone)) {
+    return res.send({ success: false, message: "Telephone number must be string." });
+  }
+
+  if (isStringEmpty(telephone)) {
     return res.send({ success: false, message: "Telephone number is required." });
   }
 
   if (
-    payload.telephone.length < membersConfigs.telephone.min ||
-    payload.telephone.length > membersConfigs.telephone.max
+    telephone.length < membersConfigs.telephone.minLength ||
+    telephone.length > membersConfigs.telephone.maxLength
   ) {
     return res.send({
       success: false,
-      message: "Invalid telephone number. You may include area code Ex. (02)xxxxxx..."
+      message: `Telephone number must consist minimum length of ${membersConfigs.telephone.minLength} and maximum length of ${membersConfigs.telephone.maxLength}`
+    });
+  }
+
+  if (!validator.isInt(telephone)) {
+    return res.send({
+      success: false,
+      message: "Invalid telephone number. You may include area code Ex. 02xxxxxx.."
     });
   }
 
   // Payor Type
 
-  if (isEmpty(payload.payorType)) {
+  if (!isString(payorType)) {
+    return res.send({ success: false, message: "Payor type must be string." });
+  }
+
+  if (isStringEmpty(payorType)) {
     return res.send({ success: false, message: "Please select a payor type." });
   }
 
-  if (!membersConfigs.payorType.allowedValues.includes(payload.payorType)) {
-    return res.send({ success: false, message: "Unacceptable payor type." });
-  }
-
-  if (payload.payorType.length > membersConfigs.payorType.length) {
-    return res.send({ success: false, message: "Invalid payor type." });
+  if (!membersConfigs.payorType.allowedValues.includes(payorType)) {
+    return res.send({ success: false, message: `Payor type ${payorType} is not valid.` });
   }
 
   // Email
 
-  if (isEmpty(payload.email)) {
+  if (!isString(email)) {
+    return res.send({ success: false, message: "Email must be string." });
+  }
+
+  if (isStringEmpty(email)) {
     return res.send({ success: false, message: "Email is required." });
   }
 
-  if (!validator.isEmail(payload.email)) {
+  if (!validator.isEmail(email)) {
     return res.send({ success: false, message: "Please provide a valid email." });
+  }
+
+  if (email.length > membersConfigs.email.maxLength) {
+    return res.send({ success: false, message: "Too many characters for an email address." });
+  }
+
+  if (email.length < membersConfigs.email.minLength) {
+    return res.send({ success: false, message: "Too few characters for an email address." });
   }
 
   let isEmailUsed;
 
   try {
-    isEmailUsed = await isEmailRegistered(payload.email);
+    isEmailUsed = await isEmailRegistered(email);
   } catch (error) {
     console.error(error);
     return res.send({ success: false, message: error.message });
@@ -111,77 +177,101 @@ export async function validateMemberRegistrationPayload(req, res, next) {
     return res.send({ success: false, message: "Email is already registered. Try signing in." });
   }
 
-  if (payload.email.length > membersConfigs.email.length) {
-    return res.send({ success: false, message: "Too many characters for an email address." });
-  }
-
   // Password
 
-  if (isEmpty(payload.password)) {
+  if (!isString(password)) {
+    return res.send({ success: false, message: "Password must be string." });
+  }
+
+  if (isStringEmpty(password)) {
     return res.send({ success: false, message: "Password is required." });
   }
 
-  if (payload.password.length > membersConfigs.password.max) {
-    return res.send({ success: false, message: "Too many password characters." });
-  }
+  const isPasswordLengthInRange =
+    password.length <= membersConfigs.password.maxLength &&
+    password.length >= membersConfigs.password.minLength;
 
-  if (payload.password.length < membersConfigs.password.min) {
-    return res.send({ success: false, message: "Weak password." });
+  if (!isPasswordLengthInRange) {
+    return res.send({
+      success: false,
+      message: `Password must consist ${membersConfigs.password.minLength} to ${membersConfigs.password.maxLength} chatacers.`
+    });
   }
 
   next();
 }
 
 export async function validateIndividualRegistrationPayload(req, res, next) {
-  const payload = req.body;
+  const { crn, firstName, middleName, lastName, suffix } = req.body;
 
   // Individual payload validation
-  // CRN
 
-  if (isEmpty(payload.crn)) {
-    return res.send({ success: false, message: "12-digit CRN is required." });
+  // CRN : optional
+
+  if (!isString(crn)) {
+    return res.send({ success: false, message: "CRN must be string." });
   }
 
   if (
-    payload.crn.length < individualConfigs.crn.min ||
-    payload.crn.length > individualConfigs.crn.max
+    !isStringEmpty(crn) &&
+    (crn.length < individualConfigs.crn.minLength || crn.length > individualConfigs.crn.maxLength)
   ) {
     return res.send({ success: false, message: "CRN must consist 12 digits." });
   }
 
+  if (!isStringEmpty(crn) && !validator.isInt(crn)) {
+    return res.send({ success: false, message: "Invalid common reference number (CRN)." });
+  }
+
   // First Name
 
-  if (isEmpty(payload.firstName)) {
+  if (!isString(firstName)) {
+    return res.send({ success: false, message: "First name must be string." });
+  }
+
+  if (isStringEmpty(firstName)) {
     return res.send({ success: false, message: "First name is required." });
   }
 
-  if (payload.firstName.length > individualConfigs.first_name.length) {
+  if (firstName.length > individualConfigs.first_name.maxLength) {
     return res.send({ success: false, message: "Too many characters for a first name." });
   }
 
   // Middle Name
 
-  if (isEmpty(payload.middleName)) {
+  if (!isString(middleName)) {
+    return res.send({ success: false, message: "Middle name must be string." });
+  }
+
+  if (isStringEmpty(middleName)) {
     return res.send({ success: false, message: "Middle name is required." });
   }
 
-  if (payload.middleName.length > individualConfigs.middle_name.length) {
+  if (middleName.length > individualConfigs.middle_name.maxLength) {
     return res.send({ success: false, message: "Too many characters for a middle name." });
   }
 
   // Last Name
 
-  if (isEmpty(payload.lastName)) {
+  if (!isString(lastName)) {
+    return res.send({ success: false, message: "Middle name must be string." });
+  }
+
+  if (isStringEmpty(lastName)) {
     return res.send({ success: false, message: "Last name is required." });
   }
 
-  if (payload.lastName.length > individualConfigs.last_name.length) {
+  if (lastName.length > individualConfigs.last_name.maxLength) {
     return res.send({ success: false, message: "Too many characters for a last name." });
   }
 
-  // Suffix
+  // Suffix : optional
 
-  if (!isEmpty(payload.suffix) && payload.suffix.length > individualConfigs.suffix.length) {
+  if (!isString(suffix)) {
+    return res.send({ success: false, message: "Suffix must be string." });
+  }
+
+  if (!isStringEmpty(suffix) && suffix.length > individualConfigs.suffix.maxLength) {
     return res.send({ success: false, message: "Too many characters for a name suffix." });
   }
 
@@ -189,22 +279,40 @@ export async function validateIndividualRegistrationPayload(req, res, next) {
 }
 
 export async function validateEmployerRegistrationPayload(req, res, next) {
-  const payload = req.body;
+  const { website, businessName } = req.body;
 
   // Employer member data payload validation
 
-  if (!isEmpty(payload.website) && !validator.isURL(payload.website)) {
+  // Website : optional
+
+  if (!isString(website)) {
     return res.send({
       success: false,
-      message: "Invalid website link. Include http/https protocol."
+      message: "Website link must be string."
     });
   }
 
-  if (isEmpty(payload.businessName)) {
+  if (!isStringEmpty(website) && !validator.isURL(website)) {
+    return res.send({
+      success: false,
+      message: "Invalid website link. Include http/https protocol and make sure it is a valid URL."
+    });
+  }
+
+  if (website.length > employersConfigs.website.maxLength) {
+    return res.send({
+      success: false,
+      message: "Too many characters for website link."
+    });
+  }
+
+  // Business Name
+
+  if (isStringEmpty(businessName)) {
     return res.send({ success: false, message: "Business name is required." });
   }
 
-  if (payload.businessName.length > employersConfigs.business_name.length) {
+  if (businessName.length > employersConfigs.business_name.maxLength) {
     return res.send({ success: false, message: "Too many characters for a business name." });
   }
 
@@ -212,13 +320,19 @@ export async function validateEmployerRegistrationPayload(req, res, next) {
 }
 
 export async function validateLoginPayload(req, res, next) {
-  const payload = req.body;
+  const { email, password } = req.body;
 
-  if (isEmpty(payload.email)) {
+  // Email
+
+  if (!isString(email)) {
+    return res.send({ success: false, message: "Email address must be a string." });
+  }
+
+  if (isStringEmpty(email)) {
     return res.send({ success: false, message: "Email address is required." });
   }
 
-  if (!validator.isEmail(payload.email)) {
+  if (!validator.isEmail(email)) {
     return res.send({
       success: false,
       message: "The email address you provided is not a valid email address."
@@ -228,7 +342,7 @@ export async function validateLoginPayload(req, res, next) {
   let isEmailUsed;
 
   try {
-    isEmailUsed = await isEmailRegistered(payload.email);
+    isEmailUsed = await isEmailRegistered(email);
   } catch (error) {
     return res.send({
       success: false,
@@ -243,7 +357,13 @@ export async function validateLoginPayload(req, res, next) {
     });
   }
 
-  if (isEmpty(payload.password)) {
+  // Password
+
+  if (!isString(password)) {
+    return res.send({ success: false, message: "Email address must be a string." });
+  }
+
+  if (isStringEmpty(password)) {
     return res.send({ success: false, message: "Password is required." });
   }
 
