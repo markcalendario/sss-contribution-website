@@ -1,5 +1,3 @@
-import globalConfigs from "./global.configs.js";
-
 export default {
   month: {
     allowedValues: [

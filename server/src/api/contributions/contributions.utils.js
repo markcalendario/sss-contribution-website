@@ -67,7 +67,7 @@ export async function hasUnpaidContributions(sssNo) {
   }
 
   const sql =
-    "SELECT COUNT(*) AS unpaidContributions FROM contributions LEFT JOIN payments ON contributions.sss_no = payments.sss_no AND contributions.month = payments.month AND contributions.year = payments.year WHERE contributions.sss_no = ? AND payments.sss_no IS NULL;";
+    "SELECT COUNT(*) AS unpaidContributions FROM contributions WHERE sss_no = ? AND payment_reference_number IS NULL";
   const values = [sssNo];
 
   let rows;
@@ -81,7 +81,13 @@ export async function hasUnpaidContributions(sssNo) {
     db.end();
   }
 
-  return rows[0].unpaidContributions;
+  const numberOfUnpaidContributions = rows[0].unpaidContributions;
+
+  if (numberOfUnpaidContributions === 0) {
+    return [false, numberOfUnpaidContributions];
+  }
+
+  return [true, numberOfUnpaidContributions];
 }
 
 export function isContributionAmountValid(amount, contributionType) {

@@ -6,7 +6,8 @@ import {
 } from "../../global/middlewares/authorizations.js";
 import {
   handleEmployerContributionFiling,
-  handleIndividualContributionFiling
+  handleIndividualContributionFiling,
+  handleRemoveUnpaidContribution
 } from "./contributions.handlers.js";
 import {
   validateCommonContributionPayload,
@@ -33,5 +34,7 @@ router.post(
   validateECContributionAmountPayload,
   handleEmployerContributionFiling
 );
+
+router.delete("/remove-unpaid-contribution", validateAuthCookie, handleRemoveUnpaidContribution);
 
 export default router;
