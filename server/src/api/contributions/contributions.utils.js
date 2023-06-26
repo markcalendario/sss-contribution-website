@@ -2,6 +2,7 @@ import connectDB from "../../db/connection.js";
 import validator from "validator";
 import { isString, isStringEmpty } from "../../global/utils/validators.js";
 import contributionsConfigs from "../../db/configs/contributions.configs.js";
+import paymentsConfigs from "../../db/configs/payments.configs.js";
 
 export function isPeriodRetroactive(month, year) {
   const months = [
@@ -124,4 +125,28 @@ export function isContributionAmountValid(amount, contributionType) {
   }
 
   return [true, "Contribution amount is valid."];
+}
+
+export async function getUnpaidSSSAndECAmount(sssNo) {
+  const db = await connectDB("sss_contribution");
+  if (!db) {
+    return res.send({ success: false, message: "Can't connect with database." });
+  }
+
+  const sql =
+    "SELECT SUM(sss + IF (ec IS NULL, 0, ec)) as toPayAmount FROM contributions WHERE sss_no = ? AND payment_reference_number IS NULL";
+  const value = [sssNo];
+
+  let row;
+  try {
+    [row] = await db.query(sql, value);
+  } catch (error) {
+    console.error("[DB Error]", error);
+    throw new Error("An error occured computing unpaid contribution.");
+  } finally {
+    db.end();
+  }
+
+  const result = row[0];
+  return result.toPayAmount;
 }

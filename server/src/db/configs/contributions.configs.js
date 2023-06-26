@@ -1,3 +1,5 @@
+import configs from "./global.configs.js";
+
 export default {
   month: {
     allowedValues: [
@@ -16,12 +18,10 @@ export default {
     ]
   },
   sss: {
-    min: 200, // custom, not a database metadata
-    max: 999999999.99 // custom, not a database metadata
+    ...configs.sss_amount
   },
   ec: {
-    min: 200, // custom, not a database metadata
-    max: 999999999.99 // custom, not a database metadata
+    ...configs.ec_amount
   },
   year: {
     minLength: 4,

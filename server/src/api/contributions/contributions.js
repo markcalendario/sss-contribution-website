@@ -6,10 +6,13 @@ import {
 } from "../../global/middlewares/authorizations.js";
 import {
   handleEmployerContributionFiling,
+  handleHistory,
   handleIndividualContributionFiling,
+  handlePayContribution,
   handleRemoveUnpaidContribution
 } from "./contributions.handlers.js";
 import {
+  validatePaymentPayload,
   validateCommonContributionPayload,
   validateECContributionAmountPayload,
   validateSSSContributionAmountPayload
@@ -34,7 +37,7 @@ router.post(
   validateECContributionAmountPayload,
   handleEmployerContributionFiling
 );
-
 router.delete("/remove-unpaid-contribution", validateAuthCookie, handleRemoveUnpaidContribution);
-
+router.post("/pay", validateAuthCookie, validatePaymentPayload, handlePayContribution);
+router.get("/history", validateAuthCookie, handleHistory);
 export default router;

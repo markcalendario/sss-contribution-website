@@ -8,6 +8,7 @@ import {
 } from "./contributions.utils.js";
 import { decodeAuthToken } from "../../global/utils/jwt.js";
 import validator from "validator";
+import paymentsConfigs from "../../db/configs/payments.configs.js";
 
 export async function validateCommonContributionPayload(req, res, next) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
@@ -140,6 +141,65 @@ export async function validateECContributionAmountPayload(req, res, next) {
     if (!isAmountValid) {
       return res.send({ success: false, message: text });
     }
+  }
+
+  next();
+}
+
+export function validatePaymentPayload(req, res, next) {
+  const { amount, mode, bank, checkReference, checkDate } = req.body;
+
+  if (!isString(amount)) {
+    return res.send({ success: false, message: "Amount must be string." });
+  }
+
+  if (isStringEmpty(amount)) {
+    return res.send({ success: false, message: "Amount is required." });
+  }
+
+  if (!validator.isNumeric(amount)) {
+    return res.send({ success: false, message: "Please type valid amount." });
+  }
+
+  if (!isString(mode)) {
+    return res.send({ success: false, message: "Payment mode must be string." });
+  }
+
+  if (isStringEmpty(mode)) {
+    return res.send({ success: false, message: "Payment mode is required." });
+  }
+
+  if (!paymentsConfigs.mode.allowedValues.includes(mode)) {
+    return res.send({ success: false, message: "Invalid payment mode." });
+  }
+
+  if (mode === "cash" || mode === "bank") {
+    return next();
+  }
+
+  // Bank Details
+
+  if (!isString(bank) || !isString(checkReference) || !isString(checkDate)) {
+    return res.send({ success: false, message: "All of the check infromation must be string." });
+  }
+
+  if (isStringEmpty(bank) || isStringEmpty(checkReference) || isStringEmpty(checkDate)) {
+    return res.send({ success: false, message: "All of the check information are required." });
+  }
+
+  if (bank.length > paymentsConfigs.bank.maxLength) {
+    return res.send({ success: false, message: "Bank name has too many characters." });
+  }
+
+  if (checkReference.length > paymentsConfigs.check_reference.maxLength) {
+    return res.send({ success: false, message: "Check checkReference  has too many characters." });
+  }
+
+  if (!validator.isDate(checkDate)) {
+    return res.send({
+      success: false,
+      message: "Date format is not valid. The required format date is YYYY-MM-DD"
+    });
   }
 
   next();
