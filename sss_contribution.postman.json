@@ -1,0 +1,370 @@
+{
+	"info": {
+		"_postman_id": "b929794b-927a-40d2-9e64-155923815902",
+		"name": "SSS Contribution",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Individual Payor Registration",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Mvark\",\r\n    \"lastName\": \"Calendario\",\r\n    \"middleName\": \"Salinas\",\r\n    \"suffix\": \"\",\r\n    \"address\": \"172 J. Felipe Street, Caloocan City\",\r\n    \"zip\": \"1403\",\r\n    \"mobile\": \"09563472115\",\r\n    \"telephone\": \"55555559\",\r\n    \"email\": \"ind@gmail.com\",\r\n    \"crn\": \"111111111111\",\r\n    \"tin\": \"123456781172\",\r\n    \"payorType\": \"self-employed\",\r\n    \"password\": \"123456\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/auth/register/individual",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"auth",
+								"register",
+								"individual"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employer Registration",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"businessName\": \"Mark Kenneth\",\r\n    \"address\": \"172 J. Felipe Street, Caloocan City\",\r\n    \"zip\": \"1403\",\r\n    \"mobile\": \"09063472116\",\r\n    \"telephone\": \"02334500\",\r\n    \"email\": \"emp@gmail.com\",\r\n    \"tin\": \"112111111113\",\r\n    \"website\": \"https://markcalendario.web.app\",\r\n    \"payorType\": \"self-employed\",\r\n    \"password\": \"123456\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/auth/register/employer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"auth",
+								"register",
+								"employer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"emp@gmail.com\",\r\n    \"password\": \"123456\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "accounts",
+			"item": [
+				{
+					"name": "Role",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3001/accounts/role",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"accounts",
+								"role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Individual Information",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/accounts/individual/info",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"accounts",
+								"individual",
+								"info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employer Information",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/accounts/employer/info",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"accounts",
+								"employer",
+								"info"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "contributions",
+			"item": [
+				{
+					"name": "Add Individual Contribution",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"contributions\": [\r\n        {\r\n            \"month\": \"august\",\r\n            \"year\": \"2023\",\r\n            \"sss\": \"1532.98\",\r\n            \"ec\": -30000\r\n        }, \r\n        {\r\n            \"month\": \"september\",\r\n            \"year\": \"2023\",\r\n            \"sss\": \"76200\",\r\n            \"ec\": 30000\r\n        }\r\n    ]\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/contributions/individual/file-contribution",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"contributions",
+								"individual",
+								"file-contribution"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Employer Contribution",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"contributions\": [\r\n        {\r\n            \"month\": \"june\",\r\n            \"year\": \"2024\",\r\n            \"sss\": \"350.50\",\r\n            \"ec\": \"30000\"\r\n        }, \r\n        {\r\n            \"month\": \"july\",\r\n            \"year\": \"2024\",\r\n            \"sss\": \"30000\",\r\n            \"ec\": \"30000\"\r\n        }\r\n    ]\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/contributions/employer/file-contribution",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"contributions",
+								"employer",
+								"file-contribution"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Unpaid Contribution",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/contributions/remove-unpaid-contribution",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"contributions",
+								"remove-unpaid-contribution"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "History",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3001/contributions/history/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"contributions",
+								"history",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pay Contribution",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\": \"77700.98\",\r\n    \"mode\": \"check\",\r\n    \"bank\": \"Landbank of the Philippines\",\r\n    \"checkReference\": \"100454AF\",\r\n    \"checkDate\": \"2023-08-30\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/contributions/pay/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"contributions",
+								"pay",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
