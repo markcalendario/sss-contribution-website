@@ -51,26 +51,6 @@ export async function validateMemberRegistrationPayload(req, res, next) {
     });
   }
 
-  // TIN: optional
-
-  if (!isString(tin)) {
-    return res.send({ success: false, message: "TIN must be string." });
-  }
-
-  if (
-    !isStringEmpty(tin) &&
-    (tin.length < membersConfigs.tin.minLength || tin.length > membersConfigs.tin.maxLength)
-  ) {
-    return res.send({ success: false, message: "TIN must consist 12 digits." });
-  }
-
-  if (!isStringEmpty(tin) && !validator.isInt(tin)) {
-    return res.send({
-      success: false,
-      message: "TIN must contain numbers only."
-    });
-  }
-
   // Mobile
 
   if (!isString(mobile)) {
@@ -107,13 +87,10 @@ export async function validateMemberRegistrationPayload(req, res, next) {
     return res.send({ success: false, message: "Telephone number must be string." });
   }
 
-  if (isStringEmpty(telephone)) {
-    return res.send({ success: false, message: "Telephone number is required." });
-  }
-
   if (
-    telephone.length < membersConfigs.telephone.minLength ||
-    telephone.length > membersConfigs.telephone.maxLength
+    !isStringEmpty(telephone) &&
+    (telephone.length < membersConfigs.telephone.minLength ||
+      telephone.length > membersConfigs.telephone.maxLength)
   ) {
     return res.send({
       success: false,
@@ -121,25 +98,11 @@ export async function validateMemberRegistrationPayload(req, res, next) {
     });
   }
 
-  if (!validator.isInt(telephone)) {
+  if (!isStringEmpty(telephone) && !validator.isInt(telephone)) {
     return res.send({
       success: false,
       message: "Invalid telephone number. You may include area code Ex. 02xxxxxx.."
     });
-  }
-
-  // Payor Type
-
-  if (!isString(payorType)) {
-    return res.send({ success: false, message: "Payor type must be string." });
-  }
-
-  if (isStringEmpty(payorType)) {
-    return res.send({ success: false, message: "Please select a payor type." });
-  }
-
-  if (!membersConfigs.payorType.allowedValues.includes(payorType)) {
-    return res.send({ success: false, message: `Payor type ${payorType} is not valid.` });
   }
 
   // Email
@@ -177,6 +140,40 @@ export async function validateMemberRegistrationPayload(req, res, next) {
     return res.send({ success: false, message: "Email is already registered. Try signing in." });
   }
 
+  // TIN: optional
+
+  if (!isString(tin)) {
+    return res.send({ success: false, message: "TIN must be string." });
+  }
+
+  if (
+    !isStringEmpty(tin) &&
+    (tin.length < membersConfigs.tin.minLength || tin.length > membersConfigs.tin.maxLength)
+  ) {
+    return res.send({ success: false, message: "TIN must consist 12 digits." });
+  }
+
+  if (!isStringEmpty(tin) && !validator.isInt(tin)) {
+    return res.send({
+      success: false,
+      message: "TIN must contain numbers only."
+    });
+  }
+
+  // Payor Type
+
+  if (!isString(payorType)) {
+    return res.send({ success: false, message: "Payor type must be string." });
+  }
+
+  if (isStringEmpty(payorType)) {
+    return res.send({ success: false, message: "Please select a payor type." });
+  }
+
+  if (!membersConfigs.payorType.allowedValues.includes(payorType)) {
+    return res.send({ success: false, message: `Payor type ${payorType} is not valid.` });
+  }
+
   // Password
 
   if (!isString(password)) {
@@ -205,23 +202,6 @@ export async function validateIndividualRegistrationPayload(req, res, next) {
   const { crn, firstName, middleName, lastName, suffix } = req.body;
 
   // Individual payload validation
-
-  // CRN : optional
-
-  if (!isString(crn)) {
-    return res.send({ success: false, message: "CRN must be string." });
-  }
-
-  if (
-    !isStringEmpty(crn) &&
-    (crn.length < individualConfigs.crn.minLength || crn.length > individualConfigs.crn.maxLength)
-  ) {
-    return res.send({ success: false, message: "CRN must consist 12 digits." });
-  }
-
-  if (!isStringEmpty(crn) && !validator.isInt(crn)) {
-    return res.send({ success: false, message: "Invalid common reference number (CRN)." });
-  }
 
   // First Name
 
@@ -273,6 +253,23 @@ export async function validateIndividualRegistrationPayload(req, res, next) {
 
   if (!isStringEmpty(suffix) && suffix.length > individualConfigs.suffix.maxLength) {
     return res.send({ success: false, message: "Too many characters for a name suffix." });
+  }
+
+  // CRN : optional
+
+  if (!isString(crn)) {
+    return res.send({ success: false, message: "CRN must be string." });
+  }
+
+  if (
+    !isStringEmpty(crn) &&
+    (crn.length < individualConfigs.crn.minLength || crn.length > individualConfigs.crn.maxLength)
+  ) {
+    return res.send({ success: false, message: "CRN must consist 12 digits." });
+  }
+
+  if (!isStringEmpty(crn) && !validator.isInt(crn)) {
+    return res.send({ success: false, message: "Invalid common reference number (CRN)." });
   }
 
   next();

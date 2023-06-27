@@ -11,7 +11,13 @@ const dotenvPath = `./.env.${process.env.NODE_ENV}`;
 dotenv.config({ path: dotenvPath });
 app.use(express.json());
 app.use(cookieParser());
+app.use((req, res, next) => {
+  res.set("Access-Control-Allow-Origin", process.env.CLIENT_URL);
+  res.set("Access-Control-Allow-Credentials", true);
+  res.set("Access-Control-Allow-Headers", "Content-Type");
 
+  next();
+});
 // APIs
 app.use("/auth", auth);
 app.use("/accounts", accounts);

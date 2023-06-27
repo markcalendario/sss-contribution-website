@@ -1,4 +1,7 @@
+import jwt from "jsonwebtoken";
 import connectDB from "../../db/connection.js";
+import { decodeAuthToken } from "../../global/utils/jwt.js";
+import { isString, isStringEmpty } from "../../global/utils/validators.js";
 import { saveMemberData, comparePasswords, signToken } from "./authentications.utils.js";
 
 export async function handleIndividualMemberRegistration(req, res) {
@@ -159,4 +162,32 @@ export async function handleLogin(req, res) {
   res
     .cookie("auth_token", token, { maxAge: 86400000, httpOnly: true, secure: true })
     .send({ success: true, message: "You are now logged in." });
+}
+
+export function handleIsAuth(req, res) {
+  const authCookie = req.cookies.auth_token;
+
+  if (!isString(authCookie)) {
+    return res.clearCookie("auth_token").send({
+      success: false,
+      message: "Authorization token is not a string.",
+      isAuth: false
+    });
+  }
+
+  if (isStringEmpty(authCookie)) {
+    return res
+      .clearCookie("auth_token")
+      .send({ success: false, message: "Authorization token is missing.", isAuth: false });
+  }
+
+  try {
+    jwt.verify(authCookie, process.env.TOKEN_SALT);
+  } catch (error) {
+    return res
+      .clearCookie("auth_token")
+      .send({ success: false, message: "Authorization token is invalid.", isAuth: false });
+  }
+
+  return res.send({ success: true, message: "You are authorized.", isAuth: true });
 }

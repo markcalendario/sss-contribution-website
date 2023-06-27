@@ -1,10 +1,14 @@
 import jwt from "jsonwebtoken";
-import { isArrayEmpty, isStringEmpty } from "../utils/validators.js";
+import { isArrayEmpty, isString, isStringEmpty } from "../utils/validators.js";
 import { decodeAuthToken } from "../utils/jwt.js";
 import connectDB from "../../db/connection.js";
 
 export function validateAuthCookie(req, res, next) {
   const authToken = req.cookies.auth_token;
+
+  if (!isString(authToken)) {
+    return res.status(401).send({ success: false, message: "Auth token must be string." });
+  }
 
   if (isStringEmpty(authToken)) {
     return res.status(401).send({ success: false, message: "Auth token is missing." });

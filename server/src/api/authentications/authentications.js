@@ -3,7 +3,8 @@ import express from "express";
 import {
   handleIndividualMemberRegistration,
   handleEmployerRegistration,
-  handleLogin
+  handleLogin,
+  handleIsAuth
 } from "./authentications.handlers.js";
 
 import {
@@ -12,13 +13,14 @@ import {
   validateLoginPayload,
   validateMemberRegistrationPayload
 } from "./authentications.middlewares.js";
+import { validateAuthCookie } from "../../global/middlewares/authorizations.js";
 
 const router = express.Router();
 
 router.post(
   "/register/individual",
-  validateMemberRegistrationPayload,
   validateIndividualRegistrationPayload,
+  validateMemberRegistrationPayload,
   handleIndividualMemberRegistration
 );
 router.post(
@@ -27,6 +29,7 @@ router.post(
   validateEmployerRegistrationPayload,
   handleEmployerRegistration
 );
-router.get("/login", validateLoginPayload, handleLogin);
+router.post("/login", validateLoginPayload, handleLogin);
+router.get("/is-auth", handleIsAuth);
 
 export default router;
