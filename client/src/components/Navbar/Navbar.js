@@ -6,6 +6,16 @@ import { Fragment, useEffect, useState } from "react";
 
 export default function Navbar() {
   const [screenWidth, setScreenWidth] = useState(null);
+  const links = [
+    {
+      name: "Sign In",
+      link: "/login"
+    },
+    {
+      name: "Sign Up",
+      link: "/register"
+    }
+  ];
 
   const handleWindowResize = () => {
     setScreenWidth(window.innerWidth);
@@ -21,13 +31,15 @@ export default function Navbar() {
   }, []);
 
   if (screenWidth <= 768) {
-    return <SmallScreenNavbar />;
+    return <SmallScreenNavbar links={links} />;
   }
 
-  return <LargeScreenNavbar />;
+  return <LargeScreenNavbar links={links} />;
 }
 
-function LargeScreenNavbar() {
+function LargeScreenNavbar(props) {
+  const { links } = props;
+
   return (
     <nav id={styles.navbar}>
       <div className={styles.container}>
@@ -42,9 +54,11 @@ function LargeScreenNavbar() {
             </div>
           </a>
           <div className={styles.links}>
-            <a href="/login/member">Member</a>
-            <a href="/login/employer">Employer</a>
-            <a href="/register">Sign Up</a>
+            {links.map((value, index) => (
+              <a key={index} href={`${value.link}`}>
+                {value.name}
+              </a>
+            ))}
           </div>
         </div>
       </div>
@@ -52,7 +66,8 @@ function LargeScreenNavbar() {
   );
 }
 
-function SmallScreenNavbar() {
+function SmallScreenNavbar(props) {
+  const { links } = props;
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleDrawerTriggerClick = () => {
@@ -81,13 +96,15 @@ function SmallScreenNavbar() {
           </div>
         </div>
       </nav>
-      {isDrawerOpen ? <Drawer handleDrawerTriggerClick={handleDrawerTriggerClick} /> : null}
+      {isDrawerOpen ? (
+        <Drawer links={links} handleDrawerTriggerClick={handleDrawerTriggerClick} />
+      ) : null}
     </Fragment>
   );
 }
 
 function Drawer(props) {
-  const { handleDrawerTriggerClick } = props;
+  const { handleDrawerTriggerClick, links } = props;
 
   return (
     <div data-aos="fade-left" className={styles.drawer}>
@@ -104,9 +121,11 @@ function Drawer(props) {
             <h1>Social Security System</h1>
           </div>
           <div className={styles.links}>
-            <a href="/login/member">Member</a>
-            <a href="/login/employer">Employer</a>
-            <a href="/register">Sign Up</a>
+            {links.map((value, index) => (
+              <a key={index} href={`${value.link}`}>
+                {value.name}
+              </a>
+            ))}
           </div>
         </div>
       </div>

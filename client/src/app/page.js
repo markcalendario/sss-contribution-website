@@ -1,9 +1,8 @@
 "use client";
 
 import styles from "./page.module.scss";
-import { Fragment } from "react";
 import Navbar from "../components/Navbar/Navbar";
-import Button, { LinkButton } from "../components/Buttons/Buttons";
+import { LinkButton } from "../components/Buttons/Buttons";
 import SectionContent, {
   SectionTitle,
   SectionWrapper
@@ -11,6 +10,7 @@ import SectionContent, {
 import ImageCard from "../components/ImageCard/ImageCard";
 import Footer from "../components/Footer/Footer";
 import Disclaimer from "../components/Disclaimer/Disclaimer";
+import { NonLoggedInPage } from "@/components/RouteProtections/RouteProtections";
 
 export const metadata = {
   title: "Welcome to Social Security System",
@@ -19,7 +19,7 @@ export const metadata = {
 
 export default function Home() {
   return (
-    <Fragment>
+    <NonLoggedInPage>
       <Navbar />
       <Hero />
       <Stats />
@@ -27,7 +27,7 @@ export default function Home() {
       <Tagline />
       <Footer />
       <Disclaimer />
-    </Fragment>
+    </NonLoggedInPage>
   );
 }
 
@@ -44,10 +44,10 @@ function Hero() {
             </p>
           </div>
           <div data-aos="fade" className={styles.buttons}>
-            <LinkButton href="/login/member" className="bg-primary text-slate">
+            <LinkButton href="/register/member" className="bg-primary text-slate">
               Member
             </LinkButton>
-            <LinkButton href="/login/employer" className="bg-white text-primary">
+            <LinkButton href="/register/employer" className="bg-white text-primary">
               Employer
             </LinkButton>
           </div>
@@ -118,7 +118,7 @@ function InviteUsers() {
   );
 }
 
-function Tagline(props) {
+function Tagline() {
   return (
     <section id={styles.tagline}>
       <div className={styles.container}>

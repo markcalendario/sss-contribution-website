@@ -42,7 +42,7 @@ export function Input(props) {
 }
 
 export function Select(props) {
-  const { id, className, name, placeholder, required, children } = props;
+  const { id, className, name, placeholder, required, onChange, value, children } = props;
 
   return (
     <div className={styles.regularFields + (className ? " " + className : "")}>
@@ -51,7 +51,7 @@ export function Select(props) {
           {placeholder} {required ? <span className={styles.requiredStar}>*</span> : null}
         </p>
       ) : null}
-      <select id={id} name={name}>
+      <select id={id} name={name} value={value} onChange={onChange}>
         {children}
       </select>
     </div>
@@ -59,10 +59,10 @@ export function Select(props) {
 }
 
 export function Checkbox(props) {
-  const { children } = props;
+  const { children, onChange, checked } = props;
   return (
     <label className={styles.checkbox}>
-      <input type="checkbox" />
+      <input type="checkbox" checked={checked} onChange={onChange} />
       <div className={styles.box}></div>
       <p>{children}</p>
     </label>

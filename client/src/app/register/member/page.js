@@ -3,23 +3,82 @@
 import { Checkbox, Input, Select } from "@/components/FormFields/FormFields";
 import styles from "../shared.module.scss";
 import Button from "@/components/Buttons/Buttons";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 export default function MemberRegistration() {
   const [currentStep, setCurrentStep] = useState("basic-info");
   const steps = ["basic-info", "contact-info", "other-details", "account-details"];
+  const [payload, setPayload] = useState({
+    firstName: "",
+    lastName: "",
+    middleName: "",
+    suffix: "",
+    address: "",
+    zip: "",
+    mobile: "",
+    telephone: "",
+    email: "",
+    crn: "",
+    tin: "",
+    payorType: "",
+    password: "",
+    agree: false,
+    confirmPassword: ""
+  });
 
-  function goToNextStep() {
+  const goToNextStep = () => {
     setCurrentStep(steps[steps.indexOf(currentStep) + 1]);
-  }
+  };
 
-  function gotoPrevStep() {
+  const gotoPrevStep = () => {
     setCurrentStep(steps[steps.indexOf(currentStep) - 1]);
-  }
+  };
 
-  function goToStep(step) {
+  const goToStep = (step) => {
     setCurrentStep(step);
-  }
+  };
+
+  const handleChangePayload = (evt, key) => {
+    setPayload((prev) => {
+      if (key === "agree") {
+        return { ...prev, [key]: evt.target.checked };
+      }
+
+      return { ...prev, [key]: evt.target.value };
+    });
+  };
+
+  const handleRegister = async () => {
+    const isPasswordSame = payload.password === payload.confirmPassword;
+    if (!isPasswordSame) {
+      return alert("Please make sure that the confirm password field is correct.");
+    }
+
+    if (!payload.agree) {
+      return alert("Please confirm that your information is correct.");
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register/individual`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!response.ok) {
+      return alert("An error occured while signing you up.");
+    }
+
+    const result = await response.json();
+    if (!result.success) {
+      return alert(result.message);
+    }
+
+    alert("You are now registered. Please sign in.");
+    window.location.href = "/login";
+  };
+
+  useEffect(() => {
+    console.log(payload);
+  }, [payload]);
 
   return (
     <section id={styles.registration} className={styles.memberRegistration}>
@@ -29,18 +88,37 @@ export default function MemberRegistration() {
             <h1 className={styles.title}>Registration Form for Individual Member</h1>
             <p>Please fill-out the form accurately. Input fields with asterisk (*) are required.</p>
           </div>
-          <form>
+          <form onSubmit={(evt) => evt.preventDefault()}>
             {currentStep === "basic-info" ? (
-              <BasicInformationForm goToNextStep={goToNextStep} />
+              <BasicInformationForm
+                payload={payload}
+                handleChangePayload={handleChangePayload}
+                goToNextStep={goToNextStep}
+              />
             ) : null}
             {currentStep === "contact-info" ? (
-              <ContactInformationForm goToNextStep={goToNextStep} gotoPrevStep={gotoPrevStep} />
+              <ContactInformationForm
+                payload={payload}
+                handleChangePayload={handleChangePayload}
+                goToNextStep={goToNextStep}
+                gotoPrevStep={gotoPrevStep}
+              />
             ) : null}
             {currentStep === "other-details" ? (
-              <OtherDetailsForm goToNextStep={goToNextStep} gotoPrevStep={gotoPrevStep} />
+              <OtherDetailsForm
+                payload={payload}
+                handleChangePayload={handleChangePayload}
+                goToNextStep={goToNextStep}
+                gotoPrevStep={gotoPrevStep}
+              />
             ) : null}
             {currentStep === "account-details" ? (
-              <AccountDetails gotoPrevStep={gotoPrevStep} />
+              <AccountDetails
+                payload={payload}
+                handleRegister={handleRegister}
+                handleChangePayload={handleChangePayload}
+                gotoPrevStep={gotoPrevStep}
+              />
             ) : null}
           </form>
           <FormNavigator currentStep={currentStep} goToStep={goToStep} />
@@ -51,16 +129,41 @@ export default function MemberRegistration() {
 }
 
 function AccountDetails(props) {
-  const { gotoPrevStep } = props;
+  const { payload, handleRegister, handleChangePayload, gotoPrevStep } = props;
+  const { password, confirmPassword, agree } = payload;
 
   return (
     <Fragment>
       <h1 className={styles.title}>Account Details</h1>
       <p>Provide a strong password for your SSS account.</p>
-      <Input placeholder="Password" type="password" required />
-      <Input placeholder="Confirm Password" type="password" required />
-      <Checkbox>I confirm that the information I have entered is correct and legitimate.</Checkbox>
-      <Button className="bg-green text-slate">Register as Individual Member</Button>
+      <Input
+        placeholder="Password"
+        type="password"
+        value={password}
+        onChange={(evt) => {
+          handleChangePayload(evt, "password");
+        }}
+        required
+      />
+      <Input
+        placeholder="Confirm Password"
+        type="password"
+        value={confirmPassword}
+        onChange={(evt) => {
+          handleChangePayload(evt, "confirmPassword");
+        }}
+        required
+      />
+      <Checkbox
+        checked={agree}
+        onChange={(evt) => {
+          handleChangePayload(evt, "agree");
+        }}>
+        I confirm that the information I have entered is correct and legitimate.
+      </Checkbox>
+      <Button className="bg-green text-slate" onClick={handleRegister}>
+        Register as Individual Member
+      </Button>
       <Button className="bg-slate-3 text-primary" onClick={gotoPrevStep}>
         Previous
       </Button>
@@ -69,19 +172,39 @@ function AccountDetails(props) {
 }
 
 function OtherDetailsForm(props) {
-  const { goToNextStep, gotoPrevStep } = props;
+  const { payload, handleChangePayload, goToNextStep, gotoPrevStep } = props;
+  const { crn, tin, payorType } = payload;
 
   return (
     <Fragment>
       <h1 className={styles.title}>Other Details</h1>
-      <Input placeholder="Common Reference Number (CRN)" />
-      <Input placeholder="Tax Identification Number (TIN)" />
-      <Select placeholder="Select a Payor Type" required>
-        <option value="Self-Employed">Self-Employed</option>
-        <option value="Non-Working Spouse">Non-Working Spouse</option>
-        <option value="Voluntary">Voluntary</option>
-        <option value="OFW">OFW</option>
-        <option value="Farmer/Fisherman">Farmer/Fisherman</option>
+      <Input
+        placeholder="Common Reference Number (CRN)"
+        value={crn}
+        onChange={(evt) => {
+          handleChangePayload(evt, "crn");
+        }}
+      />
+      <Input
+        placeholder="Tax Identification Number (TIN)"
+        value={tin}
+        onChange={(evt) => {
+          handleChangePayload(evt, "tin");
+        }}
+      />
+      <Select
+        placeholder="Select a Payor Type"
+        value={payorType}
+        onChange={(evt) => {
+          handleChangePayload(evt, "payorType");
+        }}
+        required>
+        <option value="">Select a Payor Type</option>
+        <option value="self-employed">Self-Employed</option>
+        <option value="non-working spouse">Non-Working Spouse</option>
+        <option value="voluntary">Voluntary</option>
+        <option value="ofw">OFW</option>
+        <option value="farmer/fisherman">Farmer/Fisherman</option>
       </Select>
       <Button className="bg-primary text-slate" onClick={goToNextStep}>
         Next
@@ -94,16 +217,50 @@ function OtherDetailsForm(props) {
 }
 
 function ContactInformationForm(props) {
-  const { goToNextStep, gotoPrevStep } = props;
+  const { payload, handleChangePayload, goToNextStep, gotoPrevStep } = props;
+  const { address, zip, mobile, telephone, email } = payload;
 
   return (
     <Fragment>
       <h1 className={styles.title}>Contact Information</h1>
-      <Input placeholder="Complete Address" required />
-      <Input placeholder="Zip Code" required />
-      <Input placeholder="Mobile Phone Number" required />
-      <Input placeholder="Telephone Number" />
-      <Input placeholder="Email Address" />
+      <Input
+        placeholder="Complete Address"
+        value={address}
+        onChange={(evt) => {
+          handleChangePayload(evt, "address");
+        }}
+        required
+      />
+      <Input
+        placeholder="Zip Code"
+        value={zip}
+        onChange={(evt) => {
+          handleChangePayload(evt, "zip");
+        }}
+        required
+      />
+      <Input
+        placeholder="Mobile Phone Number"
+        value={mobile}
+        onChange={(evt) => {
+          handleChangePayload(evt, "mobile");
+        }}
+        required
+      />
+      <Input
+        placeholder="Telephone Number"
+        value={telephone}
+        onChange={(evt) => {
+          handleChangePayload(evt, "telephone");
+        }}
+      />
+      <Input
+        placeholder="Email Address"
+        value={email}
+        onChange={(evt) => {
+          handleChangePayload(evt, "email");
+        }}
+      />
       <Button className="bg-primary text-slate" onClick={goToNextStep}>
         Next
       </Button>
@@ -115,15 +272,43 @@ function ContactInformationForm(props) {
 }
 
 function BasicInformationForm(props) {
-  const { goToNextStep } = props;
+  const { payload, handleChangePayload, goToNextStep } = props;
+  const { firstName, lastName, middleName, suffix } = payload;
 
   return (
     <Fragment>
       <h1 className={styles.title}>Basic Information</h1>
-      <Input placeholder="First Name" required />
-      <Input placeholder="Last Name" required />
-      <Input placeholder="Middle Name" required />
-      <Input placeholder="Suffix (Jr., Sr., etc.)" />
+      <Input
+        placeholder="First Name"
+        value={firstName}
+        onChange={(evt) => {
+          handleChangePayload(evt, "firstName");
+        }}
+        required
+      />
+      <Input
+        placeholder="Middle Name"
+        value={middleName}
+        onChange={(evt) => {
+          handleChangePayload(evt, "middleName");
+        }}
+        required
+      />
+      <Input
+        placeholder="Last Name"
+        value={lastName}
+        onChange={(evt) => {
+          handleChangePayload(evt, "lastName");
+        }}
+        required
+      />
+      <Input
+        placeholder="Suffix (Jr., Sr., etc.)"
+        value={suffix}
+        onChange={(evt) => {
+          handleChangePayload(evt, "suffix");
+        }}
+      />
       <Button className="bg-primary text-slate" onClick={goToNextStep}>
         Next
       </Button>

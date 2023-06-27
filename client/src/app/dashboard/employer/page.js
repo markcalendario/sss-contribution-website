@@ -3,7 +3,6 @@ import { Content, DashboardContent, DashboardTitle } from "../layout";
 import Welcomer from "@/components/Welcomer/Welcomer";
 import DateAndTimeCard from "@/components/DateAndTimeCard/DateAndTimeCard";
 import styles from "./page.module.scss";
-import Table from "@/components/Table/Table";
 import { VerticalTable } from "@/components/Table/Table";
 
 export default function MemberDashboard() {
