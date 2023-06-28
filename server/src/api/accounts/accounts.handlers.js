@@ -10,7 +10,7 @@ export async function handleGetRole(req, res) {
   }
 
   const sql =
-    "SELECT IF (EXISTS (SELECT 1 FROM individual WHERE sss_no = ?), 'Individual', 'Employer') AS role FROM members;";
+    "SELECT IF (EXISTS (SELECT 1 FROM individual WHERE sss_no = ?), 'individual', 'employer') AS role FROM members;";
   const value = [sssNo];
 
   let rows;

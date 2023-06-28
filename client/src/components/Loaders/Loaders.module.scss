@@ -1,10 +1,24 @@
+@use "../../styles/abstracts/variables-colors" as colors;
+
 #fullPageLoader {
   height: 100vh;
   display: flex;
   align-items: center;
+  justify-content: center;
 
-  img {
-    max-width: 200px;
-    margin: auto;
+  .content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    img {
+      max-width: 200px;
+    }
+
+    p {
+      font-weight: 900;
+      color: colors.$primary;
+    }
   }
 }

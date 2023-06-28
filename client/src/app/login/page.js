@@ -22,12 +22,12 @@ export default function LoginCompiled() {
 
 export function MemberLogin() {
   const [background, setBackground] = useState(null);
-  const backgroundImages = ["login-banner-a.webp", "login-banner-b.webp"];
 
   useEffect(() => {
+    const backgroundImages = ["login-banner-a.webp", "login-banner-b.webp"];
     const bgIndex = Math.floor(Math.random() * backgroundImages.length);
     setBackground(backgroundImages[bgIndex]);
-  }, [backgroundImages]);
+  }, []);
 
   const handleLogin = async () => {
     const email = document.getElementById("email").value;
@@ -67,7 +67,7 @@ export function MemberLogin() {
             <Input id="email" placeholder="Email Address" required />
             <Input id="password" type="password" placeholder="Pasword" required />
             <Button className="bg-primary text-slate" onClick={handleLogin}>
-              Login your SSS acount.
+              Login your SSS account.
             </Button>
             <LinkButton href="/register" className="bg-slate-2 text-slate-7">
               Don&apos;t have an account? Register here.

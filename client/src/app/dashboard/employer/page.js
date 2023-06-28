@@ -1,11 +1,11 @@
 import { Fragment } from "react";
-import { Content, DashboardContent, DashboardTitle } from "../layout";
 import Welcomer from "@/components/Welcomer/Welcomer";
 import DateAndTimeCard from "@/components/DateAndTimeCard/DateAndTimeCard";
 import styles from "./page.module.scss";
 import { VerticalTable } from "@/components/Table/Table";
+import { Content, DashboardContent, DashboardTitle } from "@/app/dashboard/layout.js";
 
-export default function MemberDashboard() {
+export default function EmployerDashboard() {
   return (
     <Fragment>
       <WelcomeAndTime />

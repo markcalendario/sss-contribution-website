@@ -1,11 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Button from "../../components/Buttons/Buttons";
 import styles from "./layout.module.scss";
 import { usePathname } from "next/navigation";
 
-export default function DashboardLayout({ children }) {
+export default function Layout({ children }) {
+  return <Fragment>{children}</Fragment>;
+}
+
+export function DashboardLayout({ children }) {
+  return <div id={styles.dashboard}>{children}</div>;
+}
+
+export function Navigations({ asideLinks }) {
   const [isAsideOpen, setIsAsideOpen] = useState(false);
 
   useEffect(() => {
@@ -19,11 +27,10 @@ export default function DashboardLayout({ children }) {
   };
 
   return (
-    <div id={styles.dashboard}>
+    <Fragment>
       <Navbar toggleAsideState={toggleAsideState} />
-      {isAsideOpen ? <Aside /> : null}
-      <Main>{children}</Main>
-    </div>
+      {isAsideOpen ? <Aside asideLinks={asideLinks} /> : null}
+    </Fragment>
   );
 }
 
@@ -47,32 +54,7 @@ export function AsideLink(props) {
   );
 }
 
-export function Aside() {
-  const [memberType, setMemberType] = useState("member");
-
-  const asideLinks = [
-    {
-      link: `/dashboard/${memberType}`,
-      icon: "fa fa-home",
-      title: "Home"
-    },
-    {
-      link: `/dashboard/${memberType}/history`,
-      icon: "fa fa-history",
-      title: "Contribution History"
-    },
-    {
-      link: `/dashboard/${memberType}/contribute`,
-      icon: "fa fa-file",
-      title: "File a Contribution"
-    },
-    {
-      link: `/dashboard/${memberType}/pay`,
-      icon: "fa fa-hourglass-half",
-      title: "Pending Payment"
-    }
-  ];
-
+export function Aside({ asideLinks }) {
   return (
     <aside id={styles.aside} data-aos="fade-right">
       <div className={styles.wrapper}>
