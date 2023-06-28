@@ -1,24 +1,58 @@
-import { Fragment } from "react";
+"use client";
+
+import { Fragment, createContext, useContext, useEffect, useState } from "react";
 import Welcomer from "@/components/Welcomer/Welcomer";
 import DateAndTimeCard from "@/components/DateAndTimeCard/DateAndTimeCard";
 import styles from "./page.module.scss";
 import { VerticalTable } from "@/components/Table/Table";
 import { Content, DashboardContent, DashboardTitle } from "@/app/dashboard/layout.js";
+import { FullPageLoader } from "@/components/Loaders/Loaders";
+
+const EmployerContext = createContext();
 
 export default function EmployerDashboard() {
+  const [employerInfo, setEmployerInfo] = useState(null);
+
+  const getEmployerInfo = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/employer/info`, {
+      credentials: "include"
+    });
+    if (!response.ok) {
+      return alert("An error occured while getting your information.");
+    }
+
+    const result = await response.json();
+
+    if (!result.success) {
+      return alert(result.message);
+    }
+
+    setEmployerInfo(result.data);
+  };
+
+  useEffect(() => {
+    getEmployerInfo();
+  }, []);
+
+  if (employerInfo === null) {
+    return <FullPageLoader text="Getting your information..." />;
+  }
+
   return (
-    <Fragment>
+    <EmployerContext.Provider value={employerInfo}>
       <WelcomeAndTime />
       <MemberInformation />
-    </Fragment>
+    </EmployerContext.Provider>
   );
 }
 
 function WelcomeAndTime() {
+  const { business_name } = useContext(EmployerContext);
+
   return (
     <DashboardContent id={styles.dateAndTime}>
       <Content className={styles.content}>
-        <Welcomer className={styles.welcomer} />
+        <Welcomer className={styles.welcomer} name={business_name} role="employer" />
         <DateAndTimeCard className={styles.dateAndTimeCard} />
       </Content>
     </DashboardContent>
@@ -40,6 +74,8 @@ function MemberInformation() {
 }
 
 function BasicInformation() {
+  const { sss_no, tin, payor_type } = useContext(EmployerContext);
+
   return (
     <Fragment>
       <VerticalTable>
@@ -51,15 +87,15 @@ function BasicInformation() {
         <tbody>
           <tr>
             <th>SSS Number</th>
-            <td>649410110</td>
+            <td>{sss_no}</td>
           </tr>
           <tr>
             <th>TIN</th>
-            <td>9500411268755</td>
+            <td>{tin}</td>
           </tr>
           <tr>
             <th>Employer Type</th>
-            <td>Business</td>
+            <td>{payor_type.toUpperCase()}</td>
           </tr>
         </tbody>
       </VerticalTable>
@@ -68,6 +104,8 @@ function BasicInformation() {
 }
 
 function ContactInformation() {
+  const { address, zip, mobile, telephone, email, website } = useContext(EmployerContext);
+
   return (
     <Fragment>
       <VerticalTable>
@@ -79,27 +117,29 @@ function ContactInformation() {
         <tbody>
           <tr>
             <th>Complete Address</th>
-            <td>172 Julian Felipe Street, Sangandaan, Caloocan City</td>
+            <td>{address}</td>
           </tr>
           <tr>
             <th>Zip Code</th>
-            <td>1403</td>
+            <td>{zip}</td>
           </tr>
           <tr>
             <th>Mobile Number</th>
-            <td>+639063472117</td>
+            <td>{mobile}</td>
           </tr>
           <tr>
             <th>Telephone Number</th>
-            <td>(02) 45634742</td>
+            <td>{telephone}</td>
           </tr>
           <tr>
             <th>Email Address</th>
-            <td>markcalendario@gmail.com</td>
+            <td>{email}</td>
           </tr>
           <tr>
             <th>Website</th>
-            <td>markkennethcalendario.web.app</td>
+            <td>
+              <a href={website}>{website}</a>
+            </td>
           </tr>
         </tbody>
       </VerticalTable>

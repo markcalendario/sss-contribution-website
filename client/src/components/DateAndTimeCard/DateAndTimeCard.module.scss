@@ -6,6 +6,8 @@
   background-color: colors.$white;
   @include shadows.shadow;
   border-radius: 5px;
+  max-width: 300px;
+  min-width: 300px;
 
   .wrapper {
     h1 {
