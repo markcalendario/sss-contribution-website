@@ -1,11 +1,10 @@
-import { HorizontalTable, VerticalTable } from "@/components/Table/Table";
+import { HorizontalTable } from "@/components/Table/Table";
 import { DashboardContent, Content, DashboardTitle } from "../../layout";
 import { Input } from "@/components/FormFields/FormFields";
 import styles from "./page.module.scss";
-import Highlight from "@/components/Highlight/Highlight";
 import Button from "@/components/Buttons/Buttons";
 
-export default function Pay() {
+export default function PayContributionPageCompiled() {
   return (
     <DashboardContent id={styles.pay}>
       <DashboardTitle>
@@ -54,14 +53,6 @@ export default function Pay() {
             </tr>
           </tbody>
         </HorizontalTable>
-        <Highlight tint="red">
-          <h1>₱60 SSS Penalty</h1>
-          <p>You skipped a following month: March, April, May</p>
-        </Highlight>
-        <Highlight tint="red">
-          <h1>₱40 EC Penalty</h1>
-          <p>You skipped a following month: March, April, May</p>
-        </Highlight>
         <h3>Select a payment methods</h3>
         <div className={styles.paymentButtons}>
           <Button className="bg-primary text-slate">
