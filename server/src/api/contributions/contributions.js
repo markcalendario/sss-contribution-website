@@ -7,6 +7,8 @@ import {
 import {
   handleEmployerContributionFiling,
   handleGetAvailablePeriods,
+  handleGetUnpaidContributions,
+  handleGetUnpaidContributionsAmount,
   handleHistory,
   handleIndividualContributionFiling,
   handlePayContribution,
@@ -42,4 +44,6 @@ router.delete("/remove-unpaid-contribution", validateAuthCookie, handleRemoveUnp
 router.post("/pay", validateAuthCookie, validatePaymentPayload, handlePayContribution);
 router.get("/history", validateAuthCookie, handleHistory);
 router.get("/available-periods", validateAuthCookie, handleGetAvailablePeriods);
+router.get("/unpaid", validateAuthCookie, handleGetUnpaidContributions);
+router.get("/unpaid-amount", validateAuthCookie, handleGetUnpaidContributionsAmount);
 export default router;

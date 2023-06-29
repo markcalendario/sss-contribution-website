@@ -4,7 +4,8 @@ import {
   handleIndividualMemberRegistration,
   handleEmployerRegistration,
   handleLogin,
-  handleIsAuth
+  handleIsAuth,
+  handleLogout
 } from "./authentications.handlers.js";
 
 import {
@@ -30,6 +31,7 @@ router.post(
   handleEmployerRegistration
 );
 router.post("/login", validateLoginPayload, handleLogin);
+router.delete("/logout", handleLogout);
 router.get("/is-auth", handleIsAuth);
 
 export default router;

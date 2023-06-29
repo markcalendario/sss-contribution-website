@@ -164,6 +164,10 @@ export async function handleLogin(req, res) {
     .send({ success: true, message: "You are now logged in." });
 }
 
+export async function handleLogout(req, res) {
+  res.clearCookie("auth_token").send({ success: true, message: "You are now logged out." });
+}
+
 export function handleIsAuth(req, res) {
   const authCookie = req.cookies.auth_token;
 

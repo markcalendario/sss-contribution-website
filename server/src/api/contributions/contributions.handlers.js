@@ -193,7 +193,7 @@ export async function handlePayContribution(req, res) {
 
   const sql =
     "INSERT INTO payments (amount, mode, bank, check_reference, check_date) VALUES (?,?,?,?,?)";
-  const values = [unpaidSSSAmount, mode, bank, checkReference, checkDate];
+  const values = [unpaidSSSAmount, mode, bank, checkReference, checkDate === "" ? null : checkDate];
   let paymentReferenceNumber;
 
   try {
@@ -244,7 +244,7 @@ export async function handleHistory(req, res) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
 
   const sql =
-    "SELECT CONCAT(UPPER(SUBSTRING(month, 1, 1)), SUBSTRING(month, 2), ' ', year) as period, sss, ec, IF (mode = 'check', UPPER(CONCAT(mode, ' | ', bank)), UPPER(mode)) as mode, DATE_FORMAT(payment_date, '%b %e, %Y') as paid_date FROM contributions INNER JOIN payments ON contributions.payment_reference_number = payments.reference_number WHERE sss_no = 100000075 ORDER BY paid_date DESC, CASE month WHEN 'january' THEN 1 WHEN 'february' THEN 2 WHEN 'march' THEN 3 WHEN 'april' THEN 4 WHEN 'may' THEN 5 WHEN 'june' THEN 6 WHEN 'july' THEN 7 WHEN 'august' THEN 8 WHEN 'september' THEN 9 WHEN 'october' THEN 10 WHEN 'november' THEN 11 WHEN 'december' THEN 12 ELSE 13 END DESC";
+    "SELECT CONCAT(UPPER(SUBSTRING(month, 1, 1)), SUBSTRING(month, 2), ' ', year) as period, sss, ec, IF (mode = 'check', UPPER(CONCAT(mode, ' | ', bank)), UPPER(mode)) as mode, DATE_FORMAT(payment_date, '%b %e, %Y') as paid_date FROM contributions INNER JOIN payments ON contributions.payment_reference_number = payments.reference_number WHERE sss_no = ? ORDER BY paid_date DESC, CASE month WHEN 'january' THEN 1 WHEN 'february' THEN 2 WHEN 'march' THEN 3 WHEN 'april' THEN 4 WHEN 'may' THEN 5 WHEN 'june' THEN 6 WHEN 'july' THEN 7 WHEN 'august' THEN 8 WHEN 'september' THEN 9 WHEN 'october' THEN 10 WHEN 'november' THEN 11 WHEN 'december' THEN 12 ELSE 13 END DESC";
   const values = [sssNo];
 
   let rows;
@@ -285,7 +285,12 @@ export async function handleGetAvailablePeriods(req, res) {
   const currentYear = moment().year();
 
   // Get all months with contributions in the current year.
-  let paidMonths = await getMonthsWithContributionsOnAYear(sssNo, currentYear);
+  let paidMonths;
+  try {
+    paidMonths = await getMonthsWithContributionsOnAYear(sssNo, currentYear);
+  } catch (error) {
+    return res.send({ success: false, message: error.message });
+  }
 
   let availablePeriods = [];
   let monthCursor = months.indexOf(currentMonth);
@@ -318,4 +323,53 @@ export async function handleGetAvailablePeriods(req, res) {
   }
 
   return res.send({ success: true, availablePeriods: availablePeriods });
+}
+
+export async function handleGetUnpaidContributions(req, res) {
+  const db = await connectDB("sss_contribution");
+  if (!db) {
+    return res.send({ success: false, message: "Can't connect with database." });
+  }
+
+  const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
+
+  const sql =
+    "SELECT CONCAT(UPPER(SUBSTR(month, 1, 1)), SUBSTR(month, 2), ' ', year) as period, sss,ec, DATE_FORMAT(filing_date, '%M %e, %Y, %h:%i %p') as filing_date FROM contributions WHERE payment_reference_number IS NULL AND sss_no = ? ORDER BY year DESC, CASE month WHEN 'january' THEN 1 WHEN 'february' THEN 2 WHEN 'march' THEN 3 WHEN 'april' THEN 4 WHEN 'may' THEN 5 WHEN 'june' THEN 6 WHEN 'july' THEN 7 WHEN 'august' THEN 8 WHEN 'september' THEN 9 WHEN 'october' THEN 10 WHEN 'november' THEN 11 WHEN 'december' THEN 12 ELSE 13 END DESC";
+  const values = [sssNo];
+
+  let rows;
+  try {
+    [rows] = await db.query(sql, values);
+  } catch (error) {
+    console.error("[DB Error]", error);
+    return res.send({
+      success: false,
+      message: "An errror occured while fetching unpaid contributions."
+    });
+  } finally {
+    db.end();
+  }
+
+  res.send({ success: true, message: "Success fetching unpaid contributions.", data: rows });
+}
+
+export async function handleGetUnpaidContributionsAmount(req, res) {
+  const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
+
+  let unpaidAmount;
+
+  try {
+    unpaidAmount = await getUnpaidSSSAndECAmount(sssNo);
+  } catch (error) {
+    return res.send({
+      success: false,
+      message: "An error occured while getting unpaid contributions amount."
+    });
+  }
+
+  res.send({
+    success: true,
+    message: "Success fetching unpaid contributions.",
+    amount: unpaidAmount
+  });
 }

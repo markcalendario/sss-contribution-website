@@ -9,6 +9,7 @@ import {
 import { decodeAuthToken } from "../../global/utils/jwt.js";
 import validator from "validator";
 import paymentsConfigs from "../../db/configs/payments.configs.js";
+import moment from "moment";
 
 export async function validateCommonContributionPayload(req, res, next) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
@@ -198,7 +199,17 @@ export function validatePaymentPayload(req, res, next) {
   if (!validator.isDate(checkDate)) {
     return res.send({
       success: false,
-      message: "Date format is not valid. The required format date is YYYY-MM-DD"
+      message: "Date format is not valid. The required date format is YYYY-MM-DD."
+    });
+  }
+
+  // Check if check is expired
+
+  const isExpired = moment(checkDate, "YYYY-MM-DD").isBefore(moment().add(3, "M"));
+  if (isExpired) {
+    return res.send({
+      success: false,
+      message: `Invalid check. The validity date must be atleast 3 months from now.`
     });
   }
 
