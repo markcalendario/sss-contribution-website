@@ -152,6 +152,11 @@ function UnpaidContributionsList() {
             ))}
           </tbody>
         </HorizontalTable>
+        <div>
+          <Button className="bg-red text-slate" onClick={undoContributionFiling}>
+            Undo Filing Contribution
+          </Button>
+        </div>
       </Content>
     </DashboardContent>
   );
