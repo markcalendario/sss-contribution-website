@@ -253,6 +253,8 @@ export async function handleHistory(req, res) {
   } catch (error) {
     console.error(error);
     return res.send({ success: false, message: "Can't get contribution history." });
+  } finally {
+    db.end();
   }
 
   return res.send({

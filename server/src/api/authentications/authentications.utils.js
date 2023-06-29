@@ -42,7 +42,7 @@ export async function saveMemberData(db, validatedPayload) {
     const [rows] = await db.query(sql, values);
     return rows.insertId;
   } catch (error) {
-    // console.error(error);
+    console.error(error);
     throw new Error("There was an error saving your membership information.");
   }
 }
