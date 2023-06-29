@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, createContext, useContext, useEffect, useState } from "react";
-import { Content, DashboardContent, DashboardTitle } from "../../layout";
+import { Content, DashboardContent, DashboardLayout, DashboardTitle } from "../../layout";
 import DateAndTimeCard from "@/components/DateAndTimeCard/DateAndTimeCard";
 import Highlight from "@/components/Highlight/Highlight";
 import { HorizontalTable } from "@/components/Table/Table";
@@ -12,21 +12,7 @@ import { FullPageLoader } from "@/components/Loaders/Loaders";
 import NoResultIndicator from "@/components/NoResultIndicator/NoResultIndicator";
 const ContributionContext = createContext();
 
-export default function ContributePageCompiled() {
-  return (
-    <Fragment>
-      <DateAndTimeCard />
-      <DashboardContent id={styles.contributionFiling}>
-        <DashboardTitle>
-          <h1>File a Contribution</h1>
-        </DashboardTitle>
-        <ContributionContent />
-      </DashboardContent>
-    </Fragment>
-  );
-}
-
-export function ContributionContent() {
+export default function ContributionFilingCompiled() {
   const [availablePeriods, setAvailablePeriods] = useState(null);
   const [selectedPeriods, setSelectedPeriods] = useState([]);
   const [currentStage, setCurrentStage] = useState("selection");
@@ -118,20 +104,48 @@ export function ContributionContent() {
     console.log("Selected", selectedPeriods);
   }, [selectedPeriods]);
 
+  if (availablePeriods === null) {
+    return <FullPageLoader text="Checking available periods." />;
+  }
+
+  if (availablePeriods === false) {
+    return (
+      <Fragment>
+        <Highlight tint="orange">
+          <h1>Pending Contributions</h1>
+          <p>You already have submitted contributions to pay.</p>
+        </Highlight>
+        <NoResultIndicator text="You have no unpaid contributions." />
+      </Fragment>
+    );
+  }
+
   return (
     <ContributionContext.Provider
-      value={{ availablePeriods, selectedPeriods, goToNextStage, goToPrevStage }}>
-      {currentStage === "selection" ? (
-        <PeriodSelection
-          appendToSelectedPeriods={appendToSelectedPeriods}
-          removeFromSelectedPeriods={removeFromSelectedPeriods}
-        />
-      ) : (
-        <ContributionFiling
-          resetAllSelectedFields={resetAllSelectedFields}
-          changeSSSAmountOfPeriod={changeSSSAmountOfPeriod}
-        />
-      )}
+      value={{
+        availablePeriods,
+        selectedPeriods,
+        goToNextStage,
+        goToPrevStage
+      }}>
+      <DashboardContent id={styles.contributionFiling}>
+        <DashboardTitle>
+          <h1>Contribution Filing</h1>
+        </DashboardTitle>
+        <Content className={styles.content}>
+          {currentStage === "selection" ? (
+            <PeriodSelection
+              appendToSelectedPeriods={appendToSelectedPeriods}
+              removeFromSelectedPeriods={removeFromSelectedPeriods}
+            />
+          ) : (
+            <ContributionFiling
+              resetAllSelectedFields={resetAllSelectedFields}
+              changeSSSAmountOfPeriod={changeSSSAmountOfPeriod}
+            />
+          )}
+        </Content>
+      </DashboardContent>
     </ContributionContext.Provider>
   );
 }
@@ -148,19 +162,11 @@ function PeriodSelection(props) {
     appendToSelectedPeriods(month, year);
   };
 
-  if (availablePeriods === null) {
-    return <FullPageLoader text="Checking available periods." />;
-  }
-
-  if (availablePeriods === false) {
-    return <NoResultIndicator text="Please settle the filed contributions." />;
-  }
-
   return (
-    <Content className={styles.content}>
+    <Fragment>
       <Highlight tint="primary">
-        <h1>Period Selection</h1>
-        <p>Select a periods you want to pay.</p>
+        <h1>Guide</h1>
+        <p>Select the period(s) you want to pay.</p>
       </Highlight>
       <HorizontalTable>
         <thead>
@@ -189,10 +195,12 @@ function PeriodSelection(props) {
           ))}
         </tbody>
       </HorizontalTable>
-      <Button className="bg-primary text-slate" onClick={goToNextStage}>
-        Next &#187;
-      </Button>
-    </Content>
+      <div className={styles.buttons}>
+        <Button className="bg-primary text-slate" onClick={goToNextStage}>
+          Next &#187;
+        </Button>
+      </div>
+    </Fragment>
   );
 }
 
@@ -230,18 +238,11 @@ function ContributionFiling(props) {
   };
 
   if (selectedPeriods.length === 0) {
-    return (
-      <Fragment>
-        <NoResultIndicator text="Please select a period first." />
-        <Button className="bg-slate-5 text-slate" onClick={goToPrevStage}>
-          &#171; Back
-        </Button>
-      </Fragment>
-    );
+    return <NoSelectedPeriodIndicator />;
   }
 
   return (
-    <Content className={styles.content}>
+    <Fragment>
       <HorizontalTable>
         <thead>
           <tr>
@@ -267,12 +268,29 @@ function ContributionFiling(props) {
           ))}
         </tbody>
       </HorizontalTable>
-      <Button className="bg-slate-5 text-slate" onClick={handleBackClick}>
-        &#171; Restart
-      </Button>
-      <Button className="bg-green text-slate" onClick={submitContribution}>
-        Finalize and Submit
-      </Button>
-    </Content>
+      <div className={styles.buttons}>
+        <Button className="bg-slate-5 text-slate" onClick={handleBackClick}>
+          &#171; Restart
+        </Button>
+        <Button className="bg-green text-slate" onClick={submitContribution}>
+          Finalize and Submit
+        </Button>
+      </div>
+    </Fragment>
+  );
+}
+
+function NoSelectedPeriodIndicator() {
+  const { goToPrevStage } = useContext(ContributionContext);
+
+  return (
+    <Fragment>
+      <NoResultIndicator text="Please select a period first." />
+      <div>
+        <Button className="bg-slate-5 text-slate" onClick={goToPrevStage}>
+          &#171; Back
+        </Button>
+      </div>
+    </Fragment>
   );
 }

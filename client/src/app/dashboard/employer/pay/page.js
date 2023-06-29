@@ -64,30 +64,22 @@ export default function PayContributionPageCompiled() {
   }
 
   return (
-    <Fragment>
-      <UnpaidContributionsContext.Provider
-        value={{ unpaidContributions, unpaidContributionsAmount }}>
-        <UnpaidContributionsList />
-      </UnpaidContributionsContext.Provider>
+    <UnpaidContributionsContext.Provider value={{ unpaidContributions, unpaidContributionsAmount }}>
+      <UnpaidContributionsList />
       <PaymentSection />
-    </Fragment>
+    </UnpaidContributionsContext.Provider>
   );
 }
 
 function NoUnpaidContributions() {
   return (
-    <DashboardContent>
-      <DashboardTitle>
-        <h1>Pay a Contribution</h1>
-      </DashboardTitle>
-      <Content>
-        <Highlight tint="green">
-          <h1>Hooray!</h1>
-          <p>You have no pending contributions to pay.</p>
-        </Highlight>
-        <NoResultIndicator text="You have no unpaid contributions." />
-      </Content>
-    </DashboardContent>
+    <Fragment>
+      <Highlight tint="green">
+        <h1>Hooray!</h1>
+        <p>You have no pending contributions to pay.</p>
+      </Highlight>
+      <NoResultIndicator text="You have no unpaid contributions." />
+    </Fragment>
   );
 }
 
@@ -139,13 +131,13 @@ function UnpaidContributionsList() {
             {unpaidContributions.map((data, index) => (
               <tr key={index}>
                 <th>{data.period}</th>
-                <td>
+                <td data-head="SSS Contribution">
                   <Input placeholder="Amount to Pay" value={data.sss} readOnly />
                 </td>
-                <td>
+                <td data-head="EC Contribution">
                   <Input placeholder="Amount to Pay" value={data.ec} readOnly />
                 </td>
-                <td>
+                <td data-head="Filing Date">
                   <Input placeholder="Filing Date" value={data.filing_date} readOnly />
                 </td>
               </tr>
@@ -154,7 +146,7 @@ function UnpaidContributionsList() {
         </HorizontalTable>
         <div>
           <Button className="bg-red text-slate" onClick={undoContributionFiling}>
-            Undo Filing Contribution
+            Unfile Contribution
           </Button>
         </div>
       </Content>
