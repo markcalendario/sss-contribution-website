@@ -113,7 +113,7 @@ export function ContributionContent() {
         continue;
       }
 
-      updatedSelectedPeriods.push({ ...selectedPeriod, sss: sssAmount });
+      updatedSelectedPeriods.push({ ...selectedPeriod });
     }
 
     setSelectedPeriods(updatedSelectedPeriods);

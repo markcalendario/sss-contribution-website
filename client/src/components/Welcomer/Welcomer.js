@@ -8,7 +8,7 @@ export default function Welcomer(props) {
       <div className={styles.wrapper}>
         <p>Welcome</p>
         <h1>{name}</h1>
-        <p>You are logged in as a/an {role}.</p>
+        <p>You are logged in as an {role}.</p>
       </div>
     </div>
   );

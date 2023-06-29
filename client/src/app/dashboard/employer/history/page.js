@@ -47,7 +47,7 @@ export default function History() {
         <HorizontalTable>
           <thead>
             <tr>
-              <th>Month</th>
+              <th>Period</th>
               <th>SSS Contribution</th>
               <th>EC Contribution</th>
               <th>Mode of Payment</th>
@@ -59,7 +59,7 @@ export default function History() {
               <tr key={period}>
                 <td data-head="Month">{period}</td>
                 <td data-head="SSS Contribution">₱ {parseFloat(sss).toLocaleString()}</td>
-                <td data-head="EC Contribution">₱ {parseFloat(sss).toLocaleString()}</td>
+                <td data-head="EC Contribution">₱ {parseFloat(ec).toLocaleString()}</td>
                 <td data-head="Mode of Payment">{mode}</td>
                 <td data-head="Date">{paid_date}</td>
               </tr>

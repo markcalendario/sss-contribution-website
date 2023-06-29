@@ -1,24 +1,63 @@
-import { Fragment } from "react";
+"use client";
+
+import { Fragment, createContext, useContext, useEffect, useState } from "react";
 import Welcomer from "@/components/Welcomer/Welcomer";
 import DateAndTimeCard from "@/components/DateAndTimeCard/DateAndTimeCard";
 import styles from "./page.module.scss";
 import { VerticalTable } from "@/components/Table/Table";
 import { Content, DashboardContent, DashboardTitle } from "@/app/dashboard/layout.js";
+import { FullPageLoader } from "@/components/Loaders/Loaders";
+
+const MemberContext = createContext();
 
 export default function MemberDashboard() {
+  const [memberInfo, setMemberInfo] = useState(null);
+
+  const getIndividualMemberInfo = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/individual/info`, {
+      credentials: "include"
+    });
+
+    if (!response.ok) {
+      return alert("An error occured while getting your information.");
+    }
+
+    const result = await response.json();
+
+    if (!result.success) {
+      return alert(result.message);
+    }
+
+    setMemberInfo(result.data);
+  };
+
+  useEffect(() => {
+    getIndividualMemberInfo();
+  }, []);
+
+  if (memberInfo === null) {
+    return <FullPageLoader text="Getting your information..." />;
+  }
+
   return (
-    <Fragment>
+    <MemberContext.Provider value={memberInfo}>
       <WelcomeAndTime />
       <MemberInformation />
-    </Fragment>
+    </MemberContext.Provider>
   );
 }
 
 function WelcomeAndTime() {
+  const { first_name, middle_name, last_name } = useContext(MemberContext);
+
   return (
     <DashboardContent id={styles.dateAndTime}>
       <Content className={styles.content}>
-        <Welcomer className={styles.welcomer} />
+        <Welcomer
+          className={styles.welcomer}
+          name={`${first_name} ${middle_name} ${last_name}`}
+          role="individual member"
+        />
         <DateAndTimeCard className={styles.dateAndTimeCard} />
       </Content>
     </DashboardContent>
@@ -40,6 +79,8 @@ function MemberInformation() {
 }
 
 function BasicInformation() {
+  const { sss_no, crn, tin, payor_type } = useContext(MemberContext);
+
   return (
     <Fragment>
       <VerticalTable>
@@ -51,19 +92,19 @@ function BasicInformation() {
         <tbody>
           <tr>
             <th>SSS Number</th>
-            <td>649410110</td>
+            <td>{sss_no}</td>
           </tr>
           <tr>
             <th>CRN</th>
-            <td>00649410110</td>
+            <td>{crn}</td>
           </tr>
           <tr>
             <th>TIN</th>
-            <td>9500411268755</td>
+            <td>{tin}</td>
           </tr>
           <tr>
             <th>Payor Type</th>
-            <td>Self-Employed</td>
+            <td>{payor_type.toUpperCase()}</td>
           </tr>
         </tbody>
       </VerticalTable>
@@ -72,6 +113,8 @@ function BasicInformation() {
 }
 
 function ContactInformation() {
+  const { address, zip, mobile, telephone, email } = useContext(MemberContext);
+
   return (
     <Fragment>
       <VerticalTable>
@@ -83,23 +126,23 @@ function ContactInformation() {
         <tbody>
           <tr>
             <th>Complete Address</th>
-            <td>172 Julian Felipe Street, Sangandaan, Caloocan City</td>
+            <td>{address}</td>
           </tr>
           <tr>
             <th>Zip Code</th>
-            <td>1403</td>
+            <td>{zip}</td>
           </tr>
           <tr>
             <th>Mobile Number</th>
-            <td>+639063472117</td>
+            <td>{mobile}</td>
           </tr>
           <tr>
             <th>Telephone Number</th>
-            <td>(02) 45634742</td>
+            <td>{telephone}</td>
           </tr>
           <tr>
             <th>Email Address</th>
-            <td>markcalendario@gmail.com</td>
+            <td>{email}</td>
           </tr>
         </tbody>
       </VerticalTable>
