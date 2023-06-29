@@ -1,6 +1,6 @@
 # SSS Contribution System
 
-A final project for the Information Management course on my second term as a computer science student.
+A final project for the Information Management course on my second semester as a computer science student.
 
 ## Screenshots
 
