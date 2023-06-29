@@ -71,13 +71,12 @@
         {
           "name": "Login",
           "protocolProfileBehavior": {
-            "disableBodyPruning": true,
             "disabledSystemHeaders": {
               "content-type": true
             }
           },
           "request": {
-            "method": "GET",
+            "method": "POST",
             "header": [
               {
                 "key": "Content-Type",
@@ -95,6 +94,36 @@
               "host": ["localhost"],
               "port": "3001",
               "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Auth",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/auth/is-auth",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["auth", "is-auth"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/auth/logout/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["auth", "logout", ""]
             }
           },
           "response": []
@@ -218,7 +247,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"contributions\": [\r\n        {\r\n            \"month\": \"june\",\r\n            \"year\": \"2024\",\r\n            \"sss\": \"350.50\",\r\n            \"ec\": \"30000\"\r\n        }, \r\n        {\r\n            \"month\": \"july\",\r\n            \"year\": \"2024\",\r\n            \"sss\": \"30000\",\r\n            \"ec\": \"30000\"\r\n        }\r\n    ]\r\n}"
+              "raw": "{\r\n    \"contributions\": [\r\n        {\r\n            \"month\": \"june\",\r\n            \"year\": \"2028\",\r\n            \"sss\": \"350.50\",\r\n            \"ec\": \"30000\"\r\n        }, \r\n        {\r\n            \"month\": \"july\",\r\n            \"year\": \"2028\",\r\n            \"sss\": \"30000\",\r\n            \"ec\": \"30000\"\r\n        }\r\n    ]\r\n}"
             },
             "url": {
               "raw": "http://localhost:3001/contributions/employer/file-contribution",
@@ -232,9 +261,24 @@
         },
         {
           "name": "Remove Unpaid Contribution",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
           "request": {
             "method": "DELETE",
-            "header": [],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "default"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"contributions\": [\r\n        {\r\n            \"month\": \"june\",\r\n            \"year\": \"2024\",\r\n            \"sss\": \"350.50\",\r\n            \"ec\": \"30000\"\r\n        }, \r\n        {\r\n            \"month\": \"july\",\r\n            \"year\": \"2024\",\r\n            \"sss\": \"30000\",\r\n            \"ec\": \"30000\"\r\n        }\r\n    ]\r\n}"
+            },
             "url": {
               "raw": "http://localhost:3001/contributions/remove-unpaid-contribution",
               "protocol": "http",
@@ -272,6 +316,37 @@
           "response": []
         },
         {
+          "name": "Unpaid Contributions",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true,
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "default"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"amount\": \"77700.98\",\r\n    \"mode\": \"check\",\r\n    \"bank\": \"Landbank of the Philippines\",\r\n    \"checkReference\": \"100454AF\",\r\n    \"checkDate\": \"2023-08-30\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/contributions/unpaid-amount/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["contributions", "unpaid-amount", ""]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Pay Contribution",
           "protocolProfileBehavior": {
             "disabledSystemHeaders": {
@@ -297,6 +372,52 @@
               "host": ["localhost"],
               "port": "3001",
               "path": ["contributions", "pay", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Available Periods",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/contributions/available-periods",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["contributions", "available-periods"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unpaid Contributions Amount",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true,
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "default"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"amount\": \"77700.98\",\r\n    \"mode\": \"check\",\r\n    \"bank\": \"Landbank of the Philippines\",\r\n    \"checkReference\": \"100454AF\",\r\n    \"checkDate\": \"2023-08-30\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/contributions/unpaid/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["contributions", "unpaid", ""]
             }
           },
           "response": []
