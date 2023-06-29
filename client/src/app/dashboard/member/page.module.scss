@@ -15,7 +15,12 @@
     }
 
     .dateAndTimeCard {
-      flex-grow: 0.6;
+      width: 300px;
+
+      @include screens.mobile {
+        width: unset;
+        flex-grow: 1;
+      }
     }
   }
 }

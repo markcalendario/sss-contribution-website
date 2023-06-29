@@ -39,4 +39,14 @@
       color: colors.$orange;
     }
   }
+
+  &.green {
+    background-color: rgba($color: colors.$green, $alpha: 0.1);
+    border: 1px solid colors.$green;
+
+    h1,
+    p {
+      color: colors.$green;
+    }
+  }
 }

@@ -56,7 +56,7 @@ export default function History() {
           </thead>
           <tbody>
             {history.map(({ period, sss, ec, mode, paid_date }) => (
-              <tr>
+              <tr key={period}>
                 <td data-head="Month">{period}</td>
                 <td data-head="SSS Contribution">₱ {parseFloat(sss).toLocaleString()}</td>
                 <td data-head="EC Contribution">₱ {parseFloat(sss).toLocaleString()}</td>

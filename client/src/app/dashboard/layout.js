@@ -69,6 +69,15 @@ export function Aside({ asideLinks }) {
 }
 
 function Navbar({ toggleAsideState }) {
+  const signOut = async () => {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+      credentials: "include",
+      method: "delete"
+    });
+
+    window.location.href = "/";
+  };
+
   return (
     <nav id={styles.nav}>
       <div className={styles.wrapper}>
@@ -82,15 +91,10 @@ function Navbar({ toggleAsideState }) {
             <img src="/images/logos/logo-original.webp" alt="SSS logo" />
           </div>
         </div>
-
         <div className={styles.right}>
-          <p className={styles.userName}>Mark Kenneth Calendario</p>
-          <div className={styles.userImage}>
-            <img
-              src="https://imageio.forbes.com/specials-images/imageserve/513343414/0x0.jpg?format=jpg&width=1200"
-              alt="user"
-            />
-          </div>
+          <Button onClick={signOut} className="bg-transparent text-red">
+            <i className="fa fa-sign-out"></i>
+          </Button>
         </div>
       </div>
     </nav>
