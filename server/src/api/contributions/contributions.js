@@ -6,6 +6,7 @@ import {
 } from "../../global/middlewares/authorizations.js";
 import {
   handleEmployerContributionFiling,
+  handleGetAvailablePeriods,
   handleHistory,
   handleIndividualContributionFiling,
   handlePayContribution,
@@ -40,4 +41,5 @@ router.post(
 router.delete("/remove-unpaid-contribution", validateAuthCookie, handleRemoveUnpaidContribution);
 router.post("/pay", validateAuthCookie, validatePaymentPayload, handlePayContribution);
 router.get("/history", validateAuthCookie, handleHistory);
+router.get("/available-periods", validateAuthCookie, handleGetAvailablePeriods);
 export default router;

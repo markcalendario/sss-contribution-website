@@ -2,24 +2,9 @@ import connectDB from "../../db/connection.js";
 import validator from "validator";
 import { isString, isStringEmpty } from "../../global/utils/validators.js";
 import contributionsConfigs from "../../db/configs/contributions.configs.js";
-import paymentsConfigs from "../../db/configs/payments.configs.js";
+import { months } from "../../global/utils/misc.js";
 
 export function isPeriodRetroactive(month, year) {
-  const months = [
-    "january",
-    "february",
-    "march",
-    "april",
-    "may",
-    "june",
-    "july",
-    "august",
-    "september",
-    "october",
-    "november",
-    "december"
-  ];
-
   const currentDate = new Date();
   const currentMonth = currentDate.toLocaleString("default", { month: "long" }).toLowerCase();
 
@@ -149,4 +134,30 @@ export async function getUnpaidSSSAndECAmount(sssNo) {
 
   const result = row[0];
   return result.toPayAmount;
+}
+
+export async function getMonthsWithContributionsOnAYear(sssNo, year) {
+  const db = await connectDB("sss_contribution");
+  if (!db) {
+    return res.send({ success: false, message: "Can't connect with database." });
+  }
+
+  const sql = "SELECT month FROM contributions WHERE year = ? AND sss_no = ?";
+  const values = [year, sssNo];
+
+  let rows;
+  try {
+    [rows] = await db.query(sql, values);
+  } catch (error) {
+    console.error("[DB Error]", error);
+    throw new Error("An error occured while getting months with contributions.");
+  }
+
+  let paidMonths = [];
+
+  for (let row of rows) {
+    paidMonths.push(row.month);
+  }
+
+  return paidMonths;
 }

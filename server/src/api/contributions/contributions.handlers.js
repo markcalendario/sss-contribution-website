@@ -1,6 +1,12 @@
+import moment from "moment/moment.js";
 import connectDB from "../../db/connection.js";
 import { decodeAuthToken } from "../../global/utils/jwt.js";
-import { getUnpaidSSSAndECAmount, hasUnpaidContributions } from "./contributions.utils.js";
+import {
+  getMonthsWithContributionsOnAYear,
+  getUnpaidSSSAndECAmount,
+  hasUnpaidContributions
+} from "./contributions.utils.js";
+import { months } from "../../global/utils/misc.js";
 
 export async function handleIndividualContributionFiling(req, res) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
@@ -238,7 +244,7 @@ export async function handleHistory(req, res) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
 
   const sql =
-    "SELECT CONCAT(UPPER(SUBSTRING(month, 1, 1)), UPPER(SUBSTRING(month, 2)), ' ', year) as period, sss, ec, mode, DATE_FORMAT(payment_date, '%b %e, %Y') as paid_date FROM contributions INNER JOIN payments ON contributions.payment_reference_number = payments.reference_number WHERE sss_no = ? ORDER BY paid_date DESC";
+    "SELECT CONCAT(UPPER(SUBSTRING(month, 1, 1)), SUBSTRING(month, 2), ' ', year) as period, sss, ec, IF (mode = 'check', UPPER(CONCAT(mode, ' | ', bank)), UPPER(mode)) as mode, DATE_FORMAT(payment_date, '%b %e, %Y') as paid_date FROM contributions INNER JOIN payments ON contributions.payment_reference_number = payments.reference_number WHERE sss_no = 100000075 ORDER BY paid_date DESC, CASE month WHEN 'january' THEN 1 WHEN 'february' THEN 2 WHEN 'march' THEN 3 WHEN 'april' THEN 4 WHEN 'may' THEN 5 WHEN 'june' THEN 6 WHEN 'july' THEN 7 WHEN 'august' THEN 8 WHEN 'september' THEN 9 WHEN 'october' THEN 10 WHEN 'november' THEN 11 WHEN 'december' THEN 12 ELSE 13 END DESC";
   const values = [sssNo];
 
   let rows;
@@ -254,4 +260,62 @@ export async function handleHistory(req, res) {
     message: "The contribution history is fetched successfully.",
     history: rows
   });
+}
+
+export async function handleGetAvailablePeriods(req, res) {
+  const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
+
+  let hasUnpaid;
+  try {
+    [hasUnpaid] = await hasUnpaidContributions(sssNo);
+  } catch (error) {
+    return res.send({ success: false, message: error.message });
+  }
+
+  if (hasUnpaid) {
+    return res.send({
+      success: false,
+      message: "You still have pending contributions to pay.",
+      hasPendingFiledContributions: true
+    });
+  }
+
+  // Get current month and year.
+  const currentMonth = moment().format("MMMM").toLowerCase();
+  const currentYear = moment().year();
+
+  // Get all months with contributions in the current year.
+  let paidMonths = await getMonthsWithContributionsOnAYear(sssNo, currentYear);
+
+  let availablePeriods = [];
+  let monthCursor = months.indexOf(currentMonth);
+  let yearCursor = currentYear;
+
+  // Collect 12 periods by iterating until the end month of the current year.
+  while (availablePeriods.length !== 12) {
+    const monthToCheck = months[monthCursor];
+
+    // Check if the month is not in the paidMonths.
+    if (!paidMonths.includes(monthToCheck)) {
+      // If it is not in the paidMonths, add it as an available period.
+      availablePeriods.push({ month: monthToCheck, year: yearCursor.toString() });
+    }
+
+    monthCursor++;
+
+    // If the month reaches December of the current year, increment the yearCursor and reset the monthCursor to 0.
+    if (monthCursor === months.length) {
+      yearCursor++;
+      monthCursor = 0;
+
+      // Collect all of the paid months on the incremented yearCursor
+      try {
+        paidMonths = await getMonthsWithContributionsOnAYear(sssNo, yearCursor);
+      } catch (error) {
+        return res.send({ success: false, message: error.message });
+      }
+    }
+  }
+
+  return res.send({ success: true, availablePeriods: availablePeriods });
 }

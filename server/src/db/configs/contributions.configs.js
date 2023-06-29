@@ -1,21 +1,9 @@
+import { months } from "../../global/utils/misc.js";
 import configs from "./global.configs.js";
 
 export default {
   month: {
-    allowedValues: [
-      "january",
-      "february",
-      "march",
-      "april",
-      "may",
-      "june",
-      "july",
-      "august",
-      "september",
-      "october",
-      "november",
-      "december"
-    ]
+    allowedValues: months
   },
   sss: {
     ...configs.sss_amount

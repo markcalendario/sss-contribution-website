@@ -1,8 +1,42 @@
-import { Fragment } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import { Content, DashboardContent, DashboardTitle } from "../../layout";
 import { HorizontalTable } from "@/components/Table/Table";
+import { FullPageLoader } from "@/components/Loaders/Loaders";
+import NoResultIndicator from "@/components/NoResultIndicator/NoResultIndicator";
 
 export default function History() {
+  const [history, setHistory] = useState([]);
+
+  const getContributionHistory = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contributions/history`, {
+      credentials: "include"
+    });
+    if (!response.ok) {
+      return alert("An error occured while fetching contribution history.");
+    }
+
+    const result = await response.json();
+    if (!result.success) {
+      return alert(result.message);
+    }
+
+    setHistory(result.history);
+  };
+
+  useEffect(() => {
+    getContributionHistory();
+  }, []);
+
+  if (history === null) {
+    return <FullPageLoader text="Checking History" />;
+  }
+
+  if (history.length === 0) {
+    return <NoResultIndicator text="Contribution history is empty." />;
+  }
+
   return (
     <DashboardContent>
       <DashboardTitle>
@@ -15,45 +49,21 @@ export default function History() {
             <tr>
               <th>Month</th>
               <th>SSS Contribution</th>
-              <th>SSS Penalty</th>
               <th>EC Contribution</th>
-              <th>EC Penalty</th>
-              <th>Paid Amount</th>
-              <th>Mode</th>
+              <th>Mode of Payment</th>
               <th>Date</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td data-head="Month">February</td>
-              <td data-head="SSS Contribution">4500</td>
-              <td data-head="SSS Penalty">60</td>
-              <td data-head="EC Contribution">4500</td>
-              <td data-head="EC Penalty">60</td>
-              <td data-head="Paid Amount">4560</td>
-              <td data-head="Mode">Cash</td>
-              <td data-head="Date">2023-02-20</td>
-            </tr>
-            <tr>
-              <td data-head="Month">January</td>
-              <td data-head="SSS Contribution">4500</td>
-              <td data-head="SSS Penalty">0</td>
-              <td data-head="EC Contribution">4500</td>
-              <td data-head="EC Penalty">0</td>
-              <td data-head="Paid Amount">4500</td>
-              <td data-head="Mode">Cash</td>
-              <td data-head="Date">2023-01-20</td>
-            </tr>
-            <tr>
-              <td data-head="Month">December</td>
-              <td data-head="SSS Contribution">4500</td>
-              <td data-head="SSS Penalty">0</td>
-              <td data-head="EC Contribution">4500</td>
-              <td data-head="EC Penalty">0</td>
-              <td data-head="Paid Amount">4500</td>
-              <td data-head="Mode">Cash</td>
-              <td data-head="Date">2022-12-20</td>
-            </tr>
+            {history.map(({ period, sss, ec, mode, paid_date }) => (
+              <tr>
+                <td data-head="Month">{period}</td>
+                <td data-head="SSS Contribution">₱ {parseFloat(sss).toLocaleString()}</td>
+                <td data-head="EC Contribution">₱ {parseFloat(sss).toLocaleString()}</td>
+                <td data-head="Mode of Payment">{mode}</td>
+                <td data-head="Date">{paid_date}</td>
+              </tr>
+            ))}
           </tbody>
         </HorizontalTable>
       </Content>
