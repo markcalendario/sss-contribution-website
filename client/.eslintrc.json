@@ -1,7 +1,6 @@
 {
   "extends": "next/core-web-vitals",
   "rules": {
-    "@next/next/no-img-element": "off",
-    "import/no-unused-modules": [1, { "unusedExports": true }]
+    "@next/next/no-img-element": "off"
   }
 }
