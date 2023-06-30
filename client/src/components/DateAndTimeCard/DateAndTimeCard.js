@@ -1,8 +1,8 @@
 "use client";
 
+import moment from "moment/moment";
 import { useEffect, useState } from "react";
 import styles from "./DateAndTimeCard.module.scss";
-import moment from "moment/moment";
 
 export default function DateAndTimeCard(props) {
   const { id, className } = props;

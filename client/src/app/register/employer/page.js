@@ -1,9 +1,9 @@
 "use client";
 
-import { Checkbox, Input, Select } from "@/components/FormFields/FormFields";
-import styles from "../shared.module.scss";
 import Button from "@/components/Buttons/Buttons";
-import { Fragment, useState, createContext, useContext, useEffect } from "react";
+import { Checkbox, Input, Select } from "@/components/FormFields/FormFields";
+import { Fragment, createContext, useContext, useEffect, useState } from "react";
+import styles from "../shared.module.scss";
 
 const EmployerRegistrationContext = createContext();
 

@@ -1,11 +1,11 @@
 "use client";
 
-import styles from "./page.module.scss";
+import ImageCard from "../../components/ImageCard/ImageCard";
 import SectionContent, {
   SectionTitle,
   SectionWrapper
 } from "../../components/SectionContent/SectionContent";
-import ImageCard from "../../components/ImageCard/ImageCard";
+import styles from "./page.module.scss";
 
 export default function ContributorTypeChooser() {
   function redirectToMemberRegistration() {

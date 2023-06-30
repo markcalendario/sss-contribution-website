@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Content, DashboardContent, DashboardTitle } from "../../layout";
-import { HorizontalTable } from "@/components/Table/Table";
 import { FullPageLoader } from "@/components/Loaders/Loaders";
 import NoResultIndicator from "@/components/NoResultIndicator/NoResultIndicator";
+import { HorizontalTable } from "@/components/Table/Table";
+import { useEffect, useState } from "react";
+import { Content, DashboardContent, DashboardTitle } from "../../layout";
 
 export default function History() {
   const [history, setHistory] = useState(null);

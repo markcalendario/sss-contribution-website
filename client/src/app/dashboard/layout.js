@@ -1,9 +1,9 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 import Button from "../../components/Buttons/Buttons";
 import styles from "./layout.module.scss";
-import { usePathname } from "next/navigation";
 
 export default function Layout({ children }) {
   return <Fragment>{children}</Fragment>;

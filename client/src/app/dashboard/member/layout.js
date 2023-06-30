@@ -1,8 +1,8 @@
-import { DashboardLayout, Main, Navigations } from "../layout";
 import {
   LoggedInPageProtection,
   MemberPageProtection
 } from "@/components/RouteProtections/RouteProtections";
+import { DashboardLayout, Main, Navigations } from "../layout";
 
 export default function MemberDashboardLayout({ children }) {
   const asideLinks = [

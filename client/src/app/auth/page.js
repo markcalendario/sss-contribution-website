@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { FullPageLoader } from "../../components/Loaders/Loaders.js";
 
 export default function Auth() {

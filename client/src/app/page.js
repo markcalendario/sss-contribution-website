@@ -1,16 +1,16 @@
 "use client";
 
-import styles from "./page.module.scss";
-import Navbar from "../components/Navbar/Navbar";
+import { NonLoggedInPage } from "@/components/RouteProtections/RouteProtections";
 import { LinkButton } from "../components/Buttons/Buttons";
+import Disclaimer from "../components/Disclaimer/Disclaimer";
+import Footer from "../components/Footer/Footer";
+import ImageCard from "../components/ImageCard/ImageCard";
+import Navbar from "../components/Navbar/Navbar";
 import SectionContent, {
   SectionTitle,
   SectionWrapper
 } from "../components/SectionContent/SectionContent";
-import ImageCard from "../components/ImageCard/ImageCard";
-import Footer from "../components/Footer/Footer";
-import Disclaimer from "../components/Disclaimer/Disclaimer";
-import { NonLoggedInPage } from "@/components/RouteProtections/RouteProtections";
+import styles from "./page.module.scss";
 
 export const metadata = {
   title: "Welcome to Social Security System",

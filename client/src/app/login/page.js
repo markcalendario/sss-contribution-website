@@ -1,13 +1,13 @@
 "use client";
 
 import Button, { LinkButton } from "@/components/Buttons/Buttons";
+import Disclaimer from "@/components/Disclaimer/Disclaimer";
+import Footer from "@/components/Footer/Footer";
 import { Input } from "@/components/FormFields/FormFields";
-import styles from "./page.module.scss";
-import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar/Navbar";
 import { NonLoggedInPage } from "@/components/RouteProtections/RouteProtections";
-import Footer from "@/components/Footer/Footer";
-import Disclaimer from "@/components/Disclaimer/Disclaimer";
+import { useEffect, useState } from "react";
+import styles from "./page.module.scss";
 
 export default function LoginCompiled() {
   return (

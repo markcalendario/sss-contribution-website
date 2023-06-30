@@ -1,8 +1,8 @@
-import { DashboardLayout, Main, Navigations } from "../layout";
 import {
   EmployerPageProtection,
   LoggedInPageProtection
 } from "@/components/RouteProtections/RouteProtections";
+import { DashboardLayout, Main, Navigations } from "../layout";
 
 export default function EmployerDashboardLayout({ children }) {
   const asideLinks = [

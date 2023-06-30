@@ -1,12 +1,10 @@
 "use client";
 
-import "../styles/main.scss";
-import "../styles/fontawesome/css/all.min.css";
-import "aos/dist/aos.css";
 import AOS from "aos";
-import Footer from "../components/Footer/Footer";
-import Disclaimer from "../components/Disclaimer/Disclaimer";
+import "aos/dist/aos.css";
 import { useEffect } from "react";
+import "../styles/fontawesome/css/all.min.css";
+import "../styles/main.scss";
 
 export const metadata = {
   title: "SSS Contribution",
