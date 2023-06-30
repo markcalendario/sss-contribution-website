@@ -1,8 +1,7 @@
 "use client";
 
 import { Fragment, createContext, useContext, useEffect, useState } from "react";
-import { Content, DashboardContent, DashboardLayout, DashboardTitle } from "../../layout";
-import DateAndTimeCard from "@/components/DateAndTimeCard/DateAndTimeCard";
+import { Content, DashboardContent, DashboardTitle } from "../../layout";
 import Highlight from "@/components/Highlight/Highlight";
 import { HorizontalTable } from "@/components/Table/Table";
 import { Checkbox, Input } from "@/components/FormFields/FormFields";
@@ -143,25 +142,18 @@ export default function ContributionFilingCompiled() {
         goToNextStage,
         goToPrevStage
       }}>
-      <DashboardContent id={styles.contributionFiling}>
-        <DashboardTitle>
-          <h1>Contribution Filing</h1>
-        </DashboardTitle>
-        <Content className={styles.content}>
-          {currentStage === "selection" ? (
-            <PeriodSelection
-              appendToSelectedPeriods={appendToSelectedPeriods}
-              removeFromSelectedPeriods={removeFromSelectedPeriods}
-            />
-          ) : (
-            <ContributionFiling
-              resetAllSelectedFields={resetAllSelectedFields}
-              changeECAmountOfPeriod={changeECAmountOfPeriod}
-              changeSSSAmountOfPeriod={changeSSSAmountOfPeriod}
-            />
-          )}
-        </Content>
-      </DashboardContent>
+      {currentStage === "selection" ? (
+        <PeriodSelection
+          appendToSelectedPeriods={appendToSelectedPeriods}
+          removeFromSelectedPeriods={removeFromSelectedPeriods}
+        />
+      ) : (
+        <ContributionFiling
+          resetAllSelectedFields={resetAllSelectedFields}
+          changeECAmountOfPeriod={changeECAmountOfPeriod}
+          changeSSSAmountOfPeriod={changeSSSAmountOfPeriod}
+        />
+      )}
     </ContributionContext.Provider>
   );
 }
@@ -179,44 +171,49 @@ function PeriodSelection(props) {
   };
 
   return (
-    <Fragment>
-      <Highlight tint="primary">
-        <h1>Guide</h1>
-        <p>Select the period(s) you want to pay.</p>
-      </Highlight>
-      <HorizontalTable>
-        <thead>
-          <tr>
-            <th>Month</th>
-            <th>Year</th>
-            <th>Select</th>
-          </tr>
-        </thead>
-        <tbody>
-          {availablePeriods.map((data, index) => (
-            <tr key={index}>
-              <td data-head="Month">
-                {data.month.substr(0, 1).toUpperCase() + data.month.substr(1)}
-              </td>
-              <td data-head="Year">{data.year}</td>
-              <td data-head="Select">
-                <Checkbox
-                  onChange={(evt) => {
-                    handleSelectPeriod(evt.target.checked, data.month, data.year);
-                  }}>
-                  Select
-                </Checkbox>
-              </td>
+    <DashboardContent id={styles.contributionFiling}>
+      <DashboardTitle>
+        <h1>Contribution Filing</h1>
+      </DashboardTitle>
+      <Content className={styles.content}>
+        <Highlight tint="primary">
+          <h1>Guide</h1>
+          <p>Select the period(s) you want to pay.</p>
+        </Highlight>
+        <HorizontalTable>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Year</th>
+              <th>Select</th>
             </tr>
-          ))}
-        </tbody>
-      </HorizontalTable>
-      <div className={styles.buttons}>
-        <Button className="bg-primary text-slate" onClick={goToNextStage}>
-          Next &#187;
-        </Button>
-      </div>
-    </Fragment>
+          </thead>
+          <tbody>
+            {availablePeriods.map((data, index) => (
+              <tr key={index}>
+                <td data-head="Month">
+                  {data.month.substr(0, 1).toUpperCase() + data.month.substr(1)}
+                </td>
+                <td data-head="Year">{data.year}</td>
+                <td data-head="Select">
+                  <Checkbox
+                    onChange={(evt) => {
+                      handleSelectPeriod(evt.target.checked, data.month, data.year);
+                    }}>
+                    Select
+                  </Checkbox>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </HorizontalTable>
+        <div className={styles.buttons}>
+          <Button className="bg-primary text-slate" onClick={goToNextStage}>
+            Next &#187;
+          </Button>
+        </div>
+      </Content>
+    </DashboardContent>
   );
 }
 
@@ -258,51 +255,56 @@ function ContributionFiling(props) {
   }
 
   return (
-    <Fragment>
-      <HorizontalTable>
-        <thead>
-          <tr>
-            <th>Month</th>
-            <th>SSS Contribution</th>
-            <th>EC Contribution</th>
-          </tr>
-        </thead>
-        <tbody>
-          {selectedPeriods.map((data, index) => (
-            <tr key={index}>
-              <th>
-                {data.month.substr(0, 1).toUpperCase() + data.month.substr(1)} {data.year}
-              </th>
-              <td data-head="SSS Contribution">
-                <Input
-                  placeholder="Amount"
-                  onChange={(evt) => {
-                    changeSSSAmountOfPeriod(data.month, data.year, evt.target.value);
-                  }}
-                />
-              </td>
-              <td data-head="EC Contribution">
-                <Input
-                  placeholder="Amount"
-                  value={data.amount}
-                  onChange={(evt) => {
-                    changeECAmountOfPeriod(data.month, data.year, evt.target.value);
-                  }}
-                />
-              </td>
+    <DashboardContent id={styles.contributionFiling}>
+      <DashboardTitle>
+        <h1>Finalize Contribution</h1>
+      </DashboardTitle>
+      <Content className={styles.content}>
+        <HorizontalTable>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>SSS Contribution</th>
+              <th>EC Contribution</th>
             </tr>
-          ))}
-        </tbody>
-      </HorizontalTable>
-      <div className={styles.buttons}>
-        <Button className="bg-slate-5 text-slate" onClick={handleBackClick}>
-          &#171; Restart
-        </Button>
-        <Button className="bg-green text-slate" onClick={submitContribution}>
-          Finalize and Submit
-        </Button>
-      </div>
-    </Fragment>
+          </thead>
+          <tbody>
+            {selectedPeriods.map((data, index) => (
+              <tr key={index}>
+                <th>
+                  {data.month.substr(0, 1).toUpperCase() + data.month.substr(1)} {data.year}
+                </th>
+                <td data-head="SSS Contribution">
+                  <Input
+                    placeholder="Amount"
+                    onChange={(evt) => {
+                      changeSSSAmountOfPeriod(data.month, data.year, evt.target.value);
+                    }}
+                  />
+                </td>
+                <td data-head="EC Contribution">
+                  <Input
+                    placeholder="Amount"
+                    value={data.amount}
+                    onChange={(evt) => {
+                      changeECAmountOfPeriod(data.month, data.year, evt.target.value);
+                    }}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </HorizontalTable>
+        <div className={styles.buttons}>
+          <Button className="bg-slate-5 text-slate" onClick={handleBackClick}>
+            &#171; Restart
+          </Button>
+          <Button className="bg-green text-slate" onClick={submitContribution}>
+            Finalize and Submit
+          </Button>
+        </div>
+      </Content>
+    </DashboardContent>
   );
 }
 
