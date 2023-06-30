@@ -1,9 +1,0 @@
-@use "../../../../styles/abstracts/mixins-screens" as screens;
-
-#unpaidContributionsList {
-  .content {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-}

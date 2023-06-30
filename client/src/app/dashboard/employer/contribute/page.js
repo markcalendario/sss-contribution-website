@@ -171,11 +171,11 @@ function PeriodSelection(props) {
   };
 
   return (
-    <DashboardContent id={styles.contributionFiling}>
+    <DashboardContent>
       <DashboardTitle>
         <h1>Contribution Filing</h1>
       </DashboardTitle>
-      <Content className={styles.content}>
+      <Content>
         <Highlight tint="primary">
           <h1>Guide</h1>
           <p>Select the period(s) you want to pay.</p>
@@ -207,7 +207,7 @@ function PeriodSelection(props) {
             ))}
           </tbody>
         </HorizontalTable>
-        <div className={styles.buttons}>
+        <div>
           <Button className="bg-primary text-slate" onClick={goToNextStage}>
             Next &#187;
           </Button>

@@ -95,16 +95,18 @@ export default function PaymentSection() {
         <h1>Payment Section</h1>
         <p>Select a payment method.</p>
       </DashboardTitle>
-      <Content className={styles.content}>
-        <Button className="bg-primary text-slate" onClick={handleCashPay}>
-          <i className="fa fa-coins" /> Pay using Cash
-        </Button>
-        <Button className="bg-primary text-slate" onClick={handleCheckPay}>
-          <i className="fa fa-receipt" /> Pay using Check
-        </Button>
-        <Button className="bg-primary text-slate" onClick={handleBankPay}>
-          <i className="fa fa-bank" /> Pay through Bank
-        </Button>
+      <Content>
+        <div className={styles.buttons}>
+          <Button className="bg-primary text-slate" onClick={handleCashPay}>
+            <i className="fa fa-coins" /> Pay using Cash
+          </Button>
+          <Button className="bg-primary text-slate" onClick={handleCheckPay}>
+            <i className="fa fa-receipt" /> Pay using Check
+          </Button>
+          <Button className="bg-primary text-slate" onClick={handleBankPay}>
+            <i className="fa fa-bank" /> Pay through Bank
+          </Button>
+        </div>
       </Content>
     </DashboardContent>
   );

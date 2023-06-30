@@ -50,10 +50,12 @@ function WelcomeAndTime() {
   const { business_name } = useContext(EmployerContext);
 
   return (
-    <DashboardContent id={styles.dateAndTime}>
-      <Content className={styles.content}>
-        <Welcomer className={styles.welcomer} name={business_name} role="employer" />
-        <DateAndTimeCard className={styles.dateAndTimeCard} />
+    <DashboardContent id={styles.welcomerAndDateTime}>
+      <Content>
+        <div className={styles.wrapper}>
+          <Welcomer className={styles.welcomer} name={business_name} role="employer" />
+          <DateAndTimeCard className={styles.dateTimeCard} />
+        </div>
       </Content>
     </DashboardContent>
   );
@@ -61,11 +63,11 @@ function WelcomeAndTime() {
 
 function MemberInformation() {
   return (
-    <DashboardContent id={styles.memberInformation}>
+    <DashboardContent>
       <DashboardTitle>
         <h1>Your Information</h1>
       </DashboardTitle>
-      <Content className={styles.content}>
+      <Content>
         <BasicInformation />
         <ContactInformation />
       </Content>

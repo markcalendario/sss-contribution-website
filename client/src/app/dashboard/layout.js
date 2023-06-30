@@ -117,7 +117,7 @@ export function DashboardTitle({ children }) {
 export function Content(props) {
   const { children, id, className } = props;
   return (
-    <div id={id} className={className}>
+    <div id={id} className={styles.content + (className ? " " + className : "")}>
       {children}
     </div>
   );

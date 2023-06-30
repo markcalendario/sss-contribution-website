@@ -3,7 +3,6 @@
 import { HorizontalTable } from "@/components/Table/Table";
 import { DashboardContent, Content, DashboardTitle } from "../../layout";
 import { Input } from "@/components/FormFields/FormFields";
-import styles from "./page.module.scss";
 import Button from "@/components/Buttons/Buttons";
 import { createContext, useContext, useEffect, useState } from "react";
 import { FullPageLoader } from "@/components/Loaders/Loaders";
@@ -98,12 +97,12 @@ function UnpaidContributionsList() {
   };
 
   return (
-    <DashboardContent id={styles.unpaidContributionsList}>
+    <DashboardContent>
       <DashboardTitle>
         <h1>Pay a Contribution</h1>
         <p>You are obliged to pay the listed contribution below.</p>
       </DashboardTitle>
-      <Content className={styles.content}>
+      <Content>
         <Highlight tint="orange">
           <h1>₱ {unpaidContributionsAmount}</h1>
           <p>Please pay exact amount.</p>

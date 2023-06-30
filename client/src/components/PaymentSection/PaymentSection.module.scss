@@ -1,7 +1,7 @@
 @use "../../styles/abstracts/mixins-screens" as screens;
 
 #paymentSection {
-  .content {
+  .buttons {
     display: flex;
     gap: 10px;
     flex-direction: column;

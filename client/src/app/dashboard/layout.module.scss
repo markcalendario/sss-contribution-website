@@ -143,6 +143,12 @@
     margin: 50px 0;
   }
 
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
   .title {
     h1 {
       font-weight: 900;

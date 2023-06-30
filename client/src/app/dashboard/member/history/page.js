@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Content, DashboardContent, DashboardTitle } from "../../layout";
 import { HorizontalTable } from "@/components/Table/Table";
 import { FullPageLoader } from "@/components/Loaders/Loaders";
+import NoResultIndicator from "@/components/NoResultIndicator/NoResultIndicator";
 
 export default function History() {
   const [history, setHistory] = useState(null);

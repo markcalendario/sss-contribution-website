@@ -1,34 +1,21 @@
 @use "../../../styles/abstracts/mixins-screens" as screens;
 
-#dateAndTime {
-  .content {
+#welcomerAndDateTime {
+  .wrapper {
     display: flex;
     flex-direction: column;
     gap: 10px;
 
     @include screens.tabletAndDesktop {
       flex-direction: row;
-    }
 
-    .welcomer {
-      flex-grow: 1;
-    }
+      .welcomer {
+        flex: 1;
+      }
 
-    .dateAndTimeCard {
-      width: 300px;
-
-      @include screens.mobile {
-        width: unset;
-        flex-grow: 1;
+      .dateTimeCard {
+        width: 280px;
       }
     }
-  }
-}
-
-#memberInformation {
-  .content {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
   }
 }
