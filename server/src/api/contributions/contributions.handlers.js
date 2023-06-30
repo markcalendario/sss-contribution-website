@@ -244,7 +244,7 @@ export async function handleHistory(req, res) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
 
   const sql =
-    "SELECT CONCAT(UPPER(SUBSTRING(month, 1, 1)), SUBSTRING(month, 2), ' ', year) as period, sss, ec, IF (mode = 'check', UPPER(CONCAT(mode, ' | ', bank)), UPPER(mode)) as mode, DATE_FORMAT(payment_date, '%b %e, %Y %l:%i %p') as paid_date FROM contributions INNER JOIN payments ON contributions.payment_reference_number = payments.reference_number WHERE sss_no = ? ORDER BY paid_date DESC, CASE month WHEN 'january' THEN 1 WHEN 'february' THEN 2 WHEN 'march' THEN 3 WHEN 'april' THEN 4 WHEN 'may' THEN 5 WHEN 'june' THEN 6 WHEN 'july' THEN 7 WHEN 'august' THEN 8 WHEN 'september' THEN 9 WHEN 'october' THEN 10 WHEN 'november' THEN 11 WHEN 'december' THEN 12 ELSE 13 END DESC";
+    "SELECT CONCAT(UPPER(SUBSTRING(month, 1, 1)), SUBSTRING(month, 2), ' ', year) as period, sss, ec, IF (mode = 'check', UPPER(CONCAT(mode, ' | ', bank)), UPPER(mode)) as mode, DATE_FORMAT(payment_date, '%b %e, %Y %l:%i %p') as paid_date FROM contributions INNER JOIN payments ON contributions.payment_reference_number = payments.reference_number WHERE sss_no = ? ORDER BY payment_date DESC, STR_TO_DATE(CONCAT(UPPER(SUBSTR(month, 1, 1)), SUBSTR(month, 2), ' 01 ', year), '%M %d %Y') DESC";
   const values = [sssNo];
 
   let rows;
