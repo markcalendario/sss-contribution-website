@@ -151,6 +151,8 @@ export async function getMonthsWithContributionsOnAYear(sssNo, year) {
   } catch (error) {
     console.error("[DB Error]", error);
     throw new Error("An error occured while getting months with contributions.");
+  } finally {
+    db.end();
   }
 
   let paidMonths = [];
