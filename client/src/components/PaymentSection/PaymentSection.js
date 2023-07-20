@@ -1,20 +1,23 @@
+import { Content, DashboardContent, DashboardTitle } from "@/app/dashboard/layout";
 import { Fragment } from "react";
+import Button from "../Buttons/Buttons";
+import Highlight from "../Highlight/Highlight";
 import NoResultIndicator from "../NoResultIndicator/NoResultIndicator";
 import styles from "./PaymentSection.module.scss";
-import Highlight from "../Highlight/Highlight";
-import { Content, DashboardContent, DashboardTitle } from "@/app/dashboard/layout";
-import Button from "../Buttons/Buttons";
 
 export default function PaymentSection() {
   const pay = async (payload) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contributions/pay`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/contributions/pay`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      }
+    );
 
     if (!response.ok) {
       return alert("Something went wrong while submitting your payments.");
@@ -50,10 +53,16 @@ export default function PaymentSection() {
       return;
     }
 
+    let bankName = prompt("Enter a bank name.");
+
+    if (!bankName) {
+      return;
+    }
+
     pay({
       amount: amount,
       mode: "bank",
-      bank: "",
+      bank: bankName,
       checkReference: "",
       checkDate: ""
     });
@@ -70,7 +79,9 @@ export default function PaymentSection() {
       return;
     }
 
-    const checkDate = prompt("Enter check validity date. Follow this format: YYYY-MM-DD");
+    const checkDate = prompt(
+      "Enter check validity date. Follow this format: YYYY-MM-DD"
+    );
     if (!checkDate) {
       return;
     }

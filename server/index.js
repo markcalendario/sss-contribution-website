@@ -1,10 +1,10 @@
-import express from "express";
-const app = express();
-import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import auth from "./src/api/authentications/authentications.js";
+import dotenv from "dotenv";
+import express from "express";
 import accounts from "./src/api/accounts/accounts.js";
+import auth from "./src/api/authentications/authentications.js";
 import contributions from "./src/api/contributions/contributions.js";
+const app = express();
 
 // Configurations
 const dotenvPath = `./.env.${process.env.NODE_ENV}`;
@@ -19,11 +19,17 @@ app.use((req, res, next) => {
 
   next();
 });
+
+// // Web UI
+// app.use(express.static("../client/out"));
+
 // APIs
 app.use("/auth", auth);
 app.use("/accounts", accounts);
 app.use("/contributions", contributions);
 
 app.listen(process.env.PORT, () => {
-  console.log(`[${process.env.NODE_ENV}] Server is running on port ${process.env.PORT}.`);
+  console.log(
+    `[${process.env.NODE_ENV}] Server is running on port ${process.env.PORT}.`
+  );
 });

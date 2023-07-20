@@ -1,6 +1,10 @@
 "use client";
 
-import { Content, DashboardContent, DashboardTitle } from "@/app/dashboard/layout.js";
+import {
+  Content,
+  DashboardContent,
+  DashboardTitle
+} from "@/app/dashboard/layout.js";
 import DateAndTimeCard from "@/components/DateAndTimeCard/DateAndTimeCard";
 import { FullPageLoader } from "@/components/Loaders/Loaders";
 import { VerticalTable } from "@/components/Table/Table";
@@ -14,9 +18,12 @@ export default function EmployerDashboard() {
   const [employerInfo, setEmployerInfo] = useState(null);
 
   const getEmployerInfo = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/employer/info`, {
-      credentials: "include"
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/accounts/employer/info`,
+      {
+        credentials: "include"
+      }
+    );
     if (!response.ok) {
       return alert("An error occured while getting your information.");
     }
@@ -50,12 +57,10 @@ function WelcomeAndTime() {
   const { business_name } = useContext(EmployerContext);
 
   return (
-    <DashboardContent id={styles.welcomerAndDateTime}>
-      <Content>
-        <div className={styles.wrapper}>
-          <Welcomer className={styles.welcomer} name={business_name} role="employer" />
-          <DateAndTimeCard className={styles.dateTimeCard} />
-        </div>
+    <DashboardContent id={styles.dateAndTime}>
+      <Content className={styles.content}>
+        <Welcomer className={styles.welcomer} name={business_name} role="employer" />
+        <DateAndTimeCard className={styles.dateTimeCard} />
       </Content>
     </DashboardContent>
   );
@@ -106,7 +111,8 @@ function BasicInformation() {
 }
 
 function ContactInformation() {
-  const { address, zip, mobile, telephone, email, website } = useContext(EmployerContext);
+  const { address, zip, mobile, telephone, email, website } =
+    useContext(EmployerContext);
 
   return (
     <Fragment>
