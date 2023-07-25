@@ -65,7 +65,7 @@ export function MemberLogin() {
           <form className={styles.loginBox} onSubmit={(evt) => evt.preventDefault()}>
             <h1>Login</h1>
             <Input id="email" placeholder="Email Address" required />
-            <Input id="password" type="password" placeholder="Pasword" required />
+            <Input id="password" type="password" placeholder="Password" required />
             <Button className="bg-primary text-slate" onClick={handleLogin}>
               Login your SSS account.
             </Button>
