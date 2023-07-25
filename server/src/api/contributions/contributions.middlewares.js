@@ -3,11 +3,7 @@ import validator from "validator";
 import contributionsConfigs from "../../db/configs/contributions.configs.js";
 import paymentsConfigs from "../../db/configs/payments.configs.js";
 import { decodeAuthToken } from "../../global/utils/jwt.js";
-import {
-  isArray,
-  isString,
-  isStringEmpty
-} from "../../global/utils/validators.js";
+import { isArray, isString, isStringEmpty } from "../../global/utils/validators.js";
 import {
   isContributionAmountValid,
   isPeriodAlreadyPaid,
@@ -98,8 +94,7 @@ export async function validateCommonContributionPayload(req, res, next) {
       });
     }
 
-    const isMonthValid =
-      contributionsConfigs.month.allowedValues.includes(month);
+    const isMonthValid = contributionsConfigs.month.allowedValues.includes(month);
 
     if (!isMonthValid) {
       return res.send({
@@ -142,10 +137,7 @@ export async function validateSSSContributionAmountPayload(req, res, next) {
   const contributions = req.body.contributions;
 
   for (const contribution of contributions) {
-    let [isAmountValid, text] = isContributionAmountValid(
-      contribution.sss,
-      "sss"
-    );
+    let [isAmountValid, text] = isContributionAmountValid(contribution.sss, "sss");
 
     if (!isAmountValid) {
       return res.send({
@@ -162,10 +154,7 @@ export async function validateECContributionAmountPayload(req, res, next) {
   const contributions = req.body.contributions;
 
   for (const contribution of contributions) {
-    let [isAmountValid, text] = isContributionAmountValid(
-      contribution.ec,
-      "ec"
-    );
+    let [isAmountValid, text] = isContributionAmountValid(contribution.ec, "ec");
 
     if (!isAmountValid) {
       return res.send({
@@ -264,16 +253,13 @@ export function validatePaymentPayload(req, res, next) {
   if (!validator.isDate(checkDate)) {
     return res.send({
       success: false,
-      message:
-        "Date format is not valid. The required date format is YYYY-MM-DD."
+      message: "Date format is not valid. The required date format is YYYY-MM-DD."
     });
   }
 
   // Check if check is expired
 
-  const isExpired = moment(checkDate, "YYYY-MM-DD").isBefore(
-    moment().add(3, "M")
-  );
+  const isExpired = moment(checkDate, "YYYY-MM-DD").isBefore(moment().add(3, "M"));
   if (isExpired) {
     return res.send({
       success: false,
