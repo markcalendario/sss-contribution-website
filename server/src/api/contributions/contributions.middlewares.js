@@ -171,26 +171,7 @@ export async function validateECContributionAmountPayload(req, res, next) {
 export function validatePaymentPayload(req, res, next) {
   const { amount, mode, bank, checkReference, checkDate } = req.body;
 
-  if (!isString(amount)) {
-    return res.send({
-      success: false,
-      message: "Amount must be string."
-    });
-  }
-
-  if (isStringEmpty(amount)) {
-    return res.send({
-      success: false,
-      message: "Amount is required."
-    });
-  }
-
-  if (!validator.isNumeric(amount)) {
-    return res.send({
-      success: false,
-      message: "Please type valid amount."
-    });
-  }
+  // Mode validation
 
   if (!isString(mode)) {
     return res.send({
@@ -213,27 +194,52 @@ export function validatePaymentPayload(req, res, next) {
     });
   }
 
-  if (mode === "cash" || mode === "bank") {
-    return next();
-  }
+  // Amount validation
 
-  // Bank Details
-
-  if (!isString(bank) || !isString(checkReference) || !isString(checkDate)) {
+  if (!isString(amount)) {
     return res.send({
       success: false,
-      message: "All of the check infromation must be string."
+      message: "Amount must be string."
     });
   }
 
-  if (
-    isStringEmpty(bank) ||
-    isStringEmpty(checkReference) ||
-    isStringEmpty(checkDate)
-  ) {
+  if (isStringEmpty(amount)) {
     return res.send({
       success: false,
-      message: "All of the check information are required."
+      message: "Amount is required."
+    });
+  }
+
+  if (!validator.isNumeric(amount)) {
+    return res.send({
+      success: false,
+      message: "Please type valid amount."
+    });
+  }
+
+  // End on Cash
+
+  if (mode === "cash") {
+    req.body.bank = null;
+    req.body.checkReference = null;
+    req.body.checkDate = null;
+    return next();
+  }
+
+  // For bank mode
+  // Bank name validation
+
+  if (!isString(bank)) {
+    return res.send({
+      success: false,
+      message: "Bank name must be string."
+    });
+  }
+
+  if (isStringEmpty(bank)) {
+    return res.send({
+      success: false,
+      message: "Bank name is required."
     });
   }
 
@@ -244,10 +250,52 @@ export function validatePaymentPayload(req, res, next) {
     });
   }
 
+  // End on Bank
+
+  if (mode === "bank") {
+    req.body.checkReference = null;
+    req.body.checkDate = null;
+    return next();
+  }
+
+  // For check mode
+
+  // Cheque reference validation
+
+  if (!isString(checkReference)) {
+    return res.send({
+      success: false,
+      message: "Check reference must be a string."
+    });
+  }
+
+  if (isStringEmpty(checkReference)) {
+    return res.send({
+      success: false,
+      message: "Check reference code is required."
+    });
+  }
+
   if (checkReference.length > paymentsConfigs.check_reference.maxLength) {
     return res.send({
       success: false,
-      message: "Check checkReference  has too many characters."
+      message: "Check reference has too many characters."
+    });
+  }
+
+  // Cheque date validation
+
+  if (!isString(checkDate)) {
+    return res.send({
+      success: false,
+      message: "Check date must be string."
+    });
+  }
+
+  if (isStringEmpty(checkDate)) {
+    return res.send({
+      success: false,
+      message: "Check date is required."
     });
   }
 
@@ -258,7 +306,7 @@ export function validatePaymentPayload(req, res, next) {
     });
   }
 
-  // Check if check is expired
+  // Check if cheque is expired
 
   const isExpired = moment(checkDate, "YYYY-MM-DD").isBefore(moment().add(3, "M"));
   if (isExpired) {

@@ -33,10 +33,6 @@ export default function PaymentSection() {
   const handleCashPay = () => {
     let amount = prompt("Enter exact amount.");
 
-    if (!amount) {
-      return;
-    }
-
     pay({
       amount: amount,
       mode: "cash",
@@ -48,16 +44,7 @@ export default function PaymentSection() {
 
   const handleBankPay = () => {
     let amount = prompt("Enter exact amount.");
-
-    if (!amount) {
-      return;
-    }
-
     let bankName = prompt("Enter a bank name.");
-
-    if (!bankName) {
-      return;
-    }
 
     pay({
       amount: amount,
@@ -70,26 +57,11 @@ export default function PaymentSection() {
 
   const handleCheckPay = () => {
     const amount = prompt("Enter exact amount.");
-    if (!amount) {
-      return;
-    }
-
     const checkReference = prompt("Enter check reference number.");
-    if (!checkReference) {
-      return;
-    }
-
     const checkDate = prompt(
       "Enter check validity date. Follow this format: YYYY-MM-DD"
     );
-    if (!checkDate) {
-      return;
-    }
-
     const bankName = prompt("Enter bank name of this check.");
-    if (!bankName) {
-      return;
-    }
 
     pay({
       amount: amount,

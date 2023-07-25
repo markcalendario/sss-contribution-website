@@ -1,12 +1,12 @@
 import moment from "moment/moment.js";
 import connectDB from "../../db/connection.js";
 import { decodeAuthToken } from "../../global/utils/jwt.js";
+import { months } from "../../global/utils/misc.js";
 import {
   getMonthsWithContributionsOnAYear,
   getUnpaidSSSAndECAmount,
   hasUnpaidContributions
 } from "./contributions.utils.js";
-import { months } from "../../global/utils/misc.js";
 
 export async function handleIndividualContributionFiling(req, res) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
@@ -17,13 +17,19 @@ export async function handleIndividualContributionFiling(req, res) {
     return res.status(500).send({ message: "Can't connect to database" });
   }
 
-  const sql = "INSERT INTO contributions (sss_no, month, year, sss) VALUES (?,?,?,?)";
+  const sql =
+    "INSERT INTO contributions (sss_no, month, year, sss) VALUES (?,?,?,?)";
 
   try {
     await db.query("START TRANSACTION");
 
     for (const contribution of contributions) {
-      const values = [sssNo, contribution.month, contribution.year, contribution.sss];
+      const values = [
+        sssNo,
+        contribution.month,
+        contribution.year,
+        contribution.sss
+      ];
       await db.query(sql, values);
     }
 
@@ -31,7 +37,10 @@ export async function handleIndividualContributionFiling(req, res) {
   } catch (error) {
     console.error("[DB Error]", error);
     await db.query("ROLLBACK");
-    return res.send({ success: false, message: "Error occured while filing contribution." });
+    return res.send({
+      success: false,
+      message: "Error occured while filing contribution."
+    });
   } finally {
     db.end();
   }
@@ -48,7 +57,8 @@ export async function handleEmployerContributionFiling(req, res) {
     return res.status(500).send({ message: "Can't connect to database" });
   }
 
-  const sql = "INSERT INTO contributions (sss_no, month, year, sss, ec) VALUES (?,?,?,?,?)";
+  const sql =
+    "INSERT INTO contributions (sss_no, month, year, sss, ec) VALUES (?,?,?,?,?)";
 
   try {
     await db.query("START TRANSACTION");
@@ -68,7 +78,10 @@ export async function handleEmployerContributionFiling(req, res) {
   } catch (error) {
     console.error("[DB Error]", error);
     await db.query("ROLLBACK");
-    return res.send({ success: false, message: "Error occured while filing contribution." });
+    return res.send({
+      success: false,
+      message: "Error occured while filing contribution."
+    });
   } finally {
     db.end();
   }
@@ -101,7 +114,8 @@ export async function handleRemoveUnpaidContribution(req, res) {
     });
   }
 
-  const sql = "DELETE FROM contributions WHERE payment_reference_number IS NULL AND sss_no = ?";
+  const sql =
+    "DELETE FROM contributions WHERE payment_reference_number IS NULL AND sss_no = ?";
   const values = [sss_no];
 
   let resultSetHeader;
@@ -146,13 +160,15 @@ export async function handlePayContribution(req, res) {
   }
 
   if (!hasUnpaidContribs) {
-    return res.send({ success: false, message: "You do not have pending contributions to pay." });
+    return res.send({
+      success: false,
+      message: "You do not have pending contributions to pay."
+    });
   }
 
-  // Get unpaid SSS and EC amount
-  // Take note! The individual member has always no EC contribution in the database.
-  // However, this program still take it but it does not have an effect in the computation.
-  // Purpose: To make /pay endpoint usable for both member.
+  // Get unpaid SSS and EC amount of a Payor
+  // Take note: This handler is used by both types of members
+  // Computing the EC of Individual Payor will not affect the computation because they have no EC
 
   let unpaidSSSAmount;
 
@@ -168,7 +184,10 @@ export async function handlePayContribution(req, res) {
   // Return if user is not paying an exact amount
 
   if (parseFloat(amount) !== unpaidSSSAmount) {
-    return res.send({ success: false, message: `Please pay exactly Php ${unpaidSSSAmount}.` });
+    return res.send({
+      success: false,
+      message: `Please pay exactly Php ${unpaidSSSAmount}.`
+    });
   }
 
   // Start a transaction
@@ -193,7 +212,13 @@ export async function handlePayContribution(req, res) {
 
   const sql =
     "INSERT INTO payments (amount, mode, bank, check_reference, check_date) VALUES (?,?,?,?,?)";
-  const values = [unpaidSSSAmount, mode, bank, checkReference, checkDate === "" ? null : checkDate];
+  const values = [
+    unpaidSSSAmount,
+    mode,
+    bank,
+    checkReference,
+    checkDate === "" ? null : checkDate
+  ];
   let paymentReferenceNumber;
 
   try {
@@ -244,7 +269,7 @@ export async function handleHistory(req, res) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
 
   const sql =
-    "SELECT CONCAT(UPPER(SUBSTRING(month, 1, 1)), SUBSTRING(month, 2), ' ', year) as period, sss, ec, IF (mode = 'check', UPPER(CONCAT(mode, ' | ', bank)), UPPER(mode)) as mode, DATE_FORMAT(payment_date, '%b %e, %Y %l:%i %p') as paid_date FROM contributions INNER JOIN payments ON contributions.payment_reference_number = payments.reference_number WHERE sss_no = ? ORDER BY payment_date DESC, STR_TO_DATE(CONCAT(UPPER(SUBSTR(month, 1, 1)), SUBSTR(month, 2), ' 01 ', year), '%M %d %Y') DESC";
+    "SELECT CONCAT(UPPER(SUBSTRING(month, 1, 1)), SUBSTRING(month, 2), ' ', year) as period, sss, ec, CASE WHEN mode = 'check' THEN UPPER(CONCAT(check_reference, ' | ', bank)) WHEN mode = 'bank' THEN UPPER(CONCAT(mode, ' | ', bank)) ELSE 'CASH' END as mode, DATE_FORMAT(payment_date, '%b %e, %Y %l:%i %p') as paid_date FROM contributions INNER JOIN payments ON contributions.payment_reference_number = payments.reference_number WHERE sss_no = ? ORDER BY payment_date DESC, STR_TO_DATE(CONCAT(UPPER(SUBSTR(month, 1, 1)), SUBSTR(month, 2), ' 01 ', year), '%M %d %Y') DESC";
   const values = [sssNo];
 
   let rows;
@@ -352,7 +377,11 @@ export async function handleGetUnpaidContributions(req, res) {
     db.end();
   }
 
-  res.send({ success: true, message: "Success fetching unpaid contributions.", data: rows });
+  res.send({
+    success: true,
+    message: "Success fetching unpaid contributions.",
+    data: rows
+  });
 }
 
 export async function handleGetUnpaidContributionsAmount(req, res) {
