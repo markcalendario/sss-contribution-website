@@ -20,16 +20,20 @@ app.use((req, res, next) => {
   next();
 });
 
-// // Web UI
-// app.use(express.static("../client/out"));
-
 // APIs
 app.use("/auth", auth);
 app.use("/accounts", accounts);
 app.use("/contributions", contributions);
 
+console.log(`Environment: ${process.env.NODE_ENV.toUpperCase()}`);
+
+// Serve built client on production
+if (process.env.NODE_ENV === "production") {
+  const builtStatic = "../client/out";
+  console.log(`[Client] Serving: ${builtStatic}`);
+  app.use(express.static(builtStatic));
+}
+
 app.listen(process.env.PORT, () => {
-  console.log(
-    `[${process.env.NODE_ENV}] Server is running on port ${process.env.PORT}.`
-  );
+  console.log(`[Server] Serving: ${process.env.PORT}.`);
 });
