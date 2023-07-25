@@ -1,21 +1,27 @@
-import { isStringEmpty, isString, isArray } from "../../global/utils/validators.js";
+import moment from "moment";
+import validator from "validator";
 import contributionsConfigs from "../../db/configs/contributions.configs.js";
+import paymentsConfigs from "../../db/configs/payments.configs.js";
+import { decodeAuthToken } from "../../global/utils/jwt.js";
 import {
-  hasUnpaidContributions,
+  isArray,
+  isString,
+  isStringEmpty
+} from "../../global/utils/validators.js";
+import {
   isContributionAmountValid,
   isPeriodAlreadyPaid,
   isPeriodRetroactive
 } from "./contributions.utils.js";
-import { decodeAuthToken } from "../../global/utils/jwt.js";
-import validator from "validator";
-import paymentsConfigs from "../../db/configs/payments.configs.js";
-import moment from "moment";
 
 export async function validateCommonContributionPayload(req, res, next) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
 
   try {
-    const [isHasUnpaid, unpaidContributionsCount] = await hasUnpaidContributions(sssNo);
+    const [isHasUnpaid, unpaidContributionsCount] = await hasUnpaidContribution(
+      sssNo
+    );
+
     if (isHasUnpaid > 0) {
       return res.send({
         success: false,
@@ -33,7 +39,10 @@ export async function validateCommonContributionPayload(req, res, next) {
   const contributions = req.body.contributions;
 
   if (!isArray(contributions)) {
-    return res.send({ success: false, message: "Contributions must be a type of list." });
+    return res.send({
+      success: false,
+      message: "Contributions must be a type of list."
+    });
   }
 
   for (const contribution of contributions) {
@@ -60,11 +69,17 @@ export async function validateCommonContributionPayload(req, res, next) {
       year.length < contributionsConfigs.year.minLength;
 
     if (isYearValid) {
-      return res.send({ success: false, message: "Invalid year: " + year });
+      return res.send({
+        success: false,
+        message: "Invalid year: " + year
+      });
     }
 
     if (!validator.isInt(year)) {
-      return res.send({ success: false, message: "Year must be a number." });
+      return res.send({
+        success: false,
+        message: "Year must be a number."
+      });
     }
 
     // Month
@@ -83,10 +98,14 @@ export async function validateCommonContributionPayload(req, res, next) {
       });
     }
 
-    const isMonthValid = contributionsConfigs.month.allowedValues.includes(month);
+    const isMonthValid =
+      contributionsConfigs.month.allowedValues.includes(month);
 
     if (!isMonthValid) {
-      return res.send({ success: false, message: "Invalid month: " + month });
+      return res.send({
+        success: false,
+        message: "Invalid month: " + month
+      });
     }
 
     if (isPeriodRetroactive(month, year)) {
@@ -123,10 +142,16 @@ export async function validateSSSContributionAmountPayload(req, res, next) {
   const contributions = req.body.contributions;
 
   for (const contribution of contributions) {
-    let [isAmountValid, text] = isContributionAmountValid(contribution.sss, "sss");
+    let [isAmountValid, text] = isContributionAmountValid(
+      contribution.sss,
+      "sss"
+    );
 
     if (!isAmountValid) {
-      return res.send({ success: false, message: text });
+      return res.send({
+        success: false,
+        message: text
+      });
     }
   }
 
@@ -137,10 +162,16 @@ export async function validateECContributionAmountPayload(req, res, next) {
   const contributions = req.body.contributions;
 
   for (const contribution of contributions) {
-    let [isAmountValid, text] = isContributionAmountValid(contribution.ec, "ec");
+    let [isAmountValid, text] = isContributionAmountValid(
+      contribution.ec,
+      "ec"
+    );
 
     if (!isAmountValid) {
-      return res.send({ success: false, message: text });
+      return res.send({
+        success: false,
+        message: text
+      });
     }
   }
 
@@ -151,27 +182,45 @@ export function validatePaymentPayload(req, res, next) {
   const { amount, mode, bank, checkReference, checkDate } = req.body;
 
   if (!isString(amount)) {
-    return res.send({ success: false, message: "Amount must be string." });
+    return res.send({
+      success: false,
+      message: "Amount must be string."
+    });
   }
 
   if (isStringEmpty(amount)) {
-    return res.send({ success: false, message: "Amount is required." });
+    return res.send({
+      success: false,
+      message: "Amount is required."
+    });
   }
 
   if (!validator.isNumeric(amount)) {
-    return res.send({ success: false, message: "Please type valid amount." });
+    return res.send({
+      success: false,
+      message: "Please type valid amount."
+    });
   }
 
   if (!isString(mode)) {
-    return res.send({ success: false, message: "Payment mode must be string." });
+    return res.send({
+      success: false,
+      message: "Payment mode must be string."
+    });
   }
 
   if (isStringEmpty(mode)) {
-    return res.send({ success: false, message: "Payment mode is required." });
+    return res.send({
+      success: false,
+      message: "Payment mode is required."
+    });
   }
 
   if (!paymentsConfigs.mode.allowedValues.includes(mode)) {
-    return res.send({ success: false, message: "Invalid payment mode." });
+    return res.send({
+      success: false,
+      message: "Invalid payment mode."
+    });
   }
 
   if (mode === "cash" || mode === "bank") {
@@ -181,31 +230,50 @@ export function validatePaymentPayload(req, res, next) {
   // Bank Details
 
   if (!isString(bank) || !isString(checkReference) || !isString(checkDate)) {
-    return res.send({ success: false, message: "All of the check infromation must be string." });
+    return res.send({
+      success: false,
+      message: "All of the check infromation must be string."
+    });
   }
 
-  if (isStringEmpty(bank) || isStringEmpty(checkReference) || isStringEmpty(checkDate)) {
-    return res.send({ success: false, message: "All of the check information are required." });
+  if (
+    isStringEmpty(bank) ||
+    isStringEmpty(checkReference) ||
+    isStringEmpty(checkDate)
+  ) {
+    return res.send({
+      success: false,
+      message: "All of the check information are required."
+    });
   }
 
   if (bank.length > paymentsConfigs.bank.maxLength) {
-    return res.send({ success: false, message: "Bank name has too many characters." });
+    return res.send({
+      success: false,
+      message: "Bank name has too many characters."
+    });
   }
 
   if (checkReference.length > paymentsConfigs.check_reference.maxLength) {
-    return res.send({ success: false, message: "Check checkReference  has too many characters." });
+    return res.send({
+      success: false,
+      message: "Check checkReference  has too many characters."
+    });
   }
 
   if (!validator.isDate(checkDate)) {
     return res.send({
       success: false,
-      message: "Date format is not valid. The required date format is YYYY-MM-DD."
+      message:
+        "Date format is not valid. The required date format is YYYY-MM-DD."
     });
   }
 
   // Check if check is expired
 
-  const isExpired = moment(checkDate, "YYYY-MM-DD").isBefore(moment().add(3, "M"));
+  const isExpired = moment(checkDate, "YYYY-MM-DD").isBefore(
+    moment().add(3, "M")
+  );
   if (isExpired) {
     return res.send({
       success: false,
