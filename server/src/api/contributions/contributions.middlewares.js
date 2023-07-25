@@ -5,6 +5,7 @@ import paymentsConfigs from "../../db/configs/payments.configs.js";
 import { decodeAuthToken } from "../../global/utils/jwt.js";
 import { isArray, isString, isStringEmpty } from "../../global/utils/validators.js";
 import {
+  hasUnpaidContributions,
   isContributionAmountValid,
   isPeriodAlreadyPaid,
   isPeriodRetroactive
@@ -14,7 +15,7 @@ export async function validateCommonContributionPayload(req, res, next) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
 
   try {
-    const [isHasUnpaid, unpaidContributionsCount] = await hasUnpaidContribution(
+    const [isHasUnpaid, unpaidContributionsCount] = await hasUnpaidContributions(
       sssNo
     );
 
