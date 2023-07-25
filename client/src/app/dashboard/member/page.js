@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  Content,
-  DashboardContent,
-  DashboardTitle
-} from "@/app/dashboard/layout.js";
+import { Content, DashboardContent, DashboardTitle } from "@/app/dashboard/layout.js";
 import DateAndTimeCard from "@/components/DateAndTimeCard/DateAndTimeCard";
 import { FullPageLoader } from "@/components/Loaders/Loaders";
 import { VerticalTable } from "@/components/Table/Table";
@@ -18,12 +14,9 @@ export default function MemberDashboard() {
   const [memberInfo, setMemberInfo] = useState(null);
 
   const getIndividualMemberInfo = async () => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/accounts/individual/info`,
-      {
-        credentials: "include"
-      }
-    );
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/individual/info`, {
+      credentials: "include"
+    });
 
     if (!response.ok) {
       return alert("An error occured while getting your information.");

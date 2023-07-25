@@ -1,20 +1,19 @@
 import express from "express";
 
 import {
-  handleIndividualMemberRegistration,
   handleEmployerRegistration,
-  handleLogin,
+  handleIndividualMemberRegistration,
   handleIsAuth,
+  handleLogin,
   handleLogout
 } from "./authentications.handlers.js";
 
 import {
-  validateIndividualRegistrationPayload,
   validateEmployerRegistrationPayload,
+  validateIndividualRegistrationPayload,
   validateLoginPayload,
   validateMemberRegistrationPayload
 } from "./authentications.middlewares.js";
-import { validateAuthCookie } from "../../global/middlewares/authorizations.js";
 
 const router = express.Router();
 

@@ -17,19 +17,13 @@ export async function handleIndividualContributionFiling(req, res) {
     return res.status(500).send({ message: "Can't connect to database" });
   }
 
-  const sql =
-    "INSERT INTO contributions (sss_no, month, year, sss) VALUES (?,?,?,?)";
+  const sql = "INSERT INTO contributions (sss_no, month, year, sss) VALUES (?,?,?,?)";
 
   try {
     await db.query("START TRANSACTION");
 
     for (const contribution of contributions) {
-      const values = [
-        sssNo,
-        contribution.month,
-        contribution.year,
-        contribution.sss
-      ];
+      const values = [sssNo, contribution.month, contribution.year, contribution.sss];
       await db.query(sql, values);
     }
 
@@ -57,8 +51,7 @@ export async function handleEmployerContributionFiling(req, res) {
     return res.status(500).send({ message: "Can't connect to database" });
   }
 
-  const sql =
-    "INSERT INTO contributions (sss_no, month, year, sss, ec) VALUES (?,?,?,?,?)";
+  const sql = "INSERT INTO contributions (sss_no, month, year, sss, ec) VALUES (?,?,?,?,?)";
 
   try {
     await db.query("START TRANSACTION");
@@ -114,8 +107,7 @@ export async function handleRemoveUnpaidContribution(req, res) {
     });
   }
 
-  const sql =
-    "DELETE FROM contributions WHERE payment_reference_number IS NULL AND sss_no = ?";
+  const sql = "DELETE FROM contributions WHERE payment_reference_number IS NULL AND sss_no = ?";
   const values = [sss_no];
 
   let resultSetHeader;
@@ -212,13 +204,7 @@ export async function handlePayContribution(req, res) {
 
   const sql =
     "INSERT INTO payments (amount, mode, bank, check_reference, check_date) VALUES (?,?,?,?,?)";
-  const values = [
-    unpaidSSSAmount,
-    mode,
-    bank,
-    checkReference,
-    checkDate === "" ? null : checkDate
-  ];
+  const values = [unpaidSSSAmount, mode, bank, checkReference, checkDate];
   let paymentReferenceNumber;
 
   try {

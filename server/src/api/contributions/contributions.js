@@ -15,9 +15,9 @@ import {
   handleRemoveUnpaidContribution
 } from "./contributions.handlers.js";
 import {
-  validatePaymentPayload,
   validateCommonContributionPayload,
   validateECContributionAmountPayload,
+  validatePaymentPayload,
   validateSSSContributionAmountPayload
 } from "./contributions.middlewares.js";
 const router = express.Router();

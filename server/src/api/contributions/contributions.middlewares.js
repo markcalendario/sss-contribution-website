@@ -15,9 +15,7 @@ export async function validateCommonContributionPayload(req, res, next) {
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
 
   try {
-    const [isHasUnpaid, unpaidContributionsCount] = await hasUnpaidContributions(
-      sssNo
-    );
+    const [isHasUnpaid, unpaidContributionsCount] = await hasUnpaidContributions(sssNo);
 
     if (isHasUnpaid > 0) {
       return res.send({

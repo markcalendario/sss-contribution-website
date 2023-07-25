@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { FullPageLoader } from "../Loaders/Loaders";
-import { useRouter } from "next/navigation";
 
 export function NonLoggedInPage({ children: Component }) {
   // If auth, send to /auth

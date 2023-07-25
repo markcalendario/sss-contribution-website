@@ -1,10 +1,10 @@
 import validator from "validator";
-import individualConfigs from "../../db/configs/individual.configs.js";
 import employersConfigs from "../../db/configs/employers.configs.js";
+import individualConfigs from "../../db/configs/individual.configs.js";
 import membersConfigs from "../../db/configs/members.configs.js";
 
+import { isString, isStringEmpty } from "../../global/utils/validators.js";
 import { isEmailRegistered } from "./authentications.utils.js";
-import { isStringEmpty, isString } from "../../global/utils/validators.js";
 
 export async function validateMemberRegistrationPayload(req, res, next) {
   const { address, zip, tin, mobile, telephone, payorType, email, password } = req.body;

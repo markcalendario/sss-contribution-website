@@ -1,8 +1,7 @@
 import jwt from "jsonwebtoken";
 import connectDB from "../../db/connection.js";
-import { decodeAuthToken } from "../../global/utils/jwt.js";
 import { isString, isStringEmpty } from "../../global/utils/validators.js";
-import { saveMemberData, comparePasswords, signToken } from "./authentications.utils.js";
+import { comparePasswords, saveMemberData, signToken } from "./authentications.utils.js";
 
 export async function handleIndividualMemberRegistration(req, res) {
   const payload = req.body;

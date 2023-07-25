@@ -1,8 +1,8 @@
 "use client";
 
+import { Fragment, useEffect, useState } from "react";
 import Button from "../Buttons/Buttons";
 import styles from "./Navbar.module.scss";
-import { Fragment, useEffect, useState } from "react";
 
 export default function Navbar() {
   const [screenWidth, setScreenWidth] = useState(null);
