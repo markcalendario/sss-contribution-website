@@ -48,14 +48,14 @@ export default function MemberDashboard() {
 }
 
 function WelcomeAndTime() {
-  const { first_name, middle_name, last_name } = useContext(MemberContext);
+  const { first_name, middle_name, last_name, suffix } = useContext(MemberContext);
 
   return (
     <DashboardContent id={styles.dateAndTime}>
       <Content className={styles.content}>
         <Welcomer
           className={styles.welcomer}
-          name={`${first_name} ${middle_name} ${last_name}`}
+          name={`${first_name} ${middle_name} ${last_name} ${suffix}`}
           role="individual member"
         />
         <DateAndTimeCard className={styles.dateAndTimeCard} />
