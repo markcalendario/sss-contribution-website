@@ -25,9 +25,9 @@ DROP TABLE IF EXISTS `individual`;
 CREATE TABLE `individual` (
   `sss_no` bigint unsigned NOT NULL,
   `crn` char(12) DEFAULT NULL,
-  `first_name` varchar(30) DEFAULT NULL,
-  `last_name` varchar(30) DEFAULT NULL,
-  `middle_name` varchar(30) DEFAULT NULL,
+  `first_name` varchar(30) NOT NULL,
+  `last_name` varchar(30) NOT NULL,
+  `middle_name` varchar(30) NOT NULL,
   `suffix` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`sss_no`),
   UNIQUE KEY `sss_no_UNIQUE` (`sss_no`)
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-04 13:59:35
+-- Dump completed on 2023-07-26  1:42:40

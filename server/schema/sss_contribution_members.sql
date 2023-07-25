@@ -24,18 +24,18 @@ DROP TABLE IF EXISTS `members`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `members` (
   `sss_no` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `address` varchar(100) DEFAULT NULL,
-  `zip` char(4) DEFAULT NULL,
+  `address` varchar(100) NOT NULL,
+  `zip` char(4) NOT NULL,
   `tin` varchar(12) DEFAULT NULL,
-  `mobile` varchar(11) DEFAULT NULL,
+  `mobile` varchar(11) NOT NULL,
   `telephone` varchar(15) DEFAULT NULL,
-  `payor_type` varchar(18) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `password` varchar(72) DEFAULT NULL,
+  `payor_type` varchar(18) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(72) NOT NULL,
   `registration_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`sss_no`),
   UNIQUE KEY `sss_no_UNIQUE` (`sss_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=100000081 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100000092 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-04 13:59:36
+-- Dump completed on 2023-07-26  1:42:40

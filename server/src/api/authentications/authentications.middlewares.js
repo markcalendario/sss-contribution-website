@@ -81,7 +81,7 @@ export async function validateMemberRegistrationPayload(req, res, next) {
     });
   }
 
-  // Telephone
+  // Telephone : Optional
 
   if (!isString(telephone)) {
     return res.send({ success: false, message: "Telephone number must be string." });

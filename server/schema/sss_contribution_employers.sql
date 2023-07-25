@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `employers`;
 CREATE TABLE `employers` (
   `sss_no` bigint unsigned NOT NULL,
   `website` varchar(255) DEFAULT NULL,
-  `business_name` varchar(75) DEFAULT NULL,
+  `business_name` varchar(75) NOT NULL,
   PRIMARY KEY (`sss_no`),
   UNIQUE KEY `sss_no_UNIQUE` (`sss_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -49,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-04 13:59:36
+-- Dump completed on 2023-07-26  1:42:40

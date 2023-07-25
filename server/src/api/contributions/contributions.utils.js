@@ -119,7 +119,7 @@ export async function getUnpaidSSSAndECAmount(sssNo) {
   }
 
   const sql =
-    "SELECT SUM(sss + IF (ec IS NULL, 0, ec)) as toPayAmount FROM contributions WHERE sss_no = ? AND payment_reference_number IS NULL";
+    "SELECT SUM(sss + ec) as toPayAmount FROM contributions WHERE sss_no = ? AND payment_reference_number IS NULL";
   const value = [sssNo];
 
   let row;

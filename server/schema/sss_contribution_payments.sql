@@ -24,15 +24,15 @@ DROP TABLE IF EXISTS `payments`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `payments` (
   `reference_number` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `amount` decimal(12,2) DEFAULT NULL,
-  `mode` varchar(5) DEFAULT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `mode` varchar(5) NOT NULL,
   `bank` varchar(45) DEFAULT NULL,
   `check_reference` varchar(15) DEFAULT NULL,
   `check_date` date DEFAULT NULL,
   `payment_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`reference_number`),
   UNIQUE KEY `reference_number_UNIQUE` (`reference_number`)
-) ENGINE=InnoDB AUTO_INCREMENT=1043 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1058 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-04 13:59:35
+-- Dump completed on 2023-07-26  1:42:41

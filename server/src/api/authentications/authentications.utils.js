@@ -26,9 +26,9 @@ export async function saveMemberData(db, validatedPayload) {
   const values = [
     validatedPayload.address,
     validatedPayload.zip,
-    validatedPayload.tin,
+    validatedPayload.tin || null,
     validatedPayload.mobile,
-    validatedPayload.telephone,
+    validatedPayload.telephone || null,
     validatedPayload.email,
     validatedPayload.payorType,
     hashedPassword

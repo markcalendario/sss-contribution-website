@@ -55,7 +55,7 @@ function WelcomeAndTime() {
       <Content className={styles.content}>
         <Welcomer
           className={styles.welcomer}
-          name={`${first_name} ${middle_name} ${last_name} ${suffix}`}
+          name={`${first_name} ${middle_name} ${last_name} ${suffix || ""}`}
           role="individual member"
         />
         <DateAndTimeCard className={styles.dateAndTimeCard} />

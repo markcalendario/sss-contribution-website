@@ -256,7 +256,12 @@ function ContactInformationForm(props) {
         value={payload.telephone}
         onChange={changeTelephoneValue}
       />
-      <Input placeholder="Email Address" value={payload.email} onChange={changeEmailValue} />
+      <Input
+        placeholder="Email Address"
+        value={payload.email}
+        onChange={changeEmailValue}
+        required
+      />
       <Button className="bg-primary text-slate" onClick={goToNextStep}>
         Next
       </Button>

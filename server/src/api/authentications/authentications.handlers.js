@@ -41,7 +41,7 @@ export async function handleIndividualMemberRegistration(req, res) {
 
   const sql =
     "INSERT INTO individual (sss_no, crn, first_name, last_name, middle_name, suffix) VALUES (?,?,?,?,?,?)";
-  const values = [lastInsertedID, crn, firstName, lastName, middleName, suffix];
+  const values = [lastInsertedID, crn || null, firstName, lastName, middleName, suffix || null];
 
   try {
     await db.query(sql, values);
@@ -98,7 +98,7 @@ export async function handleEmployerRegistration(req, res) {
   // Save membership information into members table
 
   const sql = "INSERT INTO employers (sss_no, business_name, website) VALUES (?,?,?)";
-  const values = [lastInsertedID, businessName, website];
+  const values = [lastInsertedID, businessName, website || null];
 
   try {
     await db.query(sql, values);

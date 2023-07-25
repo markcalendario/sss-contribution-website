@@ -26,8 +26,8 @@ CREATE TABLE `contributions` (
   `sss_no` bigint unsigned NOT NULL,
   `month` varchar(9) NOT NULL,
   `year` year NOT NULL,
-  `sss` decimal(11,2) DEFAULT NULL,
-  `ec` decimal(11,2) DEFAULT NULL,
+  `sss` decimal(11,2) NOT NULL,
+  `ec` decimal(11,2) NOT NULL DEFAULT '0.00',
   `filing_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `payment_reference_number` bigint unsigned DEFAULT NULL,
   PRIMARY KEY (`sss_no`,`month`,`year`)
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-04 13:59:36
+-- Dump completed on 2023-07-26  1:42:40
