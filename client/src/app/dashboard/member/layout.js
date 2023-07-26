@@ -7,22 +7,22 @@ import { DashboardLayout, Main, Navigations } from "../layout";
 export default function MemberDashboardLayout({ children }) {
   const asideLinks = [
     {
-      link: `/dashboard/member`,
+      link: "/dashboard/member/",
       icon: "fa fa-home",
       title: "Home"
     },
     {
-      link: `/dashboard/member/history`,
+      link: "/dashboard/member/history/",
       icon: "fa fa-history",
       title: "SSS/EC Contribution History"
     },
     {
-      link: `/dashboard/member/contribute`,
+      link: "/dashboard/member/contribute/",
       icon: "fa fa-file",
       title: "File an SSS/EC Contribution"
     },
     {
-      link: `/dashboard/member/pay`,
+      link: "/dashboard/member/pay/",
       icon: "fa fa-hourglass-half",
       title: "Pending Payment"
     }
