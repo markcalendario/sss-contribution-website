@@ -1,7 +1,11 @@
 import jwt from "jsonwebtoken";
 import connectDB from "../../db/connection.js";
 import { isString, isStringEmpty } from "../../global/utils/validators.js";
-import { comparePasswords, saveMemberData, signToken } from "./authentications.utils.js";
+import {
+  comparePasswords,
+  saveMemberData,
+  signToken
+} from "./authentications.utils.js";
 
 export async function handleIndividualMemberRegistration(req, res) {
   const payload = req.body;
@@ -18,9 +22,10 @@ export async function handleIndividualMemberRegistration(req, res) {
   } catch (error) {
     db.end();
     console.error("[DB Error]", error);
-    return res
-      .status(500)
-      .send({ success: false, message: "There was an error connecting with database." });
+    return res.status(500).send({
+      success: false,
+      message: "There was an error connecting with database."
+    });
   }
 
   let lastInsertedID;
@@ -32,16 +37,24 @@ export async function handleIndividualMemberRegistration(req, res) {
     await db.query("ROLLBACK");
     db.end();
     console.error("[DB Error]", error);
-    return res
-      .status(500)
-      .send({ success: false, message: "There was an error initializing your account." });
+    return res.status(500).send({
+      success: false,
+      message: "There was an error initializing your account."
+    });
   }
 
   // Save information as an individual member into individual table
 
   const sql =
     "INSERT INTO individual (sss_no, crn, first_name, last_name, middle_name, suffix) VALUES (?,?,?,?,?,?)";
-  const values = [lastInsertedID, crn || null, firstName, lastName, middleName, suffix || null];
+  const values = [
+    lastInsertedID,
+    crn || null,
+    firstName,
+    lastName,
+    middleName,
+    suffix || null
+  ];
 
   try {
     await db.query(sql, values);
@@ -51,13 +64,17 @@ export async function handleIndividualMemberRegistration(req, res) {
     console.error("[DB Error]", error);
     return res.status(500).send({
       success: false,
-      message: "There was an error saving your information as an individual member."
+      message:
+        "There was an error saving your information as an individual member."
     });
   } finally {
     db.end();
   }
 
-  return res.send({ success: true, message: "SSS account is successfully registered." });
+  return res.send({
+    success: true,
+    message: "SSS account is successfully registered."
+  });
 }
 
 export async function handleEmployerRegistration(req, res) {
@@ -75,9 +92,10 @@ export async function handleEmployerRegistration(req, res) {
   } catch (error) {
     db.end();
     console.error("[DB Error]", error);
-    return res
-      .status(500)
-      .send({ success: false, message: "There was error connecting with database." });
+    return res.status(500).send({
+      success: false,
+      message: "There was error connecting with database."
+    });
   }
 
   // Save membership information into members table
@@ -90,14 +108,16 @@ export async function handleEmployerRegistration(req, res) {
     await db.query("ROLLBACK");
     db.end();
     console.error("[DB Error]", error);
-    return res
-      .status(500)
-      .send({ success: false, message: "There was an error initializing your account." });
+    return res.status(500).send({
+      success: false,
+      message: "There was an error initializing your account."
+    });
   }
 
   // Save membership information into members table
 
-  const sql = "INSERT INTO employers (sss_no, business_name, website) VALUES (?,?,?)";
+  const sql =
+    "INSERT INTO employers (sss_no, business_name, website) VALUES (?,?,?)";
   const values = [lastInsertedID, businessName, website || null];
 
   try {
@@ -114,7 +134,10 @@ export async function handleEmployerRegistration(req, res) {
     db.end();
   }
 
-  return res.send({ success: true, message: "SSS employer account is successfully registered." });
+  return res.send({
+    success: true,
+    message: "SSS employer account is successfully registered."
+  });
 }
 
 export async function handleLogin(req, res) {
@@ -131,7 +154,10 @@ export async function handleLogin(req, res) {
   try {
     [rows] = await db.query(sql, values);
   } catch (error) {
-    return res.send({ success: false, message: "An error occured while logging in." });
+    return res.send({
+      success: false,
+      message: "An error occured while logging in."
+    });
   } finally {
     db.end();
   }
@@ -146,25 +172,40 @@ export async function handleLogin(req, res) {
   let isPasswordCorrect;
 
   try {
-    isPasswordCorrect = await comparePasswords(hashedPassword, req.body.password);
+    isPasswordCorrect = await comparePasswords(
+      hashedPassword,
+      req.body.password
+    );
   } catch (error) {
     console.error("[DB Error]", error);
-    return res.send({ success: false, message: "An error occured while logging in." });
+    return res.send({
+      success: false,
+      message: "An error occured while logging in."
+    });
   }
 
   if (!isPasswordCorrect) {
-    return res.send({ success: false, message: "Incorrect credentials. Please try again." });
+    return res.send({
+      success: false,
+      message: "Incorrect credentials. Please try again."
+    });
   }
 
   const token = await signToken(fetchedData.sss_no);
 
   res
-    .cookie("auth_token", token, { maxAge: 86400000, httpOnly: true, secure: true })
+    .cookie("auth_token", token, {
+      maxAge: 86400000,
+      httpOnly: true,
+      secure: true
+    })
     .send({ success: true, message: "You are now logged in." });
 }
 
 export async function handleLogout(req, res) {
-  res.clearCookie("auth_token").send({ success: true, message: "You are now logged out." });
+  res
+    .clearCookie("auth_token")
+    .send({ success: true, message: "You are now logged out." });
 }
 
 export function handleIsAuth(req, res) {
@@ -179,18 +220,26 @@ export function handleIsAuth(req, res) {
   }
 
   if (isStringEmpty(authCookie)) {
-    return res
-      .clearCookie("auth_token")
-      .send({ success: false, message: "Authorization token is missing.", isAuth: false });
+    return res.clearCookie("auth_token").send({
+      success: false,
+      message: "Authorization token is missing.",
+      isAuth: false
+    });
   }
 
   try {
     jwt.verify(authCookie, process.env.TOKEN_SALT);
   } catch (error) {
-    return res
-      .clearCookie("auth_token")
-      .send({ success: false, message: "Authorization token is invalid.", isAuth: false });
+    return res.clearCookie("auth_token").send({
+      success: false,
+      message: "Authorization token is invalid.",
+      isAuth: false
+    });
   }
 
-  return res.send({ success: true, message: "You are authorized.", isAuth: true });
+  return res.send({
+    success: true,
+    message: "You are authorized.",
+    isAuth: true
+  });
 }

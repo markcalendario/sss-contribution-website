@@ -10,9 +10,10 @@ export default function Auth() {
   // else if not auth, go to /
 
   const getRole = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/role`, {
-      credentials: "include"
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/accounts/role`,
+      { credentials: "include" }
+    );
 
     if (!response.ok) {
       return (window.location.href = "/");

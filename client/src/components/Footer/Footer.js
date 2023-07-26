@@ -24,7 +24,9 @@ export default function Footer() {
             <div className={styles.contentBlock}>
               <h1 className={styles.title}>Developers</h1>
               <div className={styles.content}>
-                <a href="https://markkennethcalendario.web.app">Calendario, Mark Kenneth</a>
+                <a href="https://markkennethcalendario.web.app">
+                  Calendario, Mark Kenneth
+                </a>
                 <p>Levardo, John Race</p>
                 <p>Ong, Zoe Tatianna</p>
                 <p>Yim, Gwyneth Anmarie</p>

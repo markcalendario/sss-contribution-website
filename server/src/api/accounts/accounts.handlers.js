@@ -19,16 +19,21 @@ export async function handleGetRole(req, res) {
     [rows] = await db.query(sql, value);
   } catch (error) {
     console.error("[DB Error]", error);
-    return res
-      .status(500)
-      .send({ success: false, message: "An error occured while getting role." });
+    return res.status(500).send({
+      success: false,
+      message: "An error occured while getting role."
+    });
   } finally {
     db.end();
   }
 
   const fetchedData = rows[0];
 
-  return res.send({ success: true, message: "Success fetching role.", role: fetchedData.role });
+  return res.send({
+    success: true,
+    message: "Success fetching role.",
+    role: fetchedData.role
+  });
 }
 
 export async function handleGetIndividualMemberInfo(req, res) {

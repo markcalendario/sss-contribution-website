@@ -4,7 +4,9 @@ export default function SectionContent(props) {
   const { id, className, children } = props;
 
   return (
-    <section id={id} className={styles.section + (className ? " " + className : "")}>
+    <section
+      id={id}
+      className={styles.section + (className ? " " + className : "")}>
       <div className={styles.container}>{children}</div>
     </section>
   );
@@ -34,7 +36,9 @@ export function SectionWrapper(props) {
   }
 
   return (
-    <div id={id} className={styles.wrapper + (className ? " " + className : "")}>
+    <div
+      id={id}
+      className={styles.wrapper + (className ? " " + className : "")}>
       {children}
     </div>
   );

@@ -15,15 +15,19 @@ const UnpaidContributionsContext = createContext();
 
 export default function PayContributionPageCompiled() {
   const [unpaidContributions, setUnpaidContributions] = useState(null);
-  const [unpaidContributionsAmount, setUnpaidContributionsAmount] = useState(null);
+  const [unpaidContributionsAmount, setUnpaidContributionsAmount] =
+    useState(null);
 
   const getUnpaidContributions = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contributions/unpaid`, {
-      credentials: "include"
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/contributions/unpaid`,
+      { credentials: "include" }
+    );
 
     if (!response.ok) {
-      return alert("Something went wrong while fetching all unpaid contributions.");
+      return alert(
+        "Something went wrong while fetching all unpaid contributions."
+      );
     }
 
     const result = await response.json();
@@ -35,12 +39,17 @@ export default function PayContributionPageCompiled() {
   };
 
   const getAmountOfUnpaidContributions = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contributions/unpaid-amount`, {
-      credentials: "include"
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/contributions/unpaid-amount`,
+      {
+        credentials: "include"
+      }
+    );
 
     if (!response.ok) {
-      return alert("Something went wrong while fetching unpaid contributions amount.");
+      return alert(
+        "Something went wrong while fetching unpaid contributions amount."
+      );
     }
 
     const result = await response.json();
@@ -65,7 +74,8 @@ export default function PayContributionPageCompiled() {
   }
 
   return (
-    <UnpaidContributionsContext.Provider value={{ unpaidContributions, unpaidContributionsAmount }}>
+    <UnpaidContributionsContext.Provider
+      value={{ unpaidContributions, unpaidContributionsAmount }}>
       <UnpaidContributionsList />
       <PaymentSection />
     </UnpaidContributionsContext.Provider>
@@ -73,7 +83,9 @@ export default function PayContributionPageCompiled() {
 }
 
 function UnpaidContributionsList() {
-  const { unpaidContributions, unpaidContributionsAmount } = useContext(UnpaidContributionsContext);
+  const { unpaidContributions, unpaidContributionsAmount } = useContext(
+    UnpaidContributionsContext
+  );
 
   const undoContributionFiling = async () => {
     const response = await fetch(
@@ -85,7 +97,9 @@ function UnpaidContributionsList() {
     );
 
     if (!response.ok) {
-      return alert("Something went wrong while fetching all unpaid contributions.");
+      return alert(
+        "Something went wrong while fetching all unpaid contributions."
+      );
     }
 
     const result = await response.json();
@@ -121,20 +135,30 @@ function UnpaidContributionsList() {
               <tr key={index}>
                 <th>{data.period}</th>
                 <td data-head="SSS Contribution">
-                  <Input placeholder="Amount to Pay" value={data.sss} readOnly />
+                  <Input
+                    placeholder="Amount to Pay"
+                    value={data.sss}
+                    readOnly
+                  />
                 </td>
                 <td data-head="EC Contribution">
                   <Input placeholder="Amount to Pay" value={data.ec} readOnly />
                 </td>
                 <td data-head="Filing Date">
-                  <Input placeholder="Filing Date" value={data.filing_date} readOnly />
+                  <Input
+                    placeholder="Filing Date"
+                    value={data.filing_date}
+                    readOnly
+                  />
                 </td>
               </tr>
             ))}
           </tbody>
         </HorizontalTable>
         <div>
-          <Button className="bg-red text-slate" onClick={undoContributionFiling}>
+          <Button
+            className="bg-red text-slate"
+            onClick={undoContributionFiling}>
             Unfile Contribution
           </Button>
         </div>

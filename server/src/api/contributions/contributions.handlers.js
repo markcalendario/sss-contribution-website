@@ -17,13 +17,19 @@ export async function handleIndividualContributionFiling(req, res) {
     return res.status(500).send({ message: "Can't connect to database" });
   }
 
-  const sql = "INSERT INTO contributions (sss_no, month, year, sss) VALUES (?,?,?,?)";
+  const sql =
+    "INSERT INTO contributions (sss_no, month, year, sss) VALUES (?,?,?,?)";
 
   try {
     await db.query("START TRANSACTION");
 
     for (const contribution of contributions) {
-      const values = [sssNo, contribution.month, contribution.year, contribution.sss];
+      const values = [
+        sssNo,
+        contribution.month,
+        contribution.year,
+        contribution.sss
+      ];
       await db.query(sql, values);
     }
 
@@ -39,7 +45,10 @@ export async function handleIndividualContributionFiling(req, res) {
     db.end();
   }
 
-  return res.send({ success: true, message: "Contribution filed successfully." });
+  return res.send({
+    success: true,
+    message: "Contribution filed successfully."
+  });
 }
 
 export async function handleEmployerContributionFiling(req, res) {
@@ -51,7 +60,8 @@ export async function handleEmployerContributionFiling(req, res) {
     return res.status(500).send({ message: "Can't connect to database" });
   }
 
-  const sql = "INSERT INTO contributions (sss_no, month, year, sss, ec) VALUES (?,?,?,?,?)";
+  const sql =
+    "INSERT INTO contributions (sss_no, month, year, sss, ec) VALUES (?,?,?,?,?)";
 
   try {
     await db.query("START TRANSACTION");
@@ -79,13 +89,19 @@ export async function handleEmployerContributionFiling(req, res) {
     db.end();
   }
 
-  return res.send({ success: true, message: "Contribution filed successfully." });
+  return res.send({
+    success: true,
+    message: "Contribution filed successfully."
+  });
 }
 
 export async function handleRemoveUnpaidContribution(req, res) {
   const db = await connectDB("sss_contribution");
   if (!db) {
-    return res.send({ success: false, message: "Can't connect with database." });
+    return res.send({
+      success: false,
+      message: "Can't connect with database."
+    });
   }
 
   const sss_no = decodeAuthToken(req.cookies.auth_token).sss_no;
@@ -107,7 +123,8 @@ export async function handleRemoveUnpaidContribution(req, res) {
     });
   }
 
-  const sql = "DELETE FROM contributions WHERE payment_reference_number IS NULL AND sss_no = ?";
+  const sql =
+    "DELETE FROM contributions WHERE payment_reference_number IS NULL AND sss_no = ?";
   const values = [sss_no];
 
   let resultSetHeader;
@@ -186,7 +203,10 @@ export async function handlePayContribution(req, res) {
 
   const db = await connectDB("sss_contribution");
   if (!db) {
-    return res.send({ success: false, message: "Can't connect with database." });
+    return res.send({
+      success: false,
+      message: "Can't connect with database."
+    });
   }
 
   try {
@@ -249,7 +269,10 @@ export async function handlePayContribution(req, res) {
 export async function handleHistory(req, res) {
   const db = await connectDB("sss_contribution");
   if (!db) {
-    return res.send({ success: false, message: "Can't connect with database." });
+    return res.send({
+      success: false,
+      message: "Can't connect with database."
+    });
   }
 
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;
@@ -263,7 +286,10 @@ export async function handleHistory(req, res) {
     [rows] = await db.query(sql, values);
   } catch (error) {
     console.error(error);
-    return res.send({ success: false, message: "Can't get contribution history." });
+    return res.send({
+      success: false,
+      message: "Can't get contribution history."
+    });
   } finally {
     db.end();
   }
@@ -316,7 +342,10 @@ export async function handleGetAvailablePeriods(req, res) {
     // Check if the month is not in the paidMonths.
     if (!paidMonths.includes(monthToCheck)) {
       // If it is not in the paidMonths, add it as an available period.
-      availablePeriods.push({ month: monthToCheck, year: yearCursor.toString() });
+      availablePeriods.push({
+        month: monthToCheck,
+        year: yearCursor.toString()
+      });
     }
 
     monthCursor++;
@@ -341,7 +370,10 @@ export async function handleGetAvailablePeriods(req, res) {
 export async function handleGetUnpaidContributions(req, res) {
   const db = await connectDB("sss_contribution");
   if (!db) {
-    return res.send({ success: false, message: "Can't connect with database." });
+    return res.send({
+      success: false,
+      message: "Can't connect with database."
+    });
   }
 
   const sssNo = decodeAuthToken(req.cookies.auth_token).sss_no;

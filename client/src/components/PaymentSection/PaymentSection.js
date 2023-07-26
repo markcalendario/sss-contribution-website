@@ -1,4 +1,8 @@
-import { Content, DashboardContent, DashboardTitle } from "@/app/dashboard/layout";
+import {
+  Content,
+  DashboardContent,
+  DashboardTitle
+} from "@/app/dashboard/layout";
 import { Fragment } from "react";
 import Button from "../Buttons/Buttons";
 import Highlight from "../Highlight/Highlight";
@@ -7,14 +11,17 @@ import styles from "./PaymentSection.module.scss";
 
 export default function PaymentSection() {
   const pay = async (payload) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contributions/pay`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/contributions/pay`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      }
+    );
 
     if (!response.ok) {
       return alert("Something went wrong while submitting your payments.");
@@ -55,7 +62,9 @@ export default function PaymentSection() {
   const handleCheckPay = () => {
     const amount = prompt("Enter exact amount.");
     const checkReference = prompt("Enter check reference number.");
-    const checkDate = prompt("Enter check validity date. Follow this format: YYYY-MM-DD");
+    const checkDate = prompt(
+      "Enter check validity date. Follow this format: YYYY-MM-DD"
+    );
     const bankName = prompt("Enter bank name of this check.");
 
     pay({

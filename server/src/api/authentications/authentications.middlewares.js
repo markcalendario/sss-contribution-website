@@ -7,7 +7,8 @@ import { isString, isStringEmpty } from "../../global/utils/validators.js";
 import { isEmailRegistered } from "./authentications.utils.js";
 
 export async function validateMemberRegistrationPayload(req, res, next) {
-  const { address, zip, tin, mobile, telephone, payorType, email, password } = req.body;
+  const { address, zip, tin, mobile, telephone, payorType, email, password } =
+    req.body;
 
   // Address
 
@@ -16,15 +17,24 @@ export async function validateMemberRegistrationPayload(req, res, next) {
   }
 
   if (isStringEmpty(address)) {
-    return res.send({ success: false, message: "Complete address is required." });
+    return res.send({
+      success: false,
+      message: "Complete address is required."
+    });
   }
 
   if (address.length > membersConfigs.address.maxLength) {
-    return res.send({ success: false, message: "Too many characters for an address." });
+    return res.send({
+      success: false,
+      message: "Too many characters for an address."
+    });
   }
 
   if (address.length < membersConfigs.address.minLength) {
-    return res.send({ success: false, message: "Too few characters for an address." });
+    return res.send({
+      success: false,
+      message: "Too few characters for an address."
+    });
   }
 
   // Zip
@@ -37,7 +47,10 @@ export async function validateMemberRegistrationPayload(req, res, next) {
     return res.send({ success: false, message: "Zip code is required." });
   }
 
-  if (zip.length > membersConfigs.zip.maxLength || zip.length < membersConfigs.zip.minLength) {
+  if (
+    zip.length > membersConfigs.zip.maxLength ||
+    zip.length < membersConfigs.zip.minLength
+  ) {
     return res.send({
       success: false,
       message: `ZIP Code must contain ${membersConfigs.zip.maxLength} digits.`
@@ -54,7 +67,10 @@ export async function validateMemberRegistrationPayload(req, res, next) {
   // Mobile
 
   if (!isString(mobile)) {
-    return res.send({ success: false, message: "Mobile number must be string." });
+    return res.send({
+      success: false,
+      message: "Mobile number must be string."
+    });
   }
 
   if (isStringEmpty(mobile)) {
@@ -77,14 +93,18 @@ export async function validateMemberRegistrationPayload(req, res, next) {
   if (!validator.isInt(mobile)) {
     return res.send({
       success: false,
-      message: "Invalid mobile number. Use the Philippine standard format, ex. 09xxxxxxxxx."
+      message:
+        "Invalid mobile number. Use the Philippine standard format, ex. 09xxxxxxxxx."
     });
   }
 
   // Telephone : Optional
 
   if (!isString(telephone)) {
-    return res.send({ success: false, message: "Telephone number must be string." });
+    return res.send({
+      success: false,
+      message: "Telephone number must be string."
+    });
   }
 
   if (
@@ -101,7 +121,8 @@ export async function validateMemberRegistrationPayload(req, res, next) {
   if (!isStringEmpty(telephone) && !validator.isInt(telephone)) {
     return res.send({
       success: false,
-      message: "Invalid telephone number. You may include area code Ex. 02xxxxxx.."
+      message:
+        "Invalid telephone number. You may include area code Ex. 02xxxxxx.."
     });
   }
 
@@ -116,15 +137,24 @@ export async function validateMemberRegistrationPayload(req, res, next) {
   }
 
   if (!validator.isEmail(email)) {
-    return res.send({ success: false, message: "Please provide a valid email." });
+    return res.send({
+      success: false,
+      message: "Please provide a valid email."
+    });
   }
 
   if (email.length > membersConfigs.email.maxLength) {
-    return res.send({ success: false, message: "Too many characters for an email address." });
+    return res.send({
+      success: false,
+      message: "Too many characters for an email address."
+    });
   }
 
   if (email.length < membersConfigs.email.minLength) {
-    return res.send({ success: false, message: "Too few characters for an email address." });
+    return res.send({
+      success: false,
+      message: "Too few characters for an email address."
+    });
   }
 
   let isEmailUsed;
@@ -137,7 +167,10 @@ export async function validateMemberRegistrationPayload(req, res, next) {
   }
 
   if (isEmailUsed) {
-    return res.send({ success: false, message: "Email is already registered. Try signing in." });
+    return res.send({
+      success: false,
+      message: "Email is already registered. Try signing in."
+    });
   }
 
   // TIN: optional
@@ -148,7 +181,8 @@ export async function validateMemberRegistrationPayload(req, res, next) {
 
   if (
     !isStringEmpty(tin) &&
-    (tin.length < membersConfigs.tin.minLength || tin.length > membersConfigs.tin.maxLength)
+    (tin.length < membersConfigs.tin.minLength ||
+      tin.length > membersConfigs.tin.maxLength)
   ) {
     return res.send({ success: false, message: "TIN must consist 12 digits." });
   }
@@ -171,7 +205,10 @@ export async function validateMemberRegistrationPayload(req, res, next) {
   }
 
   if (!membersConfigs.payorType.allowedValues.includes(payorType)) {
-    return res.send({ success: false, message: `Payor type ${payorType} is not valid.` });
+    return res.send({
+      success: false,
+      message: `Payor type ${payorType} is not valid.`
+    });
   }
 
   // Password
@@ -214,7 +251,10 @@ export async function validateIndividualRegistrationPayload(req, res, next) {
   }
 
   if (firstName.length > individualConfigs.first_name.maxLength) {
-    return res.send({ success: false, message: "Too many characters for a first name." });
+    return res.send({
+      success: false,
+      message: "Too many characters for a first name."
+    });
   }
 
   // Middle Name
@@ -228,7 +268,10 @@ export async function validateIndividualRegistrationPayload(req, res, next) {
   }
 
   if (middleName.length > individualConfigs.middle_name.maxLength) {
-    return res.send({ success: false, message: "Too many characters for a middle name." });
+    return res.send({
+      success: false,
+      message: "Too many characters for a middle name."
+    });
   }
 
   // Last Name
@@ -242,7 +285,10 @@ export async function validateIndividualRegistrationPayload(req, res, next) {
   }
 
   if (lastName.length > individualConfigs.last_name.maxLength) {
-    return res.send({ success: false, message: "Too many characters for a last name." });
+    return res.send({
+      success: false,
+      message: "Too many characters for a last name."
+    });
   }
 
   // Suffix : optional
@@ -251,8 +297,14 @@ export async function validateIndividualRegistrationPayload(req, res, next) {
     return res.send({ success: false, message: "Suffix must be string." });
   }
 
-  if (!isStringEmpty(suffix) && suffix.length > individualConfigs.suffix.maxLength) {
-    return res.send({ success: false, message: "Too many characters for a name suffix." });
+  if (
+    !isStringEmpty(suffix) &&
+    suffix.length > individualConfigs.suffix.maxLength
+  ) {
+    return res.send({
+      success: false,
+      message: "Too many characters for a name suffix."
+    });
   }
 
   // CRN : optional
@@ -263,13 +315,17 @@ export async function validateIndividualRegistrationPayload(req, res, next) {
 
   if (
     !isStringEmpty(crn) &&
-    (crn.length < individualConfigs.crn.minLength || crn.length > individualConfigs.crn.maxLength)
+    (crn.length < individualConfigs.crn.minLength ||
+      crn.length > individualConfigs.crn.maxLength)
   ) {
     return res.send({ success: false, message: "CRN must consist 12 digits." });
   }
 
   if (!isStringEmpty(crn) && !validator.isInt(crn)) {
-    return res.send({ success: false, message: "Invalid common reference number (CRN)." });
+    return res.send({
+      success: false,
+      message: "Invalid common reference number (CRN)."
+    });
   }
 
   next();
@@ -292,7 +348,8 @@ export async function validateEmployerRegistrationPayload(req, res, next) {
   if (!isStringEmpty(website) && !validator.isURL(website)) {
     return res.send({
       success: false,
-      message: "Invalid website link. Include http/https protocol and make sure it is a valid URL."
+      message:
+        "Invalid website link. Include http/https protocol and make sure it is a valid URL."
     });
   }
 
@@ -310,7 +367,10 @@ export async function validateEmployerRegistrationPayload(req, res, next) {
   }
 
   if (businessName.length > employersConfigs.business_name.maxLength) {
-    return res.send({ success: false, message: "Too many characters for a business name." });
+    return res.send({
+      success: false,
+      message: "Too many characters for a business name."
+    });
   }
 
   next();
@@ -322,7 +382,10 @@ export async function validateLoginPayload(req, res, next) {
   // Email
 
   if (!isString(email)) {
-    return res.send({ success: false, message: "Email address must be a string." });
+    return res.send({
+      success: false,
+      message: "Email address must be a string."
+    });
   }
 
   if (isStringEmpty(email)) {
@@ -350,14 +413,18 @@ export async function validateLoginPayload(req, res, next) {
   if (!isEmailUsed) {
     return res.send({
       success: false,
-      message: "The email address you provided is not registered. Try signing up instead."
+      message:
+        "The email address you provided is not registered. Try signing up instead."
     });
   }
 
   // Password
 
   if (!isString(password)) {
-    return res.send({ success: false, message: "Email address must be a string." });
+    return res.send({
+      success: false,
+      message: "Email address must be a string."
+    });
   }
 
   if (isStringEmpty(password)) {

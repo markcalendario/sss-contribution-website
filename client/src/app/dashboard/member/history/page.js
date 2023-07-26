@@ -10,9 +10,12 @@ export default function History() {
   const [history, setHistory] = useState(null);
 
   const getContributionHistory = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contributions/history`, {
-      credentials: "include"
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/contributions/history`,
+      {
+        credentials: "include"
+      }
+    );
 
     if (!response.ok) {
       return alert("An error occured while fetching contribution history.");
@@ -58,7 +61,9 @@ export default function History() {
             {history.map(({ period, sss, mode, paid_date }) => (
               <tr key={period}>
                 <td data-head="Month">{period}</td>
-                <td data-head="SSS Contribution">₱ {parseFloat(sss).toLocaleString()}</td>
+                <td data-head="SSS Contribution">
+                  ₱ {parseFloat(sss).toLocaleString()}
+                </td>
                 <td data-head="Mode of Payment">{mode}</td>
                 <td data-head="Paid Date">{paid_date}</td>
               </tr>

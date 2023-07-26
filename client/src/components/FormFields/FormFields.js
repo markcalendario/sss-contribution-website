@@ -24,7 +24,8 @@ export function Input(props) {
     <div className={styles.regularFields + (className ? " " + className : "")}>
       {placeholder ? (
         <p className={styles.placeholder}>
-          {placeholder} {required ? <span className={styles.requiredStar}>*</span> : null}
+          {placeholder}{" "}
+          {required ? <span className={styles.requiredStar}>*</span> : null}
         </p>
       ) : null}
       <input
@@ -42,13 +43,23 @@ export function Input(props) {
 }
 
 export function Select(props) {
-  const { id, className, name, placeholder, required, onChange, value, children } = props;
+  const {
+    id,
+    className,
+    name,
+    placeholder,
+    required,
+    onChange,
+    value,
+    children
+  } = props;
 
   return (
     <div className={styles.regularFields + (className ? " " + className : "")}>
       {placeholder ? (
         <p className={styles.placeholder}>
-          {placeholder} {required ? <span className={styles.requiredStar}>*</span> : null}
+          {placeholder}{" "}
+          {required ? <span className={styles.requiredStar}>*</span> : null}
         </p>
       ) : null}
       <select id={id} name={name} value={value} onChange={onChange}>

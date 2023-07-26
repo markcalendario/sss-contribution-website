@@ -10,9 +10,12 @@ export function NonLoggedInPage({ children: Component }) {
   const [isAuth, setIsAuth] = useState(null);
 
   const checkAuthState = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/is-auth`, {
-      credentials: "include"
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/is-auth`,
+      {
+        credentials: "include"
+      }
+    );
     const result = await response.json();
     const { isAuth } = result;
 
@@ -43,9 +46,10 @@ export function LoggedInPageProtection({ children: Component }) {
   const [isAuth, setIsAuth] = useState(null);
 
   const checkAuthState = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/is-auth`, {
-      credentials: "include"
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/is-auth`,
+      { credentials: "include" }
+    );
     const result = await response.json();
     const { isAuth } = result;
 
@@ -76,9 +80,12 @@ export function MemberPageProtection({ children: Component }) {
   const [isMember, setIsMember] = useState(null);
 
   const checkRole = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/role`, {
-      credentials: "include"
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/accounts/role`,
+      {
+        credentials: "include"
+      }
+    );
 
     const result = await response.json();
     const { role } = result;
@@ -110,9 +117,12 @@ export function EmployerPageProtection({ children: Component }) {
   const [isEmployer, setIsEmployer] = useState(null);
 
   const checkRole = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/role`, {
-      credentials: "include"
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/accounts/role`,
+      {
+        credentials: "include"
+      }
+    );
     const result = await response.json();
     const { role } = result;
 

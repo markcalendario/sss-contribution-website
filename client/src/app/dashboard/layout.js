@@ -48,7 +48,9 @@ export function AsideLink(props) {
   const isActive = href === pathName;
 
   return (
-    <a className={styles.asideLink + (isActive ? " " + styles.active : "")} href={href}>
+    <a
+      className={styles.asideLink + (isActive ? " " + styles.active : "")}
+      href={href}>
       {icon ? <i className={icon + " fa-fw"} /> : null} <span>{children}</span>
     </a>
   );
@@ -59,7 +61,10 @@ export function Aside({ asideLinks }) {
     <aside id={styles.aside} data-aos="fade-right">
       <div className={styles.wrapper}>
         {asideLinks.map((asideLink) => (
-          <AsideLink key={asideLink.link} href={asideLink.link} icon={asideLink.icon}>
+          <AsideLink
+            key={asideLink.link}
+            href={asideLink.link}
+            icon={asideLink.icon}>
             {asideLink.title}
           </AsideLink>
         ))}
@@ -104,7 +109,9 @@ function Navbar({ toggleAsideState }) {
 export function DashboardContent(props) {
   const { children, id, className } = props;
   return (
-    <div id={id} className={styles.dashboardContent + (className ? " " + className : "")}>
+    <div
+      id={id}
+      className={styles.dashboardContent + (className ? " " + className : "")}>
       {children}
     </div>
   );
@@ -117,7 +124,9 @@ export function DashboardTitle({ children }) {
 export function Content(props) {
   const { children, id, className } = props;
   return (
-    <div id={id} className={styles.content + (className ? " " + className : "")}>
+    <div
+      id={id}
+      className={styles.content + (className ? " " + className : "")}>
       {children}
     </div>
   );

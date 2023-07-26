@@ -11,7 +11,10 @@ export default async function connectDB(database) {
       database: database
     });
   } catch (error) {
-    console.error("[DB CON ERR] There was an error connecting in the database.", error);
+    console.error(
+      "[DB CON ERR] There was an error connecting in the database.",
+      error
+    );
   }
 
   return connection;

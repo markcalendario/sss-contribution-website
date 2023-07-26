@@ -84,7 +84,9 @@ export async function comparePasswords(hashed, plain) {
 
 export async function signToken(sss_no) {
   try {
-    return jwt.sign({ sss_no: sss_no }, process.env.TOKEN_SALT, { expiresIn: "24h" });
+    return jwt.sign({ sss_no: sss_no }, process.env.TOKEN_SALT, {
+      expiresIn: "24h"
+    });
   } catch (error) {
     console.error("[Jwt Signing Error]", error);
     throw new Error("An error occured while signing a token.");

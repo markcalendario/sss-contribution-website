@@ -1,11 +1,21 @@
 "use client";
 
-import { Content, DashboardContent, DashboardTitle } from "@/app/dashboard/layout.js";
+import {
+  Content,
+  DashboardContent,
+  DashboardTitle
+} from "@/app/dashboard/layout.js";
 import DateAndTimeCard from "@/components/DateAndTimeCard/DateAndTimeCard";
 import { FullPageLoader } from "@/components/Loaders/Loaders";
 import { VerticalTable } from "@/components/Table/Table";
 import Welcomer from "@/components/Welcomer/Welcomer";
-import { Fragment, createContext, useContext, useEffect, useState } from "react";
+import {
+  Fragment,
+  createContext,
+  useContext,
+  useEffect,
+  useState
+} from "react";
 import styles from "./page.module.scss";
 
 const MemberContext = createContext();
@@ -14,9 +24,12 @@ export default function MemberDashboard() {
   const [memberInfo, setMemberInfo] = useState(null);
 
   const getIndividualMemberInfo = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/individual/info`, {
-      credentials: "include"
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/accounts/individual/info`,
+      {
+        credentials: "include"
+      }
+    );
 
     if (!response.ok) {
       return alert("An error occured while getting your information.");
@@ -48,7 +61,8 @@ export default function MemberDashboard() {
 }
 
 function WelcomeAndTime() {
-  const { first_name, middle_name, last_name, suffix } = useContext(MemberContext);
+  const { first_name, middle_name, last_name, suffix } =
+    useContext(MemberContext);
 
   return (
     <DashboardContent id={styles.dateAndTime}>

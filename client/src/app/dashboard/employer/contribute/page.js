@@ -6,7 +6,13 @@ import Highlight from "@/components/Highlight/Highlight";
 import { FullPageLoader } from "@/components/Loaders/Loaders";
 import NoResultIndicator from "@/components/NoResultIndicator/NoResultIndicator";
 import { HorizontalTable } from "@/components/Table/Table";
-import { Fragment, createContext, useContext, useEffect, useState } from "react";
+import {
+  Fragment,
+  createContext,
+  useContext,
+  useEffect,
+  useState
+} from "react";
 import { Content, DashboardContent, DashboardTitle } from "../../layout";
 import styles from "./page.module.scss";
 const ContributionContext = createContext();
@@ -44,7 +50,10 @@ export default function ContributionFilingCompiled() {
     const updatedSelectedPeriods = [];
 
     for (const selectedPeriod of selectedPeriods) {
-      if (selectedPeriod.month === toRemoveMonth && selectedPeriod.year === toRemoveYear) {
+      if (
+        selectedPeriod.month === toRemoveMonth &&
+        selectedPeriod.year === toRemoveYear
+      ) {
         continue; // remove if match
       }
 
@@ -78,7 +87,10 @@ export default function ContributionFilingCompiled() {
     const updatedSelectedPeriods = [];
 
     for (const selectedPeriod of selectedPeriods) {
-      if (selectedPeriod.month === targetMonth && selectedPeriod.year === targetYear) {
+      if (
+        selectedPeriod.month === targetMonth &&
+        selectedPeriod.year === targetYear
+      ) {
         updatedSelectedPeriods.push({ ...selectedPeriod, ec: ecAmount });
         continue;
       }
@@ -93,7 +105,10 @@ export default function ContributionFilingCompiled() {
     const updatedSelectedPeriods = [];
 
     for (const selectedPeriod of selectedPeriods) {
-      if (selectedPeriod.month === targetMonth && selectedPeriod.year === targetYear) {
+      if (
+        selectedPeriod.month === targetMonth &&
+        selectedPeriod.year === targetYear
+      ) {
         updatedSelectedPeriods.push({ ...selectedPeriod, sss: sssAmount });
         continue;
       }
@@ -198,7 +213,11 @@ function PeriodSelection(props) {
                 <td data-head="Select">
                   <Checkbox
                     onChange={(evt) => {
-                      handleSelectPeriod(evt.target.checked, data.month, data.year);
+                      handleSelectPeriod(
+                        evt.target.checked,
+                        data.month,
+                        data.year
+                      );
                     }}>
                     Select
                   </Checkbox>
@@ -219,7 +238,11 @@ function PeriodSelection(props) {
 
 function ContributionFiling(props) {
   const { selectedPeriods, goToPrevStage } = useContext(ContributionContext);
-  const { resetAllSelectedFields, changeECAmountOfPeriod, changeSSSAmountOfPeriod } = props;
+  const {
+    resetAllSelectedFields,
+    changeECAmountOfPeriod,
+    changeSSSAmountOfPeriod
+  } = props;
 
   const handleBackClick = () => {
     goToPrevStage();
@@ -272,13 +295,18 @@ function ContributionFiling(props) {
             {selectedPeriods.map((data, index) => (
               <tr key={index}>
                 <th>
-                  {data.month.substr(0, 1).toUpperCase() + data.month.substr(1)} {data.year}
+                  {data.month.substr(0, 1).toUpperCase() + data.month.substr(1)}{" "}
+                  {data.year}
                 </th>
                 <td data-head="SSS Contribution">
                   <Input
                     placeholder="Amount"
                     onChange={(evt) => {
-                      changeSSSAmountOfPeriod(data.month, data.year, evt.target.value);
+                      changeSSSAmountOfPeriod(
+                        data.month,
+                        data.year,
+                        evt.target.value
+                      );
                     }}
                   />
                 </td>
@@ -287,7 +315,11 @@ function ContributionFiling(props) {
                     placeholder="Amount"
                     value={data.amount}
                     onChange={(evt) => {
-                      changeECAmountOfPeriod(data.month, data.year, evt.target.value);
+                      changeECAmountOfPeriod(
+                        data.month,
+                        data.year,
+                        evt.target.value
+                      );
                     }}
                   />
                 </td>

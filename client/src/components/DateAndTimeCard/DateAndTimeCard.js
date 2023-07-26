@@ -35,7 +35,9 @@ export default function DateAndTimeCard(props) {
   }, []);
 
   return (
-    <div id={id} className={styles.dateTimeCard + (className ? " " + className : "")}>
+    <div
+      id={id}
+      className={styles.dateTimeCard + (className ? " " + className : "")}>
       <div className={styles.wrapper}>
         <p>{dayName}</p>
         <h1>{time}</h1>

@@ -20,6 +20,11 @@ router.get(
   handleGetIndividualMemberInfo
 );
 
-router.get("/employer/info", validateAuthCookie, isEmployerMember, handleGetEmployerMemberInfo);
+router.get(
+  "/employer/info",
+  validateAuthCookie,
+  isEmployerMember,
+  handleGetEmployerMemberInfo
+);
 
 export default router;

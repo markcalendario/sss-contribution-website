@@ -39,15 +39,20 @@ function Hero() {
           <div className={styles.texts}>
             <h1 data-aos="fade-right">Building Stronger Future with SSS.</h1>
             <p data-aos="fade-left">
-              Stay connected to the Social Security System, access the contribution form, and
-              monitor your contributions effortlessly at your fingertips
+              Stay connected to the Social Security System, access the
+              contribution form, and monitor your contributions effortlessly at
+              your fingertips
             </p>
           </div>
           <div data-aos="fade" className={styles.buttons}>
-            <LinkButton href="/register/member" className="bg-primary text-slate">
+            <LinkButton
+              href="/register/member"
+              className="bg-primary text-slate">
               Member
             </LinkButton>
-            <LinkButton href="/register/employer" className="bg-white text-primary">
+            <LinkButton
+              href="/register/employer"
+              className="bg-white text-primary">
               Employer
             </LinkButton>
           </div>
@@ -59,7 +64,8 @@ function Hero() {
 
 function Stats() {
   const SSSEstablishedDate = new Date("September 1, 1957");
-  const SSSAge = new Date(Date.now() - SSSEstablishedDate).getUTCFullYear() - 1970;
+  const SSSAge =
+    new Date(Date.now() - SSSEstablishedDate).getUTCFullYear() - 1970;
 
   return (
     <section id={styles.statsBar}>
@@ -89,9 +95,9 @@ function InviteUsers() {
       <SectionTitle>
         <h1>Join Our Community and Explore Social Security Benefits</h1>
         <p>
-          Join us to experience the advantages of our social security system, providing
-          comprehensive coverage, peace of mind for your loved ones, and an accessible user-friendly
-          interface.
+          Join us to experience the advantages of our social security system,
+          providing comprehensive coverage, peace of mind for your loved ones,
+          and an accessible user-friendly interface.
         </p>
       </SectionTitle>
       <SectionWrapper className={styles.wrapper}>
@@ -123,7 +129,9 @@ function Tagline() {
     <section id={styles.tagline}>
       <div className={styles.container}>
         <div className={styles.wrapper}>
-          <h1 data-aos="fade-up">Maaasahang Proteksyon Sa Panahon Ng Pangangailangan</h1>
+          <h1 data-aos="fade-up">
+            Maaasahang Proteksyon Sa Panahon Ng Pangangailangan
+          </h1>
         </div>
       </div>
     </section>

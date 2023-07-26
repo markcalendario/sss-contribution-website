@@ -1,11 +1,21 @@
 "use client";
 
-import { Content, DashboardContent, DashboardTitle } from "@/app/dashboard/layout.js";
+import {
+  Content,
+  DashboardContent,
+  DashboardTitle
+} from "@/app/dashboard/layout.js";
 import DateAndTimeCard from "@/components/DateAndTimeCard/DateAndTimeCard";
 import { FullPageLoader } from "@/components/Loaders/Loaders";
 import { VerticalTable } from "@/components/Table/Table";
 import Welcomer from "@/components/Welcomer/Welcomer";
-import { Fragment, createContext, useContext, useEffect, useState } from "react";
+import {
+  Fragment,
+  createContext,
+  useContext,
+  useEffect,
+  useState
+} from "react";
 import styles from "./page.module.scss";
 
 const EmployerContext = createContext();
@@ -14,9 +24,11 @@ export default function EmployerDashboard() {
   const [employerInfo, setEmployerInfo] = useState(null);
 
   const getEmployerInfo = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/employer/info`, {
-      credentials: "include"
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/accounts/employer/info`,
+      { credentials: "include" }
+    );
+
     if (!response.ok) {
       return alert("An error occured while getting your information.");
     }
@@ -52,7 +64,11 @@ function WelcomeAndTime() {
   return (
     <DashboardContent id={styles.dateAndTime}>
       <Content className={styles.content}>
-        <Welcomer className={styles.welcomer} name={business_name} role="employer" />
+        <Welcomer
+          className={styles.welcomer}
+          name={business_name}
+          role="employer"
+        />
         <DateAndTimeCard className={styles.dateTimeCard} />
       </Content>
     </DashboardContent>
@@ -104,7 +120,8 @@ function BasicInformation() {
 }
 
 function ContactInformation() {
-  const { address, zip, mobile, telephone, email, website } = useContext(EmployerContext);
+  const { address, zip, mobile, telephone, email, website } =
+    useContext(EmployerContext);
 
   return (
     <Fragment>

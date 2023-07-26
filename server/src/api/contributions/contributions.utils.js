@@ -6,10 +6,13 @@ import { isString, isStringEmpty } from "../../global/utils/validators.js";
 
 export function isPeriodRetroactive(month, year) {
   const currentDate = new Date();
-  const currentMonth = currentDate.toLocaleString("default", { month: "long" }).toLowerCase();
+  const currentMonth = currentDate
+    .toLocaleString("default", { month: "long" })
+    .toLowerCase();
 
   const isYearRetroactive = parseInt(year) < currentDate.getFullYear();
-  const isMonthRetroactive = months.indexOf(month) < months.indexOf(currentMonth);
+  const isMonthRetroactive =
+    months.indexOf(month) < months.indexOf(currentMonth);
   const isYearCurrent = parseInt(year) === currentDate.getFullYear();
 
   if (isYearRetroactive || (isYearCurrent && isMonthRetroactive)) {
@@ -20,7 +23,8 @@ export function isPeriodRetroactive(month, year) {
 }
 
 export async function isPeriodAlreadyPaid(month, year, sssNo) {
-  const sql = "SELECT * FROM contributions WHERE month = ? AND year = ? AND sss_no = ?";
+  const sql =
+    "SELECT * FROM contributions WHERE month = ? AND year = ? AND sss_no = ?";
   const values = [month, year, sssNo];
 
   const db = await connectDB("sss_contribution");
@@ -62,7 +66,9 @@ export async function hasUnpaidContributions(sssNo) {
     [rows] = await db.query(sql, values);
   } catch (error) {
     console.log("[DB Error]", error);
-    throw new Error("An error occured while checking for unpaid contributions.");
+    throw new Error(
+      "An error occured while checking for unpaid contributions."
+    );
   } finally {
     db.end();
   }
@@ -101,7 +107,8 @@ export function isContributionAmountValid(amount, contributionType) {
     ];
   }
 
-  const isAmountUnderMinRange = parseFloat(amount) < contributionsConfigs[contributionType].min;
+  const isAmountUnderMinRange =
+    parseFloat(amount) < contributionsConfigs[contributionType].min;
   if (isAmountUnderMinRange) {
     return [
       false,
@@ -115,7 +122,10 @@ export function isContributionAmountValid(amount, contributionType) {
 export async function getUnpaidSSSAndECAmount(sssNo) {
   const db = await connectDB("sss_contribution");
   if (!db) {
-    return res.send({ success: false, message: "Can't connect with database." });
+    return res.send({
+      success: false,
+      message: "Can't connect with database."
+    });
   }
 
   const sql =
@@ -139,7 +149,10 @@ export async function getUnpaidSSSAndECAmount(sssNo) {
 export async function getMonthsWithContributionsOnAYear(sssNo, year) {
   const db = await connectDB("sss_contribution");
   if (!db) {
-    return res.send({ success: false, message: "Can't connect with database." });
+    return res.send({
+      success: false,
+      message: "Can't connect with database."
+    });
   }
 
   const sql = "SELECT month FROM contributions WHERE year = ? AND sss_no = ?";
@@ -150,7 +163,9 @@ export async function getMonthsWithContributionsOnAYear(sssNo, year) {
     [rows] = await db.query(sql, values);
   } catch (error) {
     console.error("[DB Error]", error);
-    throw new Error("An error occured while getting months with contributions.");
+    throw new Error(
+      "An error occured while getting months with contributions."
+    );
   } finally {
     db.end();
   }

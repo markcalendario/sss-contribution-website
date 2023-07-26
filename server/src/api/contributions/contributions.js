@@ -40,10 +40,23 @@ router.post(
   validateECContributionAmountPayload,
   handleEmployerContributionFiling
 );
-router.delete("/remove-unpaid-contribution", validateAuthCookie, handleRemoveUnpaidContribution);
-router.post("/pay", validateAuthCookie, validatePaymentPayload, handlePayContribution);
+router.delete(
+  "/remove-unpaid-contribution",
+  validateAuthCookie,
+  handleRemoveUnpaidContribution
+);
+router.post(
+  "/pay",
+  validateAuthCookie,
+  validatePaymentPayload,
+  handlePayContribution
+);
 router.get("/history", validateAuthCookie, handleHistory);
 router.get("/available-periods", validateAuthCookie, handleGetAvailablePeriods);
 router.get("/unpaid", validateAuthCookie, handleGetUnpaidContributions);
-router.get("/unpaid-amount", validateAuthCookie, handleGetUnpaidContributionsAmount);
+router.get(
+  "/unpaid-amount",
+  validateAuthCookie,
+  handleGetUnpaidContributionsAmount
+);
 export default router;

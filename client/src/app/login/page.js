@@ -33,14 +33,17 @@ export function MemberLogin() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email, password })
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      }
+    );
 
     if (!response.ok) {
       return alert("An error occured while signing you in.");
@@ -62,10 +65,17 @@ export function MemberLogin() {
       className={styles.memberLogin}>
       <div className={styles.container}>
         <div className={styles.wrapper}>
-          <form className={styles.loginBox} onSubmit={(evt) => evt.preventDefault()}>
+          <form
+            className={styles.loginBox}
+            onSubmit={(evt) => evt.preventDefault()}>
             <h1>Login</h1>
             <Input id="email" placeholder="Email Address" required />
-            <Input id="password" type="password" placeholder="Password" required />
+            <Input
+              id="password"
+              type="password"
+              placeholder="Password"
+              required
+            />
             <Button className="bg-primary text-slate" onClick={handleLogin}>
               Login your SSS account.
             </Button>

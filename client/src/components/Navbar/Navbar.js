@@ -97,7 +97,10 @@ function SmallScreenNavbar(props) {
         </div>
       </nav>
       {isDrawerOpen ? (
-        <Drawer links={links} handleDrawerTriggerClick={handleDrawerTriggerClick} />
+        <Drawer
+          links={links}
+          handleDrawerTriggerClick={handleDrawerTriggerClick}
+        />
       ) : null}
     </Fragment>
   );
